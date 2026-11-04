@@ -29,6 +29,9 @@ def resolve(cue: dict, sfx_dir: Path) -> Path | None:
 
 
 def main() -> None:
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles and pipes default to cp1252
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser()
     parser.add_argument("timeline", type=Path)
     parser.add_argument("--voice", type=Path, required=True)

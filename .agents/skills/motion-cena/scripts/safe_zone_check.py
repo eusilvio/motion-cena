@@ -129,6 +129,9 @@ def serve(directory: Path) -> tuple[http.server.ThreadingHTTPServer, int]:
 
 
 def main() -> int:
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles and pipes default to cp1252
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("composition", type=Path, help="folder with index.html")
     ap.add_argument("--preset", default="vertical")
@@ -139,7 +142,7 @@ def main() -> int:
     ap.add_argument("--json", type=Path)
     a = ap.parse_args()
 
-    preset = json.loads(PRESETS.read_text())["presets"].get(a.preset)
+    preset = json.loads(PRESETS.read_text(encoding="utf-8"))["presets"].get(a.preset)
     if not preset:
         print(f"unknown preset {a.preset}", file=sys.stderr)
         return 2
@@ -201,7 +204,7 @@ def main() -> int:
         print(f"  {r['level']:5} {when}s  {r['kind']} {r['el']} \"{r['text']}\"  {edges}")
     print(f"{errors} erro(s), {warns} aviso(s)")
     if a.json:
-        a.json.write_text(json.dumps(report, ensure_ascii=False, indent=1))
+        a.json.write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     return 1 if errors else 0
 
 

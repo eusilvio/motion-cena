@@ -97,6 +97,9 @@ def commons(file: str) -> tuple[str, str, str]:
 
 
 def main() -> int:
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles and pipes default to cp1252
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("kind", choices=["flag", "icon", "logo", "image", "search"])
     ap.add_argument("query")

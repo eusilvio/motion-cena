@@ -272,6 +272,9 @@ def report(_args) -> None:
 
 
 def main() -> None:
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles and pipes default to cp1252
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("scan").set_defaults(fn=scan)
