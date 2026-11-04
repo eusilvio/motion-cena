@@ -1,0 +1,23 @@
+{
+  "about": "Prompts for ElevenLabs Sound Effects that worked in real productions, made generic. Only the prompts live here: ElevenLabs terms forbid publishing the generated audio as standalone files or as a sound library, so each user generates with their own key into projects/<slug>/audio/sfx/ (gitignored). Usage: uv run scripts/tts_elevenlabs.py --sfx \"<prompt>\" --duration <duration_s> --out projects/<slug>/audio/sfx/<name>.mp3. Without a key, use the synthesized kit (scripts/synth_sfx.py) and the free libraries in references/sound-design.md.",
+  "sounds": [
+    {"name": "whoosh", "category": "transition", "prompt": "short airy whoosh, clean", "duration_s": 0.5, "use": "corte ou entrada rápida; o pico cai uns 0,25 s depois do início"},
+    {"name": "rewind", "category": "transition", "prompt": "short fast tape rewind scrub, quick reverse whirr, clean", "duration_s": 0.8, "use": "voltar no tempo, desfazer, antes e depois"},
+    {"name": "key", "category": "ui", "prompt": "single mechanical keyboard key press, close mic, crisp clack, no reverb", "duration_s": 0.5, "use": "digitação em cena, atalho, tecla apertada"},
+    {"name": "error", "category": "ui", "prompt": "soft software error notification tone, two low short notes, subtle, UI", "duration_s": 0.6, "use": "erro, recusa, alerta de interface"},
+    {"name": "device-beep", "category": "ui", "prompt": "single short electronic beep of a handheld device button, high pitched, clean", "duration_s": 0.5, "use": "botão de aparelho, leitura, confirmação curta (versão sintetizada: beep do synth_sfx.py)"},
+    {"name": "vibrate", "category": "ui", "prompt": "smartphone vibrating on a desk, two short buzz pulses, no ringtone", "duration_s": 1.2, "use": "notificação chegando, celular na mesa"},
+    {"name": "stamp", "category": "object", "prompt": "single rubber stamp pressed hard on paper on a wooden desk, dry thud, close mic", "duration_s": 0.6, "use": "aprovado, carimbo, selo batendo na tela"},
+    {"name": "sign", "category": "object", "prompt": "quick pen signature scribble on paper, short", "duration_s": 0.8, "use": "assinatura, contrato fechado, rabisco desenhando"},
+    {"name": "peel", "category": "object", "prompt": "sheet of paper peeling off and fluttering down, soft", "duration_s": 0.8, "use": "papel saindo, página virando, card descolando"},
+    {"name": "tape", "category": "object", "prompt": "masking tape peeled off a plastic container, quick rip", "duration_s": 0.8, "use": "etiqueta ou fita sendo arrancada"},
+    {"name": "printer", "category": "object", "prompt": "small thermal label printer printing a sticker label, fast mechanical whir and paper feed, clean, no music", "duration_s": 2.5, "use": "etiqueta, recibo ou cupom saindo da impressora"},
+    {"name": "clink", "category": "object", "prompt": "small steel block placed on a steel surface, soft precise metallic clink", "duration_s": 0.5, "use": "peça metálica encaixando, precisão, ferramenta"},
+    {"name": "slide", "category": "object", "prompt": "metal slider sliding smoothly along a steel rail, short precise metallic glide, close mic", "duration_s": 0.6, "use": "régua, trilho ou medidor deslizando"},
+    {"name": "crunch", "category": "impact", "prompt": "car gearbox failing, harsh metallic gear crunch clunk, single hit", "duration_s": 0.8, "use": "falha mecânica, quebra, virada ruim"},
+    {"name": "flyby", "category": "vehicle", "prompt": "race car passing by at full speed, doppler fly-by", "duration_s": 2.0, "use": "passagem rápida, velocidade, whip pan"},
+    {"name": "engine", "category": "vehicle", "prompt": "race car engine at high revs, onboard, sustained scream", "duration_s": 6.0, "use": "cama de motor sob uma cena de corrida"},
+    {"name": "crowd", "category": "ambience", "prompt": "huge stadium crowd roaring and cheering, sustained", "duration_s": 5.0, "use": "vitória, chegada, comemoração"},
+    {"name": "rain", "category": "ambience", "prompt": "heavy rain hitting asphalt, steady downpour, no thunder", "duration_s": 9.0, "use": "ambiente de chuva sob uma cena inteira"}
+  ]
+}
