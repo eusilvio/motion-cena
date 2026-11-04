@@ -1,0 +1,28 @@
+{
+  "source": "https://example.com",
+  "colors": {
+    "bg": "#1C1712",
+    "surface": "#2A231C",
+    "text": "#F4EDE3",
+    "muted": "#A89C8C",
+    "primary": "#F2C230",
+    "accent": "#D9733B",
+    "positive": "#7FB069",
+    "negative": "#D1495B"
+  },
+  "fonts": {
+    "display": {"family": "Lora", "weights": [500, 700], "source": "google"},
+    "body": {"family": "Geist", "weights": [400, 600], "source": "google"},
+    "mono": {"family": "Geist Mono", "weights": [500], "source": "google"}
+  },
+  "radius": 18,
+  "texture": "grain sutil 4% + vinheta leve",
+  "motion": {
+    "ease_in": "power3.out",
+    "ease_out": "power2.in",
+    "base_duration": 0.45,
+    "stagger": 0.04
+  },
+  "logo": null,
+  "notes": "Paleta terrosa, amarelo como cor principal; serifada para títulos e números-herói."
+}

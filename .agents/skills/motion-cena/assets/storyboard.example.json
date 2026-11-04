@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "title": "IA nas empresas: larga, mas rasa",
+    "input_mode": "fonte-longa",
+    "genre": "dados",
+    "format": "comparacao",
+    "angle": "Quase todas as grandes empresas dizem usar IA; um grupo pequeno nada no fundo e a distância cresce.",
+    "hook": "A",
+    "platform": "ig-reels",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "captions": true,
+    "engine": "hyperframes"
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "title": "Hook",
+      "narration": "Todo mundo diz que usa inteligência artificial. Quase ninguém usa de verdade.",
+      "visual": "Fundo escuro da marca. Frase 'TODO MUNDO USA IA' em serifada enorme. Miniaturas de páginas do relatório flutuando ao fundo em parallax.",
+      "motion": "Texto já visível no frame 0 com push-in lento. Em 'quase ninguém', texto racha (glitch) e a palavra 'TODO' é riscada em amarelo.",
+      "on_screen_text": "TODO MUNDO USA IA?",
+      "anchors": [
+        {
+          "id": "crack",
+          "phrase": "quase ninguém",
+          "effect": "glitch + risco amarelo"
+        }
+      ],
+      "transition_out": "whip-pan para a direita",
+      "sfx": [
+        {
+          "type": "glitch",
+          "at": "anchor:crack",
+          "gain_db": -14
+        },
+        {
+          "type": "whoosh",
+          "at": "scene_end",
+          "gain_db": -12
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Adoção larga",
+      "narration": "Das cem maiores empresas americanas, quase todas dizem ter um plano de IA.",
+      "visual": "Grade 10x10 de quadrados cinza representando as 100 maiores empresas. Contador no topo.",
+      "motion": "Grade entra com stagger diagonal. Em 'quase todas', 95 quadrados acendem em verde em onda; contador faz count-up até 95%.",
+      "on_screen_text": "95% têm plano de IA",
+      "anchors": [
+        {
+          "id": "wave",
+          "phrase": "quase todas",
+          "effect": "onda verde + count-up"
+        }
+      ],
+      "transition_out": "grade achata e vira superfície da água (match-cut)",
+      "sfx": [
+        {
+          "type": "tick",
+          "at": 0.1,
+          "gain_db": -20
+        },
+        {
+          "type": "riser",
+          "at": "anchor:wave",
+          "gain_db": -18,
+          "offset": -1.6
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Mas rasa",
+      "narration": "Mas só uma fração mínima consegue medir resultado. É uma piscina de um metro de profundidade.",
+      "visual": "Corte lateral de piscina, régua marcando 1m. Pequenos bonecos em pé com água na cintura.",
+      "motion": "Água sobe com spring até 1m. Em 'fração mínima', 3 bonecos acendem em amarelo, resto apaga para 25%.",
+      "on_screen_text": "só 5% medem resultado",
+      "anchors": [
+        {
+          "id": "few",
+          "phrase": "fração mínima",
+          "effect": "destaque amarelo"
+        },
+        {
+          "id": "meter",
+          "phrase": "um metro",
+          "effect": "régua pulsa"
+        }
+      ],
+      "transition_out": "câmera mergulha (zoom-through) para o fundo",
+      "sfx": [
+        {
+          "type": "pop",
+          "at": "anchor:few",
+          "gain_db": -16
+        },
+        {
+          "type": "impact",
+          "at": "anchor:meter",
+          "gain_db": -12
+        }
+      ]
+    }
+  ]
+}

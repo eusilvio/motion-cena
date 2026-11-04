@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "motion-cena storyboard",
+  "type": "object",
+  "required": [
+    "meta",
+    "scenes"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "output": {
+          "enum": [
+            "video",
+            "carrossel"
+          ],
+          "default": "video",
+          "description": "carrossel = static slides, no narration; see references/carousel.md"
+        },
+        "input_mode": {
+          "enum": [
+            "roteiro",
+            "narracao-literal",
+            "notas",
+            "tema",
+            "fonte-longa",
+            "dados",
+            "audio-gravado",
+            "narracao-pronta",
+            "roteiro-rascunho"
+          ],
+          "description": "what the user provided; roteiro = user's text adapted for video (default); narracao-literal = verbatim, only on explicit request; narracao-pronta/roteiro-rascunho = legacy ids"
+        },
+        "genre": {
+          "enum": [
+            "historia",
+            "motivacional",
+            "tecnico",
+            "explicativo",
+            "dados",
+            "produto",
+            "opiniao"
+          ],
+          "description": "dominant genre; drives structure, pacing, visual direction"
+        },
+        "format": {
+          "type": "string",
+          "description": "narrative format chosen, e.g. comparacao"
+        },
+        "angle": {
+          "type": "string"
+        },
+        "hook": {
+          "type": "string",
+          "description": "which hook (A/B/C) the narration uses"
+        },
+        "platform": {
+          "enum": [
+            "ig-reels",
+            "ig-stories",
+            "ig-feed",
+            "fb-reels",
+            "tiktok",
+            "yt-shorts",
+            "yt-long",
+            "yt-long-4k",
+            "linkedin",
+            "square"
+          ],
+          "default": "ig-reels",
+          "description": "preset id from assets/platforms.json; sets canvas, fps, safe zone and max duration"
+        },
+        "extra_platforms": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "ig-reels",
+              "ig-stories",
+              "ig-feed",
+              "fb-reels",
+              "tiktok",
+              "yt-shorts",
+              "yt-long",
+              "yt-long-4k",
+              "linkedin",
+              "square"
+            ]
+          },
+          "description": "other presets recomposed from the same timeline"
+        },
+        "width": {
+          "type": "integer",
+          "default": 1080
+        },
+        "height": {
+          "type": "integer",
+          "default": 1920
+        },
+        "fps": {
+          "type": "integer",
+          "default": 30
+        },
+        "captions": {
+          "type": "boolean",
+          "default": true
+        },
+        "engine": {
+          "enum": [
+            "hyperframes",
+            "remotion",
+            "motion-canvas"
+          ]
+        },
+        "target_duration": {
+          "type": "number",
+          "description": "target length in seconds: the user's parameter, else the preset default_duration"
+        },
+        "concept": {
+          "type": "string",
+          "description": "one-line pitch of the central idea (references/concept.md)"
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "narration",
+          "visual",
+          "motion"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "narration": {
+            "type": "string",
+            "description": "exact spoken text of this scene; all scenes concatenated = full script. Empty for silent scenes."
+          },
+          "duration": {
+            "type": "number",
+            "description": "only for silent scenes (seconds)"
+          },
+          "visual": {
+            "type": "string",
+            "description": "what is on screen: elements, layout, colors"
+          },
+          "motion": {
+            "type": "string",
+            "description": "entrance / emphasis / camera, using the storyboard vocabulary"
+          },
+          "on_screen_text": {
+            "type": "string"
+          },
+          "anchors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "phrase",
+                "effect"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "phrase": {
+                  "type": "string",
+                  "description": "words from this scene's narration that trigger the effect"
+                },
+                "effect": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "transition_out": {
+            "type": "string"
+          },
+          "sfx": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "whoosh|pop|tick|click|impact|riser|glitch|ding|custom name"
+                },
+                "at": {
+                  "description": "scene_start | scene_end | anchor:<id> | seconds from scene start",
+                  "type": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "gain_db": {
+                  "type": "number",
+                  "default": -14
+                },
+                "file": {
+                  "type": "string"
+                },
+                "offset": {
+                  "type": "number",
+                  "description": "seconds added to resolved time; negative for risers that must end on the anchor"
+                }
+              }
+            }
+          },
+          "icons": {
+            "type": "array",
+            "description": "visuals from the visual map (references/visual-mapping.md) for this scene; fetched with scripts/fetch_icon.py. Emoji are never allowed.",
+            "items": {
+              "type": "object",
+              "required": [
+                "kind",
+                "query"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "flag",
+                    "logo",
+                    "icon",
+                    "image"
+                  ]
+                },
+                "query": {
+                  "type": "string",
+                  "description": "ISO country code, logo slug, icon name or image search terms (English)"
+                },
+                "commons": {
+                  "type": "string",
+                  "description": "Wikimedia Commons file name when a logo is not in Simple Icons"
+                },
+                "color": {
+                  "type": "string",
+                  "description": "recolor line icons / mono logos"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "which word triggers it and where it sits"
+                },
+                "set": {
+                  "enum": [
+                    "phosphor",
+                    "lucide"
+                  ]
+                },
+                "weight": {
+                  "type": "string"
+                },
+                "pick": {
+                  "type": "integer",
+                  "description": "chosen image candidate"
+                },
+                "category": {
+                  "enum": [
+                    "photograph",
+                    "illustration",
+                    "digitized_artwork"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="pt-BR" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Dicionário de efeitos motion — demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; }
+      @font-face { font-family: "Anton"; src: url("assets/fonts/Anton-Regular.ttf") format("truetype"); font-weight: 400; }
+      @font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; }
+
+      :root {
+        --bg: #f3ede2;
+        --ink: #141414;
+        --muted: #6b645b;
+        --accent: #d0592c;
+        --soft: #e8c9b6;
+        --panel: #161616;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; color: var(--ink); font-family: "Inter", sans-serif; background: var(--bg); }
+
+      .clip { position: absolute; inset: 0; }
+      .stage { position: absolute; inset: 0; }
+      .display { font-family: "Anton", "Inter", sans-serif; font-weight: 400; letter-spacing: -0.01em; text-transform: none; }
+
+      .hd { position: absolute; left: 80px; top: 290px; font-family: "JetBrains Mono", monospace; font-size: 34px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+      .num { position: absolute; right: 80px; top: 290px; font-family: "JetBrains Mono", monospace; font-size: 34px; color: var(--muted); }
+      .term { position: absolute; left: 76px; top: 345px; font-size: 180px; line-height: 1; }
+      .par { position: absolute; left: 80px; top: 570px; right: 80px; font-size: 42px; line-height: 1.3; color: var(--muted); }
+      .par b { color: var(--ink); font-weight: 700; }
+      .demo { position: absolute; left: 0; right: 0; top: 760px; height: 760px; }
+      .mid { position: absolute; left: 50%; top: 50%; }
+
+      .sq { width: 340px; height: 340px; margin: -170px 0 0 -170px; background: var(--accent); border-radius: 18px; }
+      .circ { width: 360px; height: 360px; margin: -180px 0 0 -180px; background: var(--accent); border-radius: 50%; }
+      .tri { width: 400px; height: 360px; margin: -180px 0 0 -200px; background: var(--accent); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+      .row { position: absolute; left: 0; right: 0; top: 50%; margin-top: -100px; display: flex; justify-content: center; gap: 36px; }
+      .sm { width: 200px; height: 200px; border-radius: 14px; }
+
+      .track { position: absolute; left: 140px; right: 140px; top: 50%; border-top: 4px dashed #c9bfb1; }
+      .ball { position: absolute; left: 140px; top: 50%; width: 130px; height: 130px; margin-top: -65px; border-radius: 50%; background: var(--accent); border: 6px solid var(--ink); }
+      .dest { position: absolute; top: 25%; bottom: 25%; border-left: 4px dashed var(--muted); }
+      .tag { position: absolute; font-family: "JetBrains Mono", monospace; font-size: 30px; color: var(--muted); }
+      .floor { position: absolute; left: 120px; right: 120px; top: 640px; border-top: 6px solid var(--ink); }
+
+      .panel { position: absolute; left: 70px; right: 70px; top: 50%; height: 300px; margin-top: -150px; background: var(--panel); border-radius: 22px; display: flex; align-items: center; justify-content: center; color: #f6f1e8; font-size: 118px; line-height: 1; gap: 0 36px; white-space: nowrap; }
+      .cursor { display: inline-block; width: 10px; height: 120px; background: var(--accent); margin-left: 10px; vertical-align: middle; }
+      .slot { display: inline-grid; overflow: hidden; }
+      .slot > span { grid-area: 1 / 1; }
+
+      .frame { position: absolute; left: 100px; right: 100px; top: 100px; height: 560px; overflow: hidden; border-radius: 20px; }
+      .big { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 320px; line-height: 1; }
+
+      .bar-track { position: absolute; left: 110px; right: 110px; top: 470px; height: 120px; border-radius: 16px; background: #e4dbcd; overflow: hidden; }
+      .bar { position: absolute; inset: 0; background: var(--accent); }
+      .bar-num { position: absolute; left: 110px; top: 160px; font-size: 260px; line-height: 1; }
+
+      .title { position: absolute; left: 76px; right: 76px; top: 420px; font-size: 200px; line-height: 0.95; }
+      .title .accent, .accent { color: var(--accent); }
+      .sub { position: absolute; left: 80px; right: 80px; top: 1130px; font-size: 52px; line-height: 1.25; font-weight: 600; }
+      .prompt { position: absolute; left: 70px; right: 70px; top: 560px; padding: 56px 60px; background: var(--panel); border-radius: 22px; color: #f6f1e8; font-size: 56px; line-height: 1.32; font-weight: 600; }
+      .prompt .w { display: inline; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="54" data-width="1080" data-height="1920">
+
+      <section id="e0" class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <div class="stage">
+          <div class="hd">motion dictionary</div>
+          <div class="title display"><span class="t0">Dicionário</span><br /><span class="t0">de efeitos</span><br /><span class="t0 accent">Motion</span></div>
+          <div class="sub" id="e0-sub">18 efeitos · cada um com duração, ease e receita GSAP.</div>
+        </div>
+      </section>
+
+      <section id="e1" class="clip" data-start="3" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="mid circ" id="fx1"></div></div></div>
+      </section>
+
+      <section id="e2" class="clip" data-start="5.6" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="mid sq" id="fx2"></div></div></div>
+      </section>
+
+      <section id="e3" class="clip" data-start="8.2" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="mid" id="fx3"><div class="tri"></div></div></div></div>
+      </section>
+
+      <section id="e4" class="clip" data-start="10.8" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="mid sq" id="fx4"></div></div></div>
+      </section>
+
+      <section id="e5" class="clip" data-start="13.4" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="mid sq" id="fx5"></div></div></div>
+      </section>
+
+      <section id="e6" class="clip" data-start="16" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="row">
+            <div class="sm fx6" style="background: var(--accent)"></div>
+            <div class="sm fx6" style="background: #df8a66"></div>
+            <div class="sm fx6" style="background: #e9b39b"></div>
+            <div class="sm fx6" style="background: #f0d3c4"></div>
+          </div></div></div>
+      </section>
+
+      <section id="e7" class="clip" data-start="18.6" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo">
+            <div class="track"></div>
+            <div class="tag" style="left: 140px; top: 460px">devagar</div>
+            <div class="tag" style="left: 470px; top: 460px">acelera</div>
+            <div class="tag" style="right: 140px; top: 460px">freia</div>
+            <div class="ball" id="fx7"></div>
+          </div></div>
+      </section>
+
+      <section id="e8" class="clip" data-start="21.2" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo">
+            <div class="track"></div>
+            <div class="dest" style="left: 875px"></div>
+            <div class="tag" style="left: 820px; top: 590px">destino</div>
+            <div class="ball" id="fx8"></div>
+          </div></div>
+      </section>
+
+      <section id="e9" class="clip" data-start="23.8" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo">
+            <div class="floor"></div>
+            <div class="ball" id="fx9" style="left: 475px; top: 575px"></div>
+          </div></div>
+      </section>
+
+      <section id="e10" class="clip" data-start="26.4" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="panel display"><span><span id="fx10" data-text="IDEIA VIRA VÍDEO"></span><span class="cursor" id="fx10-cur"></span></span></div></div></div>
+      </section>
+
+      <section id="e11" class="clip" data-start="29" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="panel display"><span class="fx11">IDEIA</span><span class="fx11">VIRA</span><span class="fx11">VÍDEO</span></div></div></div>
+      </section>
+
+      <section id="e12" class="clip" data-start="31.6" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="panel display">
+            <span class="slot" data-layout-allow-overflow><span id="fx12-old">IDEIA</span><span id="fx12-new" class="accent">VÍDEO</span></span><span>VIRA</span><span>VÍDEO</span>
+          </div></div></div>
+      </section>
+
+      <section id="e13" class="clip" data-start="34.2" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo">
+            <svg width="1080" height="760" viewBox="0 0 1080 760" style="position: absolute; inset: 0">
+              <path d="M760 130 C 520 80, 300 140, 320 280 C 340 420, 760 360, 760 520 C 760 660, 480 680, 300 640" fill="none" stroke="#c9bfb1" stroke-width="5" stroke-dasharray="14 14" />
+              <path id="fx13" d="M760 130 C 520 80, 300 140, 320 280 C 340 420, 760 360, 760 520 C 760 660, 480 680, 300 640" fill="none" stroke="#d0592c" stroke-width="30" stroke-linecap="round" />
+            </svg>
+          </div></div>
+      </section>
+
+      <section id="e14" class="clip" data-start="36.8" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="mid circ" id="fx14"></div></div></div>
+      </section>
+
+      <section id="e15" class="clip" data-start="39.4" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo">
+            <div class="bar-num display" id="fx15-num">0%</div>
+            <div class="bar-track"><div class="bar" id="fx15"></div></div>
+          </div></div>
+      </section>
+
+      <section id="e16" class="clip" data-start="42" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="frame" style="background: var(--panel)">
+            <div id="fx16" style="position: absolute; inset: 0; background: linear-gradient(#f0d3c4, #e9b39b)">
+              <div style="position: absolute; left: 480px; top: 150px; width: 190px; height: 190px; border-radius: 50%; background: var(--accent)"></div>
+              <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 330px; background: #3a3530; clip-path: polygon(0 60%, 18% 20%, 32% 55%, 50% 0, 68% 50%, 82% 25%, 100% 55%, 100% 100%, 0 100%)"></div>
+            </div>
+          </div></div></div>
+      </section>
+
+      <section id="e17" class="clip" data-start="44.6" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="frame" data-layout-allow-overlap data-layout-allow-overflow>
+            <div class="big display" style="background: #8a837a; color: #f3ede2">A</div>
+            <div class="big display" id="fx17" style="background: var(--accent); color: #f3ede2">B</div>
+            <div id="fx17-bar" style="position: absolute; left: -12px; top: 0; bottom: 0; width: 24px; background: var(--ink)"></div>
+          </div></div></div>
+      </section>
+
+      <section id="e18" class="clip" data-start="47.2" data-duration="2.6" data-track-index="1">
+        <div class="stage"><div class="hd"></div><div class="num"></div><div class="term display"></div><div class="par"></div>
+          <div class="demo"><div class="frame" style="background: #e4dbcd">
+            <div id="fx18" style="position: absolute; inset: 0">
+              <div style="position: absolute; left: 250px; top: 260px; width: 170px; height: 170px; background: #7d756b; border-radius: 10px; box-shadow: 18px 18px 0 #5e574f"></div>
+              <div style="position: absolute; left: 230px; top: 455px; width: 230px; height: 26px; border-radius: 50%; background: #cfc5b6"></div>
+              <div class="tag" style="left: 520px; top: 120px">produto</div>
+            </div>
+          </div></div></div>
+      </section>
+
+      <section id="e19" class="clip" data-start="49.8" data-duration="4.2" data-track-index="1">
+        <div class="stage">
+          <div class="hd">agora peça assim</div>
+          <div class="prompt" id="e19-prompt"></div>
+          <div class="sub" style="top: 1300px">efeito + duração + ease + alvo</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const SCENES = [
+        null,
+        ["entradas suaves", "fade in", "aparece aos poucos · <b>0,4 s</b> · power2.out"],
+        ["entradas suaves", "slide in", "entra deslizando · <b>0,4 s</b> · power3.out"],
+        ["entradas suaves", "blur in", "do borrado ao nítido · <b>0,5 s</b> · blur 24px → 0"],
+        ["entradas com impacto", "pop in", "pequeno salto de escala · <b>0,4 s</b> · back.out(1.7)"],
+        ["entradas com impacto", "scale up", "cresce até o tamanho final · <b>0,6 s</b> · expo.out"],
+        ["entradas com impacto", "stagger", "um depois do outro · <b>0,15 s</b> entre itens"],
+        ["ritmo do movimento", "ease in-out", "começa devagar, acelera e freia · power2.inOut"],
+        ["ritmo do movimento", "overshoot", "passa do destino e volta · back.out(1.8)"],
+        ["ritmo do movimento", "bounce", "quica antes de parar · bounce.out"],
+        ["texto em movimento", "typewriter", "letras uma a uma · <b>35 ms</b>/letra"],
+        ["texto em movimento", "word reveal", "palavras em sequência · ancorar na fala"],
+        ["texto em movimento", "text swap", "uma palavra troca por outra · <b>0,35 s</b>"],
+        ["formas que mudam", "draw-on", "o traço se desenha · <b>1,0 s</b> · power2.inOut"],
+        ["formas que mudam", "morph", "uma forma vira outra · <b>0,6 s</b> · power3.inOut"],
+        ["formas que mudam", "bar grow", "cresce até o valor · <b>0,8 s</b> + count-up"],
+        ["transições de cena", "mask reveal", "máscara revela o conteúdo · <b>0,6 s</b>"],
+        ["transições de cena", "wipe", "faixa troca uma cena pela outra · <b>0,5 s</b>"],
+        ["transições de cena", "punch zoom", "zoom rápido para dar impacto · <b>0,25 s</b>"],
+      ];
+      const PROMPT = "“Faça o título entrar com |slide in| em |0,4\u00a0s| e |ease out|. Revele os benefícios com |stagger| de |0,15\u00a0s|. Termine com um |punch zoom| no produto.”";
+
+      SCENES.forEach((s, i) => {
+        if (!s) return;
+        const root = document.getElementById("e" + i);
+        root.querySelector(".hd").textContent = s[0];
+        root.querySelector(".num").textContent = String(i).padStart(2, "0") + "/18";
+        root.querySelector(".term").textContent = s[1];
+        root.querySelector(".par").innerHTML = s[2];
+      });
+      const promptEl = document.getElementById("e19-prompt");
+      // keep the original spacing so punctuation stays glued to the previous word
+      PROMPT.split("|").forEach((chunk, ci) => {
+        for (const tok of chunk.split(/( +)/)) {
+          if (!tok) continue;
+          if (/^ +$/.test(tok)) { promptEl.appendChild(document.createTextNode(" ")); continue; }
+          const w = document.createElement("span");
+          w.className = "w" + (ci % 2 ? " accent" : "");
+          w.textContent = tok;
+          promptEl.appendChild(w);
+        }
+      });
+
+      window.__timelines = window.__timelines || {};
+      document.fonts.ready.then(() => {
+        const tl = gsap.timeline({ paused: true });
+        const E = "power3.out";
+        const start = (i) => parseFloat(document.getElementById("e" + i).dataset.start);
+        const dur = (i) => parseFloat(document.getElementById("e" + i).dataset.duration);
+        const FX = 0.55; // effect starts after the header lands
+
+        // headers: slide in with stagger; every scene drifts and fades out at its end
+        for (let i = 0; i <= 19; i++) {
+          const t = start(i), d = dur(i), sec = document.getElementById("e" + i);
+          const stage = sec.querySelector(".stage");
+          const head = ["hd", "num", "term", "par"].map((c) => sec.getElementsByClassName(c)[0]).filter(Boolean);
+          if (i > 0 && i < 19) tl.fromTo(head, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: E, stagger: 0.06 }, t + 0.05);
+          tl.fromTo(stage, { scale: 1 }, { scale: 1.02, duration: d, ease: "sine.inOut" }, t);
+          if (i < 19) tl.to(stage, { opacity: 0, duration: 0.15, ease: "power2.in" }, t + d - 0.15);
+        }
+
+        // e0 title: word reveal on the three lines, then subtitle fade in
+        tl.fromTo("#e0 .t0", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: E, stagger: 0.15 }, 0.1);
+        tl.fromTo("#e0-sub", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.8);
+
+        let t;
+        // 1 fade in
+        t = start(1) + FX;
+        tl.fromTo("#fx1", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, t);
+        // 2 slide in
+        t = start(2) + FX;
+        tl.fromTo("#fx2", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, t);
+        // 3 blur in
+        t = start(3) + FX;
+        tl.fromTo("#fx3", { filter: "blur(24px)", opacity: 0 }, { filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "power2.out" }, t);
+        // 4 pop in
+        t = start(4) + FX;
+        tl.fromTo("#fx4", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }, t);
+        // 5 scale up
+        t = start(5) + FX;
+        tl.fromTo("#fx5", { scale: 0 }, { scale: 1, duration: 0.6, ease: "expo.out" }, t);
+        // 6 stagger
+        t = start(6) + FX;
+        tl.fromTo(".fx6", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out", stagger: 0.15 }, t);
+        // 7 ease in-out
+        t = start(7) + FX;
+        tl.fromTo("#fx7", { x: 0 }, { x: 670, duration: 1.0, ease: "power2.inOut" }, t);
+        // 8 overshoot
+        t = start(8) + FX;
+        tl.fromTo("#fx8", { x: 0 }, { x: 670, duration: 0.9, ease: "back.out(1.8)" }, t);
+        // 9 bounce
+        t = start(9) + FX - 0.2;
+        tl.fromTo("#fx9", { y: -500 }, { y: 0, duration: 1.2, ease: "bounce.out" }, t);
+
+        // 10 typewriter
+        t = start(10) + FX - 0.2;
+        const tw = document.getElementById("fx10"), full = tw.dataset.text, p = { n: 0 };
+        tl.fromTo(p, { n: 0 }, { n: full.length, duration: full.length * 0.035, ease: "none",
+          onUpdate: () => { tw.textContent = full.slice(0, Math.round(p.n)); } }, t);
+        for (let k = 0; k < 8; k++) tl.set("#fx10-cur", { opacity: k % 2 ? 0 : 1 }, start(10) + 0.4 + k * 0.27);
+        // 11 word reveal (simulated word timestamps)
+        t = start(11) + FX;
+        document.querySelectorAll(".fx11").forEach((el, i) =>
+          tl.fromTo(el, { opacity: 0.15 }, { opacity: 1, duration: 0.12 }, t + i * 0.35));
+        // 12 text swap
+        t = start(12) + FX + 0.2;
+        tl.fromTo("#fx12-old", { yPercent: 0 }, { yPercent: -100, duration: 0.35, ease: "power3.inOut" }, t);
+        tl.fromTo("#fx12-new", { yPercent: 100 }, { yPercent: 0, duration: 0.35, ease: "power3.inOut" }, t);
+
+        // 13 draw-on
+        t = start(13) + FX - 0.1;
+        const path = document.getElementById("fx13"), L = path.getTotalLength();
+        tl.fromTo(path, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, t);
+        // 14 morph
+        t = start(14) + FX;
+        tl.fromTo("#fx14", { borderRadius: "50%", scale: 1, backgroundColor: "#d0592c" },
+          { borderRadius: "16%", scale: 1.15, backgroundColor: "#141414", duration: 0.6, ease: "power3.inOut" }, t);
+        // 15 bar grow + count-up
+        t = start(15) + FX;
+        tl.fromTo("#fx15", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 0.87, duration: 0.8, ease: "power3.out" }, t);
+        const c = { v: 0 }, numEl = document.getElementById("fx15-num");
+        tl.fromTo(c, { v: 0 }, { v: 87, duration: 0.8, ease: "power3.out", onUpdate: () => { numEl.textContent = Math.round(c.v) + "%"; } }, t);
+
+        // 16 mask reveal
+        t = start(16) + FX;
+        tl.fromTo("#fx16", { clipPath: "inset(50% 0% 50% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.inOut" }, t);
+        // 17 wipe: clip edge and bar share duration + ease, so they stay glued
+        t = start(17) + FX;
+        tl.fromTo("#fx17", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "power3.inOut" }, t);
+        tl.fromTo("#fx17-bar", { x: 0 }, { x: 880, duration: 0.5, ease: "power3.inOut" }, t);
+        // 18 punch zoom on the product
+        t = start(18) + FX;
+        tl.fromTo("#fx18", { scale: 1, transformOrigin: "335px 345px" }, { scale: 2.2, duration: 0.25, ease: "power4.out" }, t);
+        tl.to("#fx18", { scale: 1.9, duration: 0.4, ease: "power2.out" }, t + 0.25);
+
+        // 19 prompt: word reveal
+        t = start(19) + 0.3;
+        tl.fromTo("#e19 .hd", { opacity: 0 }, { opacity: 1, duration: 0.3 }, start(19));
+        tl.fromTo("#e19-prompt", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: E }, start(19));
+        tl.fromTo("#e19-prompt .w", { opacity: 0.15 }, { opacity: 1, duration: 0.12, stagger: 0.09 }, t);
+        tl.fromTo("#e19 .sub", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, start(19) + 2.6);
+
+        window.__timelines["main"] = tl;
+      });
+    </script>
+  </body>
+</html>

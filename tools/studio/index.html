@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>motion-cena studio</title>
+<style>
+  :root {
+    --bg: #0f1012; --panel: #16181b; --panel-2: #1d2024; --line: #2a2e33;
+    --text: #e9e7e3; --muted: #9a9ca0; --faint: #6b6e73;
+    --accent: #f2b33d; --accent-ink: #1a1408; --ok: #6fbf73; --err: #ef6b5b;
+    --mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f4f2ee; --panel: #ffffff; --panel-2: #f7f5f1; --line: #e2ded6;
+      --text: #1d1c1a; --muted: #67645e; --faint: #9a968e;
+      --accent: #c9851a; --accent-ink: #fff; --ok: #2f8a3a; --err: #c2412f;
+      color-scheme: light;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--text); font: 14px/1.45 var(--sans); display: grid; grid-template-rows: auto 1fr; }
+  button, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+
+  header { display: flex; align-items: center; gap: 16px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); flex-wrap: wrap; }
+  .brand { font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+  .brand span { color: var(--accent); }
+  .project { display: flex; align-items: center; gap: 8px; }
+  .project select { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; max-width: 260px; }
+  .follow { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .stages { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+  .stage { font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--faint); background: transparent; }
+  .stage.done { color: var(--text); border-color: transparent; background: var(--panel-2); }
+  .stage.done::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); margin-right: 6px; vertical-align: 1px; }
+  .stage.now { color: var(--accent); border-color: var(--accent); }
+  .stage[data-file] { cursor: pointer; }
+
+  main { display: grid; grid-template-columns: minmax(320px, 420px) 1fr; min-height: 0; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; grid-template-rows: 55vh auto; } .stages { margin-left: 0; } }
+
+  /* chat */
+  .chat { display: grid; grid-template-rows: auto 1fr auto; border-right: 1px solid var(--line); background: var(--panel); min-height: 0; }
+  .chat-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .chat-head select { flex: 1; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; }
+  .ghost { background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; color: var(--muted); }
+  .ghost:hover { color: var(--text); }
+  .log { overflow-y: auto; overflow-x: hidden; padding: 14px 12px 20px; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+  .empty-chat { color: var(--muted); margin: auto 8px; }
+  .empty-chat h2 { color: var(--text); font-size: 15px; margin: 0 0 6px; }
+  .empty-chat ul { padding-left: 18px; margin: 8px 0 0; }
+  .empty-chat li { margin: 4px 0; cursor: pointer; }
+  .empty-chat li:hover { color: var(--text); }
+  .msg-user { align-self: flex-end; max-width: 90%; background: var(--accent); color: var(--accent-ink); padding: 8px 11px; border-radius: 12px 12px 3px 12px; white-space: pre-wrap; }
+  .msg-agent { max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .msg-agent code { font-family: var(--mono); font-size: 12.5px; background: var(--panel-2); padding: 1px 4px; border-radius: 4px; }
+  .tool { font-family: var(--mono); font-size: 12px; color: var(--muted); border-left: 2px solid var(--line); padding: 2px 0 2px 8px; overflow-wrap: anywhere; }
+  .tool b { color: var(--text); font-weight: 600; margin-right: 6px; }
+  .tool details { margin-top: 2px; }
+  .tool summary { cursor: pointer; color: var(--faint); list-style: none; }
+  .tool summary::before { content: "+ saída"; }
+  .tool details[open] summary::before { content: "- saída"; }
+  .tool pre { margin: 4px 0 0; white-space: pre-wrap; color: var(--faint); max-height: 220px; overflow: auto; }
+  .tool.err { border-left-color: var(--err); }
+  .note { font-size: 12px; color: var(--faint); text-align: center; }
+  .note.err { color: var(--err); text-align: left; white-space: pre-wrap; }
+  .composer { border-top: 1px solid var(--line); padding: 10px 12px; display: grid; gap: 8px; }
+  .composer textarea { width: 100%; min-height: 64px; max-height: 220px; resize: vertical; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; }
+  .composer textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .row { display: flex; align-items: center; gap: 8px; }
+  .status { color: var(--muted); font-size: 12px; flex: 1; }
+  .status.busy::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 6px; animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  .primary { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px; padding: 7px 14px; font-weight: 600; }
+  .primary:disabled { opacity: .45; cursor: default; }
+  .danger { background: transparent; color: var(--err); border: 1px solid var(--err); border-radius: 8px; padding: 6px 12px; }
+
+  /* stage view */
+  .view { display: grid; grid-template-rows: auto 1fr; min-height: 0; }
+  .tabs { display: flex; gap: 2px; padding: 8px 12px 0; border-bottom: 1px solid var(--line); align-items: flex-end; }
+  .tab { background: transparent; border: 0; border-bottom: 2px solid transparent; padding: 6px 12px 8px; color: var(--muted); }
+  .tab.on { color: var(--text); border-bottom-color: var(--accent); }
+  .tabs .spacer { flex: 1; }
+  .tabs select { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; margin-bottom: 6px; font-size: 12px; }
+  .tabs a { color: var(--muted); font-size: 12px; margin: 0 4px 9px; }
+  .pane { min-height: 0; position: relative; overflow: auto; }
+  .pane iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+  .placeholder { display: grid; place-items: center; height: 100%; padding: 24px; color: var(--muted); text-align: center; }
+  .placeholder strong { display: block; color: var(--text); font-size: 15px; margin-bottom: 6px; }
+  .doc { padding: 20px 24px 40px; max-width: 920px; white-space: pre-wrap; font-family: var(--mono); font-size: 12.5px; line-height: 1.55; }
+  .scenes { padding: 16px 20px 40px; display: grid; gap: 10px; max-width: 980px; }
+  .scene { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .scene h3 { margin: 0 0 6px; font-size: 13px; color: var(--accent); font-weight: 600; }
+  .scene p { margin: 4px 0; }
+  .scene .k { color: var(--faint); font-size: 12px; margin-right: 6px; }
+  .finals { padding: 16px 20px 40px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .final { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+  .final video, .final img { width: 100%; border-radius: 6px; background: #000; display: block; }
+  .final div { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 6px; word-break: break-all; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">motion-cena <span>studio</span></div>
+  <div class="project">
+    <select id="project" aria-label="Projeto"></select>
+    <label class="follow"><input type="checkbox" id="follow" checked> seguir o mais recente</label>
+  </div>
+  <div class="stages" id="stages"></div>
+</header>
+<main>
+  <section class="chat">
+    <div class="chat-head">
+      <select id="agent" aria-label="Agente"></select>
+      <button class="ghost" id="reset" title="Começa uma conversa nova com o agente">Nova conversa</button>
+    </div>
+    <div class="log" id="log"></div>
+    <div class="composer">
+      <textarea id="prompt" placeholder="Peça um vídeo ou um ajuste. Enter envia, Shift+Enter quebra linha."></textarea>
+      <div class="row">
+        <div class="status" id="status">pronto</div>
+        <button class="danger" id="stop" hidden>Parar</button>
+        <button class="primary" id="send">Enviar</button>
+      </div>
+    </div>
+  </section>
+  <section class="view">
+    <nav class="tabs">
+      <button class="tab on" data-tab="preview">Preview ao vivo</button>
+      <button class="tab" data-tab="roteiro">Roteiro</button>
+      <button class="tab" data-tab="storyboard">Storyboard</button>
+      <button class="tab" data-tab="final">Final</button>
+      <button class="tab" data-tab="arquivo" id="tab-file" hidden>Arquivo</button>
+      <span class="spacer"></span>
+      <select id="comp" aria-label="Composição" hidden></select>
+      <a id="open-studio" href="#" target="_blank" rel="noopener" hidden>abrir em outra aba</a>
+    </nav>
+    <div class="pane" id="pane"></div>
+  </section>
+</main>
+<script>
+const T = "__MOTION_CENA_TOKEN__";
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const inline = (s) => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+const store = { get(k, d) { try { return localStorage.getItem(k) ?? d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+
+const st = { agents: [], projects: [], previews: {}, running: false, slug: null, comp: null, tab: "preview", file: null, asked: new Set() };
+
+async function api(path, body) {
+  const r = await fetch(path, body === undefined ? { headers: { "x-motion-cena-token": T } } : { method: "POST", headers: { "x-motion-cena-token": T, "content-type": "application/json" }, body: JSON.stringify(body) });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || r.statusText);
+  return data;
+}
+const fileUrl = (base, path) => `/api/file?t=${T}&base=${base}&path=${encodeURIComponent(path)}`;
+
+// ── chat ────────────────────────────────────────────────────────────────
+const log = $("#log");
+let agentBubble = null;
+const SUGGESTIONS = [
+  "Faz um reels de 30 s explicando juros compostos.",
+  "Analisa o código em ../meu-app e faz um vídeo de 30 s mostrando o produto, com a marca dele.",
+  "Anima em cima desse vídeo em que eu falo (caminho/video.mp4), com legenda palavra por palavra.",
+  "Faz um carrossel de 7 slides sobre como montar uma reserva de emergência.",
+];
+function emptyChat() {
+  if (log.children.length) return;
+  log.innerHTML = `<div class="empty-chat"><h2>O que vamos fazer?</h2>Marca, voz e tom vão no pedido: um site, cores, o código do produto ou a gravação de quem fala. Quando a animação começar, o vídeo aparece ao lado, sendo editado.<ul>${SUGGESTIONS.map((s) => `<li>${esc(s)}</li>`).join("")}</ul></div>`;
+  log.querySelectorAll("li").forEach((li) => li.onclick = () => { $("#prompt").value = li.textContent; $("#prompt").focus(); });
+}
+function scroll() { log.scrollTop = log.scrollHeight; }
+function add(el) { log.querySelector(".empty-chat")?.remove(); log.appendChild(el); scroll(); return el; }
+function div(cls, html) { const d = document.createElement("div"); d.className = cls; d.innerHTML = html; return d; }
+
+function renderEvent(ev) {
+  if (ev.type === "user") { agentBubble = null; add(div("msg-user", esc(ev.text))); }
+  else if (ev.type === "text") {
+    if (!agentBubble) { agentBubble = add(div("msg-agent", "")); agentBubble._raw = ""; }
+    agentBubble._raw += ev.delta ? ev.text : (agentBubble._raw ? "\n\n" : "") + ev.text;
+    agentBubble.innerHTML = inline(agentBubble._raw); scroll();
+  } else if (ev.type === "tool") { agentBubble = null; add(div("tool", `<b>${esc(ev.name)}</b>${esc(ev.detail)}`)); }
+  else if (ev.type === "tool_result") {
+    const last = log.lastElementChild;
+    if (ev.text && last?.classList.contains("tool") && !last.querySelector("details")) {
+      last.insertAdjacentHTML("beforeend", `<details><summary></summary><pre>${esc(ev.text)}</pre></details>`);
+      if (ev.error) last.classList.add("err");
+    }
+  } else if (ev.type === "error") { agentBubble = null; add(div("note err", esc(ev.text))); }
+  else if (ev.type === "done") { agentBubble = null; add(div("note", ev.ok ? "concluído" : "terminou com erro")); }
+}
+
+function setRunning(on, agent) {
+  st.running = on;
+  $("#send").disabled = on; $("#stop").hidden = !on; $("#reset").disabled = on; $("#agent").disabled = on;
+  const label = st.agents.find((a) => a.id === agent)?.label ?? "agente";
+  $("#status").textContent = on ? `${label} trabalhando` : "pronto";
+  $("#status").classList.toggle("busy", on);
+}
+
+async function send() {
+  const prompt = $("#prompt").value.trim();
+  if (!prompt || st.running) return;
+  const agent = $("#agent").value;
+  if (!agent) return alertNote("Nenhum agente instalado: instale Claude Code, Codex ou Antigravity (agy).");
+  $("#prompt").value = "";
+  store.set("motion-cena.agent", agent);
+  try { await api("/api/chat", { agent, prompt }); } catch (e) { alertNote(e.message); }
+}
+function alertNote(text) { add(div("note err", esc(text))); }
+$("#send").onclick = send;
+$("#prompt").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
+$("#stop").onclick = () => api("/api/stop", {});
+$("#reset").onclick = async () => { try { await api("/api/reset", {}); } catch (e) { alertNote(e.message); } };
+
+// ── projects, stages, preview ───────────────────────────────────────────
+const current = () => st.projects.find((p) => p.slug === st.slug);
+
+function pickProject(projects) {
+  st.projects = projects;
+  const follow = $("#follow").checked;
+  if (!st.slug || follow || !current()) st.slug = projects[0]?.slug ?? null;
+  const sel = $("#project");
+  sel.innerHTML = projects.length ? projects.map((p) => `<option value="${esc(p.slug)}">${esc(p.slug)}</option>`).join("") : `<option value="">nenhum projeto ainda</option>`;
+  sel.value = st.slug ?? "";
+  const p = current();
+  const comps = p?.compositions ?? [];
+  if (!comps.includes(st.comp)) st.comp = comps[0] ?? null;
+  $("#comp").innerHTML = comps.map((c) => `<option>${esc(c)}</option>`).join("");
+  $("#comp").hidden = comps.length < 2;
+  if (st.comp) $("#comp").value = st.comp;
+  renderStages();
+  ensurePreview();
+  renderPane();
+}
+
+function renderStages() {
+  const p = current();
+  if (!p) { $("#stages").innerHTML = ""; return; }
+  const next = p.stages.findIndex((s) => !s.done);
+  $("#stages").innerHTML = p.stages.map((s, i) =>
+    `<button class="stage ${s.done ? "done" : ""} ${i === next ? "now" : ""}" ${s.done && s.file ? `data-file="${esc(s.file)}"` : ""} title="${s.done ? "pronto" : i === next ? "próxima etapa" : "pendente"}">${esc(s.label)}</button>`).join("");
+  $("#stages").querySelectorAll("[data-file]").forEach((b) => b.onclick = () => openFile(b.dataset.file));
+}
+
+async function ensurePreview() {
+  const p = current();
+  if (!p || !st.comp) return;
+  const key = `${p.slug}/${st.comp}`;
+  if (st.previews[key]?.state === "running" || st.asked.has(key)) return;
+  st.asked.add(key);
+  try { const r = await api("/api/preview", { slug: p.slug, comp: st.comp }); st.previews[key] = r; renderPane(); } catch {}
+  setTimeout(() => st.asked.delete(key), 15000);
+}
+
+let lastFrame = null;
+async function renderPane() {
+  const pane = $("#pane");
+  const p = current();
+  const tab = st.tab;
+  $("#open-studio").hidden = true;
+  if (!p) { lastFrame = null; pane.innerHTML = `<div class="placeholder"><div><strong>Nenhum projeto ainda</strong>Peça um vídeo no chat. O projeto aparece aqui assim que o agente criar a pasta.</div></div>`; return; }
+
+  if (tab === "preview") {
+    const pv = st.comp ? st.previews[`${p.slug}/${st.comp}`] : null;
+    if (pv?.state === "running" && pv.studioUrl) {
+      $("#open-studio").href = pv.studioUrl; $("#open-studio").hidden = false;
+      if (lastFrame !== pv.studioUrl || !pane.querySelector("iframe")) {
+        lastFrame = pv.studioUrl;
+        pane.innerHTML = `<iframe src="${esc(pv.studioUrl)}" title="HyperFrames Studio" allow="autoplay; fullscreen; clipboard-write"></iframe>`;
+      }
+      return;
+    }
+    lastFrame = null;
+    const msg = st.comp
+      ? `<strong>Abrindo o Studio…</strong>Composição <code>${esc(st.comp)}</code> encontrada.`
+      : `<strong>O preview aparece aqui na etapa de animação</strong>Antes dela o agente escreve roteiro, storyboard e locução (veja as abas e as etapas no topo).`;
+    pane.innerHTML = `<div class="placeholder"><div>${msg}</div></div>`;
+    return;
+  }
+  lastFrame = null;
+  if (tab === "roteiro") {
+    const file = p.stages.find((s) => s.id === "roteiro" || s.id === "plano");
+    if (!file?.done) { pane.innerHTML = `<div class="placeholder"><div><strong>Sem roteiro ainda</strong>Ele aparece aqui quando o agente gravar o plan.md.</div></div>`; return; }
+    const text = await fetch(fileUrl("projects", `${p.slug}/${file.file}`)).then((r) => r.text()).catch(() => "");
+    pane.innerHTML = `<div class="doc">${esc(text)}</div>`;
+  } else if (tab === "storyboard") {
+    const sb = await fetch(fileUrl("projects", `${p.slug}/storyboard.json`)).then((r) => r.ok ? r.json() : null).catch(() => null);
+    if (!sb?.scenes) { pane.innerHTML = `<div class="placeholder"><div><strong>Sem storyboard ainda</strong>Ele aparece aqui quando o agente gravar o storyboard.json.</div></div>`; return; }
+    pane.innerHTML = `<div class="scenes">${sb.scenes.map((s) => `<div class="scene"><h3>${esc(s.id)} · ${esc(s.title ?? "")}</h3>${s.narration ? `<p><span class="k">fala</span>${esc(s.narration)}</p>` : ""}${s.visual ? `<p><span class="k">visual</span>${esc(s.visual)}</p>` : ""}${s.motion ? `<p><span class="k">motion</span>${esc(s.motion)}</p>` : ""}</div>`).join("")}</div>`;
+  } else if (tab === "final") {
+    if (!p.outputs.length) { pane.innerHTML = `<div class="placeholder"><div><strong>Nada renderizado ainda</strong>O MP4 (ou os slides) aparece aqui depois do render, em creatives/.</div></div>`; return; }
+    pane.innerHTML = `<div class="finals">${p.outputs.map((o) => {
+      const u = fileUrl("creatives", o);
+      const media = o.endsWith(".mp4") ? `<video src="${u}" controls preload="metadata"></video>` : /\.(png|jpe?g)$/.test(o) ? `<img src="${u}" alt="">` : "";
+      return `<div class="final">${media}<div>${esc(o)}</div></div>`;
+    }).join("")}</div>`;
+  } else if (tab === "arquivo" && st.file) {
+    const u = fileUrl("projects", `${p.slug}/${st.file}`);
+    if (/\.(mp3|wav)$/.test(st.file)) pane.innerHTML = `<div class="doc"><audio src="${u}" controls></audio>\n\n${esc(st.file)}</div>`;
+    else pane.innerHTML = `<div class="doc">${esc(await fetch(u).then((r) => r.text()).catch(() => ""))}</div>`;
+  }
+}
+
+function openFile(file) { st.file = file; $("#tab-file").hidden = false; $("#tab-file").textContent = file; setTab("arquivo"); }
+function setTab(tab) {
+  st.tab = tab;
+  document.querySelectorAll(".tab").forEach((b) => b.classList.toggle("on", b.dataset.tab === tab));
+  renderPane();
+}
+document.querySelectorAll(".tab").forEach((b) => b.onclick = () => setTab(b.dataset.tab));
+$("#project").onchange = (e) => { $("#follow").checked = false; st.slug = e.target.value; st.comp = null; pickProject(st.projects); };
+$("#comp").onchange = (e) => { st.comp = e.target.value; ensurePreview(); renderPane(); };
+
+// ── boot + live events ──────────────────────────────────────────────────
+async function boot() {
+  const s = await api("/api/state");
+  st.agents = s.agents; st.previews = s.previews || {};
+  $("#agent").innerHTML = s.agents.length ? s.agents.map((a) => `<option value="${a.id}">${esc(a.label)}</option>`).join("") : `<option value="">nenhum agente encontrado</option>`;
+  const saved = store.get("motion-cena.agent", "");
+  if (s.agents.some((a) => a.id === saved)) $("#agent").value = saved;
+  log.innerHTML = ""; s.history.forEach(renderEvent); emptyChat();
+  setRunning(s.running, s.agent);
+  pickProject(s.projects);
+}
+
+const es = new EventSource(`/api/events?t=${T}`);
+es.onmessage = (m) => {
+  const ev = JSON.parse(m.data);
+  if (ev.channel === "chat") renderEvent(ev);
+  else if (ev.channel === "run") setRunning(ev.running, ev.agent);
+  else if (ev.channel === "reset") { log.innerHTML = ""; agentBubble = null; emptyChat(); }
+  else if (ev.channel === "preview") { st.previews[ev.key] = { state: ev.state, studioUrl: ev.studioUrl }; renderPane(); }
+  else if (ev.channel === "fs") {
+    pickProject(ev.projects);
+  }
+};
+es.onerror = () => { $("#status").textContent = "sem conexão com o servidor"; };
+boot().catch((e) => alertNote(e.message));
+</script>
+</body>
+</html>

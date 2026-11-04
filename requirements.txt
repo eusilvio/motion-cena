@@ -1,0 +1,4 @@
+# Python scripts in .agents/skills/motion-cena/scripts/ declare their own dependencies inline
+# and run with `uv run`. This file lists the ElevenLabs integration for tools that look for it.
+elevenlabs>=2.74
+python-dotenv>=1.0

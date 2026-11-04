@@ -1,0 +1,52 @@
+# ── Ferramentas ───────────────────────────────────────────────
+.hyperframes/
+node_modules/
+__pycache__/
+.venv/
+*.hf-transaction-*/
+
+# ── Segredos ──────────────────────────────────────────────────
+# chaves ficam em .env.local (modelo em .env.example)
+.env
+.env.*
+!.env.example
+
+# ── Configurações locais de cada agente ───────────────────────
+# .claude/skills/ são links para .agents/skills/, criados pelo setup.sh
+/.claude/
+CLAUDE.local.md
+.codex/
+.gemini/settings.json
+.cursor/
+.vscode/
+
+# ── Workspace de cada pessoa: nada gerado sobe ────────────────
+# projetos em produção (brief, roteiro, voz, composição)
+projects/*
+!projects/.gitkeep
+
+# peças finais e histórico de peças entregues
+creatives/*
+!creatives/README.md
+!creatives/demos/
+creatives/demos/*
+!creatives/demos/dicionario-demo.mp4
+!creatives/demos/dicionario-demo-2.mp4
+
+# voz gravada (dado biométrico), vídeos de referência, testes, pesquisas
+# (sobem só as demos agnósticas do dicionário de efeitos)
+training/*
+!training/README.md
+!training/dicionario-demo/
+!training/dicionario-demo-2/
+
+# estilos tirados das referências de cada pessoa (análise de vídeo de terceiros: ficam locais)
+.agents/skills/motion-cena/references/styles/*
+!.agents/skills/motion-cena/references/styles/README.md
+!.agents/skills/motion-cena/references/styles/_template.md
+
+# prints de referência para carrossel
+.agents/skills/motion-cena/assets/carousel-refs/
+
+# arquivos recebidos por tools/upload_server.py
+uploads/

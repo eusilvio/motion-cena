@@ -1,0 +1,330 @@
+{
+  "_doc": "Platform presets. type=video: canvas, fps, durations (s; default_duration = target when the user gives no time), safe margins (px) where critical text must NOT go. type=carousel: canvas per slide, slide limits, safe margins. See references/platforms.md and references/carousel.md.",
+  "encoding": {
+    "container": "mp4 (+faststart)",
+    "video": "h264 high, yuv420p, constant frame rate, progressive",
+    "audio": "aac-lc 48 kHz stereo",
+    "loudness_lufs": -14
+  },
+  "presets": {
+    "vertical": {
+      "label": "Vertical universal (Reels + TikTok + Shorts)",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "max_duration": 180,
+      "ideal_duration": [
+        15,
+        60
+      ],
+      "safe": {
+        "top": 288,
+        "bottom": 672,
+        "left": 65,
+        "right": 192
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 30,
+      "note": "zona = a mais restritiva de ig-reels, tiktok e yt-shorts em cada borda; um render serve aos três"
+    },
+    "ig-reels": {
+      "label": "Instagram Reels",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "max_duration": 180,
+      "ideal_duration": [
+        15,
+        60
+      ],
+      "safe": {
+        "top": 269,
+        "bottom": 672,
+        "left": 65,
+        "right": 65
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 30
+    },
+    "ig-stories": {
+      "label": "Instagram Stories",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "max_duration": 60,
+      "ideal_duration": [
+        5,
+        15
+      ],
+      "safe": {
+        "top": 269,
+        "bottom": 672,
+        "left": 65,
+        "right": 65
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 15
+    },
+    "ig-feed": {
+      "label": "Instagram Feed (vídeo no feed)",
+      "width": 1080,
+      "height": 1350,
+      "fps": 30,
+      "max_duration": 180,
+      "ideal_duration": [
+        15,
+        60
+      ],
+      "safe": {
+        "top": 60,
+        "bottom": 60,
+        "left": 60,
+        "right": 60
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 30
+    },
+    "fb-reels": {
+      "label": "Facebook Reels",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "max_duration": 180,
+      "ideal_duration": [
+        15,
+        60
+      ],
+      "safe": {
+        "top": 269,
+        "bottom": 672,
+        "left": 65,
+        "right": 65
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 30
+    },
+    "tiktok": {
+      "label": "TikTok",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "max_duration": 600,
+      "ideal_duration": [
+        15,
+        60
+      ],
+      "safe": {
+        "top": 160,
+        "bottom": 480,
+        "left": 60,
+        "right": 140
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 30
+    },
+    "yt-shorts": {
+      "label": "YouTube Shorts",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "max_duration": 180,
+      "ideal_duration": [
+        20,
+        60
+      ],
+      "safe": {
+        "top": 288,
+        "bottom": 672,
+        "left": 48,
+        "right": 192
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 40
+    },
+    "yt-long": {
+      "label": "YouTube (vídeo horizontal)",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "max_duration": 43200,
+      "ideal_duration": [
+        60,
+        900
+      ],
+      "safe": {
+        "top": 54,
+        "bottom": 140,
+        "left": 96,
+        "right": 96
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "safe_corners": {
+        "_doc": "Google Universal Video Ad Safe Zones (1920x1080): rectangles covered by overlays, [x, y, w, h]. Ads only; organic uses the plain margins but these corners are still where the player puts title/channel (top) and controls (bottom).",
+        "top_left": [
+          0,
+          0,
+          352,
+          166
+        ],
+        "top_right": [
+          1487,
+          0,
+          433,
+          133
+        ],
+        "bottom_left": [
+          0,
+          743,
+          856,
+          337
+        ],
+        "bottom_right_low": [
+          1262,
+          890,
+          658,
+          190
+        ],
+        "bottom_right_high": [
+          1457,
+          771,
+          463,
+          309
+        ],
+        "min_margin": {
+          "top": 38,
+          "left": 38,
+          "right": 152,
+          "bottom": 143
+        }
+      },
+      "default_duration": 90
+    },
+    "yt-long-4k": {
+      "label": "YouTube 4K (horizontal)",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30,
+      "max_duration": 43200,
+      "ideal_duration": [
+        60,
+        900
+      ],
+      "safe": {
+        "top": 108,
+        "bottom": 280,
+        "left": 192,
+        "right": 192
+      },
+      "bitrate_mbps": 40,
+      "type": "video",
+      "safe_corners": {
+        "_doc": "same as yt-long, x2"
+      },
+      "default_duration": 90
+    },
+    "linkedin": {
+      "label": "LinkedIn (feed)",
+      "width": 1080,
+      "height": 1350,
+      "fps": 30,
+      "max_duration": 900,
+      "ideal_duration": [
+        30,
+        90
+      ],
+      "safe": {
+        "top": 60,
+        "bottom": 60,
+        "left": 60,
+        "right": 60
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 45
+    },
+    "square": {
+      "label": "Quadrado 1:1 (feed genérico, X, LinkedIn)",
+      "width": 1080,
+      "height": 1080,
+      "fps": 30,
+      "max_duration": 600,
+      "ideal_duration": [
+        15,
+        60
+      ],
+      "safe": {
+        "top": 60,
+        "bottom": 60,
+        "left": 60,
+        "right": 60
+      },
+      "bitrate_mbps": 8,
+      "type": "video",
+      "default_duration": 30
+    },
+    "ig-carousel": {
+      "type": "carousel",
+      "label": "Instagram carrossel (4:5)",
+      "width": 1080,
+      "height": 1350,
+      "max_slides": 20,
+      "ads_max_slides": 10,
+      "ideal_slides": [
+        6,
+        10
+      ],
+      "safe": {
+        "top": 80,
+        "bottom": 80,
+        "left": 80,
+        "right": 80
+      },
+      "format": "png"
+    },
+    "ig-carousel-square": {
+      "type": "carousel",
+      "label": "Instagram carrossel (1:1)",
+      "width": 1080,
+      "height": 1080,
+      "max_slides": 20,
+      "ads_max_slides": 10,
+      "ideal_slides": [
+        6,
+        10
+      ],
+      "safe": {
+        "top": 72,
+        "bottom": 72,
+        "left": 72,
+        "right": 72
+      },
+      "format": "png"
+    },
+    "linkedin-carousel": {
+      "type": "carousel",
+      "label": "LinkedIn carrossel (documento PDF 4:5)",
+      "width": 1080,
+      "height": 1350,
+      "max_slides": 20,
+      "ideal_slides": [
+        6,
+        12
+      ],
+      "safe": {
+        "top": 80,
+        "bottom": 80,
+        "left": 80,
+        "right": 80
+      },
+      "format": "pdf"
+    }
+  }
+}
