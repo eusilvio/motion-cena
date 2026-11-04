@@ -1,0 +1,888 @@
+[
+  {
+    "id": "glow",
+    "nome": "glow",
+    "nome_pt": "brilho em volta",
+    "aliases": [
+      "brilhar",
+      "acender",
+      "dar um brilho",
+      "neon"
+    ],
+    "familia": "enfase",
+    "descricao": "Um brilho na cor de acento acende ao redor do elemento e apaga devagar.",
+    "como_funciona": "drop-shadow de 0 até 40 px na cor de acento em 0,25 s power2.out; depois volta a 0 em 0,5 s power2.in.",
+    "quando_usar": "Ícone ou palavra que precisa de destaque elegante, especialmente sobre fundo escuro.",
+    "evitar": "Sobre fundo claro quase não aparece. drop-shadow em muitas camadas pesa no render.",
+    "padrao": {
+      "duracao_s": 0.75,
+      "ease": "power2.out",
+      "parametros": {
+        "subida_s": 0.25,
+        "descida_s": 0.5,
+        "raio_px": 40,
+        "cor": "rgba(208,89,44,0.9)"
+      }
+    },
+    "propriedades": [
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pulse",
+      "highlight",
+      "light-sheen"
+    ],
+    "gsap": "// glow: drop-shadow na cor de acento\ntl.fromTo(el, { filter: \"drop-shadow(0 0 0px rgba(208,89,44,0))\" }, { filter: \"drop-shadow(0 0 40px rgba(208,89,44,0.9))\", duration: 0.25, ease: \"power2.out\" }, t);\ntl.to(el, { filter: \"drop-shadow(0 0 0px rgba(208,89,44,0))\", duration: 0.5, ease: \"power2.in\" }, t + 0.35);",
+    "receita_hyperframes": "ambient-glow-bloom",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "pulse",
+    "nome": "pulse",
+    "nome_pt": "pulsar uma vez",
+    "aliases": [
+      "pulsar",
+      "dar um pulso",
+      "pulsinho",
+      "destacar com escala"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento cresce um pouco e volta, uma única vez, para chamar o olho sem tirar nada do lugar.",
+    "como_funciona": "Escala de 1 até 1,08 em 0,18 s com sine.inOut, yoyo com repeat 1 para voltar ao tamanho original.",
+    "quando_usar": "Palavra-chave da narração, número que acabou de ser dito, botão de CTA.",
+    "evitar": "Em vários elementos ao mesmo tempo ou repetido a cada frase: perde o sentido de destaque.",
+    "padrao": {
+      "duracao_s": 0.36,
+      "ease": "sine.inOut",
+      "parametros": {
+        "escala": 1.08,
+        "meia_ida_s": 0.18
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "dados",
+      "produto",
+      "tecnico",
+      "opiniao"
+    ],
+    "combina_com": [
+      "highlight",
+      "glow",
+      "word-reveal"
+    ],
+    "gsap": "// pulse\ntl.fromTo(el, { scale: 1 }, { scale: 1.08, duration: 0.18, ease: \"sine.inOut\", yoyo: true, repeat: 1 }, t);",
+    "receita_hyperframes": "asr-keyword-glow",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "shake",
+    "nome": "shake",
+    "nome_pt": "tremer no lugar",
+    "aliases": [
+      "tremer",
+      "chacoalhar",
+      "balançar de erro",
+      "tremidinha"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento treme de um lado para o outro com amplitude que vai diminuindo, como um erro ou um impacto.",
+    "como_funciona": "Keyframes fixos em x (0, -14, 12, -8, 6, -3, 0) em 0,35 s com ease none; os valores determinísticos fazem a amplitude decair.",
+    "quando_usar": "Erro, negação, impacto de algo pesado, número chocante.",
+    "evitar": "Em toda cena: vira ruído. Não confundir com camera shake, que mexe a cena inteira.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "none",
+      "parametros": {
+        "amplitude_px": 14,
+        "decaimento": "fixo"
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "dados",
+      "historia",
+      "tecnico"
+    ],
+    "combina_com": [
+      "slam",
+      "flash-attention",
+      "color-pop"
+    ],
+    "gsap": "// shake: amplitude decaindo; valores fixos (determinístico)\ntl.fromTo(el, { x: 0 }, { keyframes: { x: [0, -14, 12, -8, 6, -3, 0] }, duration: 0.35, ease: \"none\" }, t);",
+    "receita_hyperframes": "chromatic-glitch",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "wiggle",
+    "nome": "wiggle",
+    "nome_pt": "rebolado rápido",
+    "aliases": [
+      "balançadinha",
+      "chamar o clique",
+      "tremelique",
+      "mexidinha"
+    ],
+    "familia": "enfase",
+    "descricao": "Uma oscilação curta e leve de rotação, como um ícone pedindo para ser tocado.",
+    "como_funciona": "rotation de -2° a 2° em meias oscilações de 0,12 s, yoyo com repeat 7 (8 meias oscilações), depois volta a 0.",
+    "quando_usar": "Botão de seguir, ícone de notificação, seta de 'clique aqui'.",
+    "evitar": "Rotação grande demais vira tremedeira. Não use em texto longo.",
+    "padrao": {
+      "duracao_s": 1.06,
+      "ease": "sine.inOut",
+      "parametros": {
+        "angulo_graus": 2,
+        "meia_oscilacao_s": 0.12,
+        "meias_oscilacoes": 8
+      }
+    },
+    "propriedades": [
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "pop-in",
+      "ring-bell",
+      "arrow-bounce"
+    ],
+    "gsap": "// wiggle: repeat finito\ntl.fromTo(el, { rotation: -2 }, { rotation: 2, duration: 0.12, ease: \"sine.inOut\", yoyo: true, repeat: 7 }, t);\ntl.to(el, { rotation: 0, duration: 0.1 }, t + 0.96);",
+    "receita_hyperframes": "svg-icon-enrichment",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "arrow-bounce",
+    "nome": "attention arrow bounce",
+    "nome_pt": "seta quicando",
+    "aliases": [
+      "seta pulando",
+      "seta apontando",
+      "arrow bounce",
+      "olha aqui"
+    ],
+    "familia": "enfase",
+    "descricao": "Uma seta vai e volta na direção que aponta, várias vezes, indicando para onde olhar.",
+    "como_funciona": "y (ou x) de 0 até 24 px no sentido da seta, 0,3 s power2.in na ida e yoyo power2.out, repeat finito (3 idas).",
+    "quando_usar": "Indicar link na bio, botão, campo do formulário, 'arraste para cima'.",
+    "evitar": "Seta que nunca para irrita; limite as repetições e congele no fim.",
+    "padrao": {
+      "duracao_s": 1.8,
+      "ease": "power2.inOut",
+      "parametros": {
+        "distancia_px": 24,
+        "idas": 3
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "outline-pulse",
+      "nudge",
+      "pop-in"
+    ],
+    "gsap": "// arrow bounce: seta apontando para baixo; 3 idas e voltas\ntl.fromTo(el, { y: 0 }, { y: 24, duration: 0.3, ease: \"power2.inOut\", yoyo: true, repeat: 5 }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "color-pop",
+    "nome": "color pop",
+    "nome_pt": "estouro de cor",
+    "aliases": [
+      "mudar de cor",
+      "acender na cor",
+      "ficar vermelho",
+      "colorir"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento muda de cor de repente para a cor de acento, com um micro salto de escala.",
+    "como_funciona": "Filtro (saturate/brightness + sepia/hue-rotate) ou uma camada de cor por cima com opacity 0 → 1 em 0,15 s, junto com scale 1,06 yoyo.",
+    "quando_usar": "Palavra que vira o assunto, preço errado em vermelho, item correto em verde.",
+    "evitar": "Trocar cor de muitas coisas ao mesmo tempo dilui a mensagem. Garanta contraste da cor nova.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power2.out",
+      "parametros": {
+        "cor": "acento",
+        "escala": 1.06
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "dados",
+      "produto"
+    ],
+    "combina_com": [
+      "pulse",
+      "headshake",
+      "highlight"
+    ],
+    "gsap": "// color pop: \"tint\" é uma cópia do elemento já pintada na cor de acento, empilhada por cima (a = tint)\ntl.fromTo(a, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: \"power2.out\" }, t);\ntl.fromTo(el, { scale: 1 }, { scale: 1.06, duration: 0.15, ease: \"power2.out\", yoyo: true, repeat: 1 }, t);",
+    "receita_hyperframes": "theme-crossfade-morph",
+    "origem": "expansao"
+  },
+  {
+    "id": "flash-attention",
+    "nome": "flash attention",
+    "nome_pt": "piscar para chamar atenção",
+    "aliases": [
+      "piscar",
+      "blink",
+      "pisca-pisca",
+      "chamar atenção piscando"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento some e volta duas vezes, em cortes secos, como um alerta.",
+    "como_funciona": "tl.set de opacity 1/0 em passos fixos de 0,1 s (4 trocas), sem interpolação; os cortes secos são o efeito.",
+    "quando_usar": "Alerta, 'atenção', aviso, preço com prazo.",
+    "evitar": "Mais de 3 piscadas por segundo por muito tempo pode incomodar pessoas fotossensíveis. Use 1 vez.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "none",
+      "parametros": {
+        "piscadas": 2,
+        "passo_s": 0.1
+      }
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "tecnico",
+      "dados"
+    ],
+    "combina_com": [
+      "shake",
+      "color-pop",
+      "outline-pulse"
+    ],
+    "gsap": "// flash attention: cortes secos de opacidade\n[0, 1, 0, 1].forEach((o, k) => tl.set(el, { opacity: o }, t + k * 0.1));",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "headshake",
+    "nome": "headshake",
+    "nome_pt": "balançar de não",
+    "aliases": [
+      "não",
+      "negar",
+      "balançar a cabeça",
+      "nope"
+    ],
+    "familia": "enfase",
+    "descricao": "Um balanço lateral curto com leve giro, como alguém balançando a cabeça dizendo não.",
+    "como_funciona": "x em keyframes (0, -9, 7, -5, 3, 0) junto com rotateY (0, -9°, 7°, -5°, 3°, 0) em 0,6 s; mais contido e 'humano' que o shake.",
+    "quando_usar": "Mito, resposta errada, 'não faça isso', comparação do jeito errado.",
+    "evitar": "Para erro forte ou impacto prefira shake. Em texto muito largo o giro distorce.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power1.inOut",
+      "parametros": {
+        "amplitude_px": 9,
+        "giro_graus": 9
+      }
+    },
+    "propriedades": [
+      "x",
+      "rotationY"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "color-pop",
+      "shake",
+      "nod"
+    ],
+    "gsap": "// headshake: balanço lateral com giro (precisa de perspective no pai)\ntl.fromTo(el, { x: 0, rotationY: 0 }, { keyframes: { x: [0, -9, 7, -5, 3, 0], rotationY: [0, -9, 7, -5, 3, 0], easeEach: \"sine.inOut\" }, duration: 0.6, ease: \"none\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "heartbeat",
+    "nome": "heartbeat",
+    "nome_pt": "batida de coração",
+    "aliases": [
+      "batimento",
+      "tum-tum",
+      "pulso duplo",
+      "coração batendo"
+    ],
+    "familia": "enfase",
+    "descricao": "Duas batidas rápidas em sequência, a segunda mais fraca, como um coração.",
+    "como_funciona": "Keyframes de escala 1 → 1,14 → 1 → 1,08 → 1 em 0,6 s; o par de picos separados por uma pausa curta é o que lê como batimento.",
+    "quando_usar": "Ícone de coração, like, tema de saúde, momento emocional da história.",
+    "evitar": "Em loop durante a cena inteira cansa; no máximo 2 ou 3 ciclos.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power1.inOut",
+      "parametros": {
+        "pico_1": 1.14,
+        "pico_2": 1.08,
+        "ciclos": 1
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "glow",
+      "pulse-ring-loop",
+      "pop-in"
+    ],
+    "gsap": "// heartbeat: dois picos, o segundo menor\ntl.fromTo(el, { scale: 1 }, { keyframes: { scale: [1, 1.14, 1, 1.08, 1], easeEach: \"power1.inOut\" }, duration: 0.6, ease: \"none\" }, t);",
+    "receita_hyperframes": "asr-keyword-glow",
+    "origem": "expansao"
+  },
+  {
+    "id": "jello",
+    "nome": "jello",
+    "nome_pt": "gelatina",
+    "aliases": [
+      "tremer como gelatina",
+      "efeito gelatina",
+      "wobble de skew",
+      "balanço mole"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento se deforma para os lados como gelatina, com o balanço diminuindo até parar.",
+    "como_funciona": "Keyframes de skewX e skewY alternados (-12,5°, 6,25°, -3,1°, 1,6°, 0) em 0,8 s: só deformação, sem sair do lugar.",
+    "quando_usar": "Ícones fofos, mascote, botão em vídeo leve ou infantil.",
+    "evitar": "Texto pequeno fica ilegível durante a deformação. Tom sério não combina.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "none",
+      "parametros": {
+        "skew_max_graus": 12.5
+      }
+    },
+    "propriedades": [
+      "skewX",
+      "skewY"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pop-in",
+      "squash-stretch",
+      "rubber-band"
+    ],
+    "gsap": "// jello: skew alternado com amplitude caindo pela metade\ntl.fromTo(el, { skewX: 0, skewY: 0 }, { keyframes: { skewX: [0, -12.5, 6.25, -3.1, 1.6, -0.8, 0], skewY: [0, -12.5, 6.25, -3.1, 1.6, -0.8, 0] }, duration: 0.8, ease: \"none\" }, t);",
+    "receita_hyperframes": "physics-press-reaction",
+    "origem": "expansao"
+  },
+  {
+    "id": "magnetic-pull",
+    "nome": "magnetic pull",
+    "nome_pt": "puxão magnético",
+    "aliases": [
+      "ímã",
+      "ser puxado",
+      "atração",
+      "imantar"
+    ],
+    "familia": "enfase",
+    "descricao": "Os elementos ao redor se inclinam e deslizam alguns pixels na direção do alvo, como atraídos por um ímã.",
+    "como_funciona": "Cada item recebe x/y proporcional ao vetor até o alvo (fator 0,15) em 0,5 s power3.out e volta com elastic.out.",
+    "quando_usar": "Mostrar que algo atrai atenção, clientes, dinheiro; produto no centro da conversa.",
+    "evitar": "Fator alto faz os itens colarem no alvo e encavalarem.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.out",
+      "parametros": {
+        "fator": 0.15,
+        "retorno_ease": "elastic.out(1,0.5)"
+      }
+    },
+    "propriedades": [
+      "x",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "motivacional"
+    ],
+    "combina_com": [
+      "scale-emphasis",
+      "spring-settle",
+      "orbit"
+    ],
+    "gsap": "// magnetic pull: deslocamentos pré-calculados (dx,dy até o alvo × 0.15)\nconst pulls = [[40, 30], [-35, 25], [30, -40], [-25, -30]];\nitems.forEach((it, i) => {\n  const [dx, dy] = pulls[i % pulls.length];\n  tl.fromTo(it, { x: 0, y: 0 }, { x: dx, y: dy, duration: 0.5, ease: \"power3.out\" }, t);\n  tl.to(it, { x: 0, y: 0, duration: 0.8, ease: \"elastic.out(1, 0.5)\" }, t + 1.2);\n});",
+    "receita_hyperframes": "center-outward-expansion",
+    "origem": "expansao"
+  },
+  {
+    "id": "nod",
+    "nome": "nod",
+    "nome_pt": "acenar que sim",
+    "aliases": [
+      "sim",
+      "concordar",
+      "balançar de sim",
+      "aceno"
+    ],
+    "familia": "enfase",
+    "descricao": "Um aceno vertical curto, como alguém concordando com a cabeça.",
+    "como_funciona": "y e rotationX em keyframes pequenos (0, 10, 0, 6, 0 px / 0, 12°, 0, 6°, 0) em 0,6 s, com origem no topo.",
+    "quando_usar": "Resposta certa, check de lista, 'isso mesmo', confirmação.",
+    "evitar": "Amplitude grande parece um pulo. Não use junto com headshake na mesma cena sem intenção de contraste.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "sine.inOut",
+      "parametros": {
+        "amplitude_px": 10,
+        "giro_graus": 12
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotationX"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "headshake",
+      "pop-in",
+      "pulse"
+    ],
+    "gsap": "// nod: dois acenos para baixo, origem no topo\ntl.fromTo(el, { y: 0, rotationX: 0, transformOrigin: \"50% 0%\" }, { keyframes: { y: [0, 10, 0, 6, 0], rotationX: [0, 12, 0, 6, 0], easeEach: \"sine.inOut\" }, duration: 0.6, ease: \"none\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "nudge",
+    "nome": "nudge",
+    "nome_pt": "empurrãozinho",
+    "aliases": [
+      "cutucar",
+      "empurrar de leve",
+      "cutucada",
+      "toquinho"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento dá um pequeno passo numa direção e volta, como uma cutucada.",
+    "como_funciona": "x de 0 → 16 px em 0,12 s power2.out e volta em 0,3 s back.out(2); direção definida em parâmetro.",
+    "quando_usar": "Lembrar de um item já visto, apontar o próximo passo, sinalizar 'olha aqui' de leve.",
+    "evitar": "Repetir várias vezes seguidas vira wiggle; use 1 vez.",
+    "padrao": {
+      "duracao_s": 0.42,
+      "ease": "power2.out",
+      "parametros": {
+        "distancia_px": 16,
+        "direcao": "direita | esquerda | cima | baixo"
+      }
+    },
+    "propriedades": [
+      "x",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "arrow-bounce",
+      "pulse"
+    ],
+    "gsap": "// nudge: para a direita (troque x por y para cima/baixo)\ntl.fromTo(el, { x: 0 }, { x: 16, duration: 0.12, ease: \"power2.out\" }, t);\ntl.to(el, { x: 0, duration: 0.3, ease: \"back.out(2)\" }, t + 0.12);",
+    "receita_hyperframes": "nudge-curve",
+    "origem": "expansao"
+  },
+  {
+    "id": "outline-pulse",
+    "nome": "outline pulse",
+    "nome_pt": "contorno pulsando",
+    "aliases": [
+      "borda piscando",
+      "contorno",
+      "anel de seleção",
+      "outline"
+    ],
+    "familia": "enfase",
+    "descricao": "Um contorno aparece em volta do elemento e cresce um pouco enquanto some, como uma seleção ativa.",
+    "como_funciona": "Um anel (div com border ou rect SVG) atrás do alvo: scale 1 → 1,15 e opacity 1 → 0 em 0,6 s power2.out, repetido 2 vezes.",
+    "quando_usar": "Mostrar 'clique aqui', selecionar campo, apontar um item numa interface.",
+    "evitar": "Contorno grosso demais compete com o conteúdo. 3 a 6 px basta em 1080 px.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.out",
+      "parametros": {
+        "espessura_px": 4,
+        "escala_final": 1.15,
+        "repeticoes": 2
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "ripple",
+      "arrow-bounce",
+      "spotlight-dim"
+    ],
+    "gsap": "// outline pulse: a = anel (mesmo tamanho do alvo, atrás dele)\ntl.fromTo(a, { scale: 1, opacity: 1 }, { scale: 1.15, opacity: 0, duration: 0.6, ease: \"power2.out\", repeat: 1 }, t);",
+    "receita_hyperframes": "cursor-click-ripple",
+    "origem": "expansao"
+  },
+  {
+    "id": "ring-bell",
+    "nome": "ring",
+    "nome_pt": "sino tocando",
+    "aliases": [
+      "bell",
+      "sino",
+      "notificação tocando",
+      "tocar o sino"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento gira de um lado para o outro a partir do topo, como um sino de notificação tocando.",
+    "como_funciona": "rotation em keyframes (0, 18, -16, 12, -8, 4, 0) com transformOrigin no topo central, em 0,7 s; amplitude decai.",
+    "quando_usar": "Ícone de sino, notificação, alarme, lembrete, 'ative o sininho'.",
+    "evitar": "Origem no centro faz parecer roda girando, não sino. Coloque transformOrigin no ponto de pendurar.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "none",
+      "parametros": {
+        "angulo_max_graus": 18,
+        "origem": "50% 0%"
+      }
+    },
+    "propriedades": [
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "wiggle",
+      "pulse-ring-loop",
+      "pop-in"
+    ],
+    "gsap": "// ring/bell: pendurado pelo topo, amplitude caindo\ntl.fromTo(el, { rotation: 0, transformOrigin: \"50% 0%\" }, { keyframes: { rotation: [0, 18, -16, 12, -8, 4, -2, 0], easeEach: \"sine.inOut\" }, duration: 0.7, ease: \"none\" }, t);",
+    "receita_hyperframes": "svg-icon-enrichment",
+    "origem": "expansao"
+  },
+  {
+    "id": "ripple",
+    "nome": "ripple",
+    "nome_pt": "onda de toque",
+    "aliases": [
+      "ondinha",
+      "efeito de toque",
+      "onda d'água",
+      "tap ripple"
+    ],
+    "familia": "enfase",
+    "descricao": "Círculos concêntricos saem do ponto de toque e se dissolvem, como gota na água.",
+    "como_funciona": "3 anéis no mesmo centro: scale 0 → 1 e opacity 0,6 → 0 em 0,7 s power2.out, com stagger 0,12 s.",
+    "quando_usar": "Toque em tela de app, clique num botão, ponto de origem de uma ideia.",
+    "evitar": "Anéis muito grandes cobrem o conteúdo. Para impacto forte use shockwave ring.",
+    "padrao": {
+      "duracao_s": 0.94,
+      "ease": "power2.out",
+      "parametros": {
+        "aneis": 3,
+        "stagger_s": 0.12,
+        "diametro_px": 320
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "outline-pulse",
+      "pop-in"
+    ],
+    "gsap": "// ripple: items = 3 anéis empilhados no ponto de toque\ntl.fromTo(items, { scale: 0, opacity: 0.6 }, { scale: 1, opacity: 0, duration: 0.7, ease: \"power2.out\", stagger: 0.12 }, t);",
+    "receita_hyperframes": "cursor-click-ripple",
+    "origem": "expansao"
+  },
+  {
+    "id": "rubber-band",
+    "nome": "rubber band",
+    "nome_pt": "elástico esticando",
+    "aliases": [
+      "elástico",
+      "esticar e voltar",
+      "borrachinha",
+      "estica-estica"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento estica na horizontal e encolhe na vertical, depois o contrário, como uma tira de borracha solta.",
+    "como_funciona": "scaleX e scaleY em oposição (1,25×0,75 → 0,75×1,25 → 1,15×0,85 → 1) em 0,8 s; o volume visual parece se conservar.",
+    "quando_usar": "Botões, selos de preço, palavra curta que precisa de destaque divertido.",
+    "evitar": "Em elementos largos (barra de título inteira) fica exagerado.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "none",
+      "parametros": {
+        "esticamento_max": 1.25
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "historia"
+    ],
+    "combina_com": [
+      "jello",
+      "pop-in",
+      "squash-stretch"
+    ],
+    "gsap": "// rubber band: estica X enquanto encolhe Y, alternando\ntl.fromTo(el, { scaleX: 1, scaleY: 1 }, { keyframes: { scaleX: [1, 1.25, 0.75, 1.15, 0.95, 1.05, 1], scaleY: [1, 0.75, 1.25, 0.85, 1.05, 0.95, 1], easeEach: \"sine.inOut\" }, duration: 0.8, ease: \"none\" }, t);",
+    "receita_hyperframes": "press-release-spring",
+    "origem": "expansao"
+  },
+  {
+    "id": "scale-emphasis",
+    "nome": "scale emphasis",
+    "nome_pt": "crescer e segurar",
+    "aliases": [
+      "aumentar",
+      "dar zoom no item",
+      "crescer para destacar",
+      "ampliar"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento cresce e fica maior enquanto o assunto dura, depois volta ao tamanho normal.",
+    "como_funciona": "scale 1 → 1,2 em 0,35 s power3.out, segura, e volta em 0,35 s power2.inOut. Diferente do pulse, ele permanece grande.",
+    "quando_usar": "Item que vai ser explicado agora, enquanto a narração fala dele.",
+    "evitar": "Crescer sem espaço ao redor faz sobrepor vizinhos; abra espaço ou use spotlight dim junto.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power3.out",
+      "parametros": {
+        "escala": 1.2,
+        "segurar_s": 1.5
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "dados",
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "spotlight-dim",
+      "glow",
+      "count-up"
+    ],
+    "gsap": "// scale emphasis: cresce, segura, volta\nconst hold = 1.5;\ntl.fromTo(el, { scale: 1 }, { scale: 1.2, duration: 0.35, ease: \"power3.out\" }, t);\ntl.to(el, { scale: 1, duration: 0.35, ease: \"power2.inOut\" }, t + 0.35 + hold);",
+    "receita_hyperframes": "coordinate-target-zoom",
+    "origem": "expansao"
+  },
+  {
+    "id": "shockwave-ring",
+    "nome": "shockwave",
+    "nome_pt": "onda de choque",
+    "aliases": [
+      "shockwave ring",
+      "anel de impacto",
+      "explosão de anel",
+      "onda de impacto"
+    ],
+    "familia": "enfase",
+    "descricao": "Um único anel grosso explode do centro do impacto, rápido e grande, enquanto afina e some.",
+    "como_funciona": "Anel SVG: scale 0,2 → 3 em 0,45 s expo.out, strokeWidth 24 → 1 e opacity 1 → 0 no mesmo tempo.",
+    "quando_usar": "Logo batendo na tela, slam de número, chegada de algo pesado.",
+    "evitar": "Em cena calma destoa. Combine com o frame do impacto, não antes.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "expo.out",
+      "parametros": {
+        "escala_final": 3,
+        "espessura_px": 24
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "strokeWidth"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "dados",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "slam",
+      "impact-frame",
+      "hit-stop"
+    ],
+    "gsap": "// shockwave: a = <circle> SVG sem preenchimento no centro do impacto\ntl.fromTo(a, { scale: 0.2, opacity: 1, attr: { \"stroke-width\": 24 }, transformOrigin: \"50% 50%\" }, { scale: 3, opacity: 0, attr: { \"stroke-width\": 1 }, duration: 0.45, ease: \"expo.out\" }, t);",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "spotlight-dim",
+    "nome": "spotlight",
+    "nome_pt": "escurecer o resto",
+    "aliases": [
+      "holofote",
+      "dim",
+      "focar em um",
+      "apagar os outros",
+      "destaque por contraste"
+    ],
+    "familia": "enfase",
+    "descricao": "Todo o resto da cena escurece e perde força, deixando só o elemento escolhido aceso.",
+    "como_funciona": "Os outros itens (items) vão para opacity 0,25 e brightness 0,6 em 0,4 s power2.out; o alvo ganha leve escala. Devolve depois.",
+    "quando_usar": "Um item de uma lista, um card entre vários, um ponto de um gráfico.",
+    "evitar": "Escurecer demais (opacity < 0,15) faz parecer que os outros sumiram de vez.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power2.out",
+      "parametros": {
+        "opacidade_resto": 0.25,
+        "brilho_resto": 0.6,
+        "escala_alvo": 1.05
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "filter",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "dados",
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "scale-emphasis",
+      "highlight",
+      "stagger"
+    ],
+    "gsap": "// spotlight dim: items = os outros; el = o destacado\ntl.fromTo(items, { opacity: 1, filter: \"brightness(1)\" }, { opacity: 0.25, filter: \"brightness(0.6)\", duration: 0.4, ease: \"power2.out\" }, t);\ntl.fromTo(el, { scale: 1 }, { scale: 1.05, duration: 0.4, ease: \"power2.out\" }, t);\n// para devolver: tl.to(items, { opacity: 1, filter: \"brightness(1)\", duration: 0.4 }, tFim);",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "tada",
+    "nome": "tada",
+    "nome_pt": "tcharam",
+    "aliases": [
+      "ta-da",
+      "comemorar",
+      "revelação festiva",
+      "tcharã"
+    ],
+    "familia": "enfase",
+    "descricao": "O elemento encolhe um pouco, depois cresce chacoalhando a rotação e assenta, como quem apresenta algo.",
+    "como_funciona": "Escala 1 → 0,9 → 1,1 mantida enquanto rotation alterna ±3°, voltando a 1 e 0° no fim, tudo em 1 s.",
+    "quando_usar": "Revelação de resultado, prêmio, produto novo, conquista.",
+    "evitar": "Mais de uma vez por vídeo perde a graça. Não use em momento sério.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "none",
+      "parametros": {
+        "escala_pico": 1.1,
+        "rotacao_graus": 3
+      }
+    },
+    "propriedades": [
+      "scale",
+      "rotation"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "sparkle-loop",
+      "glow",
+      "scale-up"
+    ],
+    "gsap": "// tada: encolhe, cresce chacoalhando, assenta\ntl.fromTo(el, { scale: 1, rotation: 0 }, { keyframes: { scale: [1, 0.9, 0.9, 1.1, 1.1, 1.1, 1.1, 1.1, 1], rotation: [0, -3, -3, 3, -3, 3, -3, 3, 0] }, duration: 1.0, ease: \"none\" }, t);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  }
+]

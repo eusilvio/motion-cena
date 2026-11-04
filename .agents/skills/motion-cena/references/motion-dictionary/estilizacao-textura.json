@@ -1,0 +1,1238 @@
+[
+  {
+    "id": "grain",
+    "nome": "grain",
+    "nome_pt": "granulado de filme",
+    "aliases": [
+      "granulado",
+      "film grain",
+      "ruído de filme",
+      "textura de filme"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Textura de filme cintilando a 12 fps por cima da cena, que tira a cara de vídeo digital chapado.",
+    "como_funciona": "Uma camada de ruído maior que o quadro, com opacity 0,06 a 0,1 e mix-blend-mode: overlay, troca de posição 12 vezes por segundo com valores de uma seed fixa.",
+    "quando_usar": "Cenas estáticas (gráfico, citação), estética cinema, histórias e depoimentos.",
+    "evitar": "Opacity alta demais suja a imagem; em telas de interface com texto pequeno atrapalha a leitura.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "opacity": [
+          0.06,
+          0.1
+        ],
+        "fps": 12,
+        "blend": "overlay",
+        "deslocamento_px": 80
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "push-in",
+      "float",
+      "dust-scratches"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// el = camada de grain (imagem de ruído maior que o quadro, mix-blend-mode: overlay)\nconst fps = 12, r = rng(99);\ntl.set(el, { opacity: 0.08 }, t);\nfor (let k = 0; k < sceneDur * fps; k++) tl.set(el, { x: (r() - 0.5) * 80, y: (r() - 0.5) * 80 }, t + k / fps);",
+    "receita_hyperframes": null,
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "motion-trail",
+    "nome": "motion trail",
+    "nome_pt": "rastro de movimento",
+    "aliases": [
+      "rastro",
+      "eco de movimento",
+      "trail",
+      "ghost trail"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Ecos fantasmas seguem um movimento rápido, deixando um rastro que some logo depois.",
+    "como_funciona": "Três cópias do elemento fazem o mesmo movimento com 0,03 s de atraso cada, com opacity 0,4 / 0,25 / 0,12; no fim os ecos somem em 0,15 s.",
+    "quando_usar": "Movimentos rápidos de objeto, ícone ou palavra que precisam parecer velozes.",
+    "evitar": "Em movimentos lentos (vira borrão sujo) ou em muitos elementos ao mesmo tempo.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.out",
+      "parametros": {
+        "ecos": 3,
+        "atraso_s": 0.03,
+        "opacidades": [
+          0.4,
+          0.25,
+          0.12
+        ],
+        "distancia_px": 600
+      }
+    },
+    "propriedades": [
+      "x",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "motion-blur",
+      "whip-pan",
+      "slide-in"
+    ],
+    "gsap": "// items = [líder, eco1, eco2, eco3]; ecos com opacity 0.4 / 0.25 / 0.12\nconst echoes = items.slice(1);\ntl.set(echoes, { opacity: (i) => [0.4, 0.25, 0.12][i] }, t);\nitems.forEach((node, i) => tl.fromTo(node, { x: 0 }, { x: 600, duration: 0.5, ease: \"power3.out\" }, t + i * 0.03));\ntl.fromTo(echoes, { opacity: (i) => [0.4, 0.25, 0.12][i] }, { opacity: 0, duration: 0.15, immediateRender: false }, t + 0.6);",
+    "receita_hyperframes": "motion-blur-streak",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "bloom",
+    "nome": "bloom",
+    "nome_pt": "brilho estourado",
+    "aliases": [
+      "bloom de luz",
+      "luz estourando",
+      "dreamy",
+      "brilho difuso"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "As partes claras da imagem passam a vazar luz suave em volta, dando aspecto de sonho ou de produto premium.",
+    "como_funciona": "Uma cópia do elemento com blur e brightness altos, em mix-blend-mode: screen, sobe de opacity 0 a 0,8 enquanto o blur cresce de 10 para 30 px.",
+    "quando_usar": "Logo, produto brilhante, cena noturna com luzes, momento de revelação.",
+    "evitar": "Em fundo branco (estoura tudo) ou combinado com glow no mesmo elemento.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.out",
+      "parametros": {
+        "blur_px": [
+          10,
+          30
+        ],
+        "brilho": 1.6,
+        "opacity": 0.8
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "lens-flare",
+      "neon-flicker",
+      "scale-up"
+    ],
+    "gsap": "// el = cópia do elemento por cima, mix-blend-mode: screen\ntl.fromTo(el, { opacity: 0, filter: \"blur(10px) brightness(1)\" }, { opacity: 0.8, filter: \"blur(30px) brightness(1.6)\", duration: 0.5, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "ambient-glow-bloom",
+    "origem": "expansao"
+  },
+  {
+    "id": "boiling-line",
+    "nome": "boiling line",
+    "nome_pt": "traço fervendo",
+    "aliases": [
+      "linha tremida",
+      "boil",
+      "traço vivo",
+      "desenho fervendo"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "O contorno de um desenho treme o tempo todo, como animação feita a mão em que cada quadro foi redesenhado.",
+    "como_funciona": "O desenho SVG passa por um filtro feTurbulence + feDisplacementMap de escala baixa; o attr seed do feTurbulence alterna entre 3 valores a 12 fps.",
+    "quando_usar": "Ilustrações, ícones e setas feitos a mão, explicativos com cara de caderno.",
+    "evitar": "Em texto pequeno (fica ilegível) ou com scale do displacement alto.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "fps": 12,
+        "seeds": 3,
+        "displacement_scale": 3
+      }
+    },
+    "propriedades": [
+      "attr:seed"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "draw-on",
+      "stop-motion",
+      "paper-texture"
+    ],
+    "gsap": "const sceneDur = 4; // duração da cena em s (troque pela real)\n\n// el = <feTurbulence> do filtro aplicado ao desenho (feDisplacementMap scale=\"3\")\nfor (let k = 0; k < sceneDur * 12; k++) tl.set(el, { attr: { seed: (k % 3) + 1 } }, t + k / 12);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "bw-to-color",
+    "nome": "black and white to color",
+    "nome_pt": "do preto e branco à cor",
+    "aliases": [
+      "pb para cor",
+      "ganhar cor",
+      "colorir",
+      "preto e branco"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "A imagem começa em preto e branco e ganha cor, no todo ou se espalhando a partir de um ponto.",
+    "como_funciona": "filter grayscale(1) contrast(1.1) vai a grayscale(0) contrast(1). Na variante local, uma cópia colorida por cima abre com clip-path circle a partir do assunto.",
+    "quando_usar": "Antes e depois, \"a vida ganhou cor\", lembrança que volta ao presente.",
+    "evitar": "Em toda cena; o efeito só funciona se a cor carrega sentido.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.inOut",
+      "parametros": {
+        "modo": "global ou a partir do ponto",
+        "contraste_inicial": 1.1
+      }
+    },
+    "propriedades": [
+      "filter",
+      "clip-path"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "color-grade-shift",
+      "dust-scratches"
+    ],
+    "gsap": "// global\ntl.fromTo(el, { filter: \"grayscale(1) contrast(1.1)\" }, { filter: \"grayscale(0) contrast(1)\", duration: 0.8, ease: \"power2.inOut\" }, t);\n// variante local: items[0] = cópia colorida por cima da versão PB\n// tl.fromTo(items[0], { clipPath: \"circle(0% at 50% 40%)\" }, { clipPath: \"circle(120% at 50% 40%)\", duration: 0.8, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "color-grade-shift",
+    "nome": "color grading",
+    "nome_pt": "mudança de tom de cor",
+    "aliases": [
+      "color grade",
+      "esquentar a imagem",
+      "esfriar a imagem",
+      "mudar o clima",
+      "grading shift"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "O tom geral da cena muda aos poucos, de frio para quente (ou o contrário), mudando o clima sem trocar de imagem.",
+    "como_funciona": "Um tween de filter mexe juntos em saturate, hue-rotate e brightness, de um grading frio para um quente, com sine.inOut.",
+    "quando_usar": "Virada de humor na narrativa (problema para solução), antes e depois, amanhecer.",
+    "evitar": "Variações bruscas ou rápidas demais: parece erro de câmera.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "sine.inOut",
+      "parametros": {
+        "de": "frio (hue -15°, saturate 0.8)",
+        "para": "quente (hue +10°, saturate 1.25)"
+      }
+    },
+    "propriedades": [
+      "filter"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "bw-to-color",
+      "light-leak",
+      "push-in"
+    ],
+    "gsap": "tl.fromTo(el, { filter: \"saturate(0.8) hue-rotate(-15deg) brightness(0.95)\" }, { filter: \"saturate(1.25) hue-rotate(10deg) brightness(1.05)\", duration: 1.2, ease: \"sine.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "crt-turn-on",
+    "nome": "crt",
+    "nome_pt": "TV de tubo ligando",
+    "aliases": [
+      "crt on",
+      "tv ligando",
+      "tv desligando",
+      "crt off",
+      "monitor antigo ligando"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Uma tela dentro do vídeo liga como TV de tubo: vira uma linha branca estourada e se abre até a imagem inteira.",
+    "como_funciona": "O elemento parte de scaleY 0,004 e scaleX 0,02 com brightness(6); primeiro abre no eixo X em 0,18 s, depois no Y em 0,25 s enquanto o brilho volta a 1. Ao contrário é a TV desligando.",
+    "quando_usar": "Revelar uma tela, print, vídeo antigo ou o encerramento de um bloco (desligando).",
+    "evitar": "Usar como troca de cena inteira em todo vídeo; reserve para um momento.",
+    "padrao": {
+      "duracao_s": 0.43,
+      "ease": "power3.out",
+      "parametros": {
+        "fase_x_s": 0.18,
+        "fase_y_s": 0.25,
+        "brilho_inicial": 6,
+        "modo": "ligar ou desligar"
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "tecnico",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "scanlines",
+      "tv-static"
+    ],
+    "gsap": "// liga: linha horizontal estourada que abre até a tela inteira\ntl.fromTo(el, { scaleX: 0.02, scaleY: 0.004, filter: \"brightness(6)\" }, { scaleX: 1, duration: 0.18, ease: \"power2.out\" }, t);\ntl.fromTo(el, { scaleY: 0.004, filter: \"brightness(6)\" }, { scaleY: 1, filter: \"brightness(1)\", duration: 0.25, ease: \"power3.out\", immediateRender: false }, t + 0.18);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "datamosh",
+    "nome": "datamosh fake",
+    "nome_pt": "datamosh simulado",
+    "aliases": [
+      "datamosh",
+      "compressão quebrada",
+      "pixel derretendo",
+      "bloco corrompido"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Blocos da imagem escorregam, esticam e mudam de cor como vídeo com compressão corrompida, e depois voltam ao lugar.",
+    "como_funciona": "Clones da imagem recortados em blocos (clip-path) recebem, em 8 passos de 0,06 s, deslocamento em x crescente, scaleY e hue-rotate sorteados com seed fixa; no fim tudo volta a zero.",
+    "quando_usar": "Momento \"quebrou a cabeça\", estética de clipe, arte digital, tom de crítica.",
+    "evitar": "Como transição de cena entre dois planos (D) ou em vídeo institucional.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "none",
+      "parametros": {
+        "passos": 8,
+        "passo_s": 0.06,
+        "deslocamento_max_px": 120,
+        "hue_max_graus": 90
+      }
+    },
+    "propriedades": [
+      "x",
+      "scaleY",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "tecnico"
+    ],
+    "combina_com": [
+      "pixel-sort",
+      "rgb-split"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = blocos da imagem (clones recortados por clip-path)\nconst r = rng(13);\nfor (let k = 0; k < 8; k++) items.forEach((b) => tl.set(b, { x: (r() - 0.5) * 120 * (k / 8), scaleY: 1 + r() * 0.6, filter: `hue-rotate(${Math.round(r() * 90)}deg)` }, t + k * 0.06));\ntl.set(items, { x: 0, scaleY: 1, filter: \"none\" }, t + 0.5);",
+    "receita_hyperframes": "css-distortion",
+    "origem": "expansao"
+  },
+  {
+    "id": "duotone",
+    "nome": "duotone",
+    "nome_pt": "duas cores",
+    "aliases": [
+      "bicolor",
+      "duas cores da marca",
+      "filtro duotone",
+      "duo tom"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "A foto perde as cores originais e passa a ser pintada em só duas cores (sombra e luz), normalmente as da marca.",
+    "como_funciona": "A foto vai a grayscale(1) contrast(1.2) enquanto uma camada de gradiente com as duas cores (mix-blend-mode: color ou multiply/screen em duas camadas) sobe de opacity 0 a 1.",
+    "quando_usar": "Unificar fotos de fontes diferentes, capas, citações sobre foto, identidade visual forte.",
+    "evitar": "Em foto de produto onde a cor real importa (comida, roupa, cosmético).",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "cor_sombra": "#1b1f3b",
+        "cor_luz": "#ff6b4a",
+        "contraste": 1.2
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "halftone",
+      "bw-to-color",
+      "grain"
+    ],
+    "gsap": "// items = [foto, camada de tinta com gradiente das 2 cores e mix-blend-mode: color]\nconst [photo, tint] = items;\ntl.fromTo(photo, { filter: \"grayscale(0) contrast(1)\" }, { filter: \"grayscale(1) contrast(1.2)\", duration: 0.6, ease: \"power2.inOut\" }, t);\ntl.fromTo(tint, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "dust-scratches",
+    "nome": "dust e scratches",
+    "nome_pt": "poeira e arranhões",
+    "aliases": [
+      "poeira",
+      "arranhões",
+      "filme velho",
+      "sujeira de película"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Pontinhos de poeira e riscos verticais aparecem em quadros aleatórios, como película antiga projetada.",
+    "como_funciona": "Um conjunto fixo de manchas e riscos (PNG ou divs) é ligado e desligado a 12 fps com posição e opacity sorteadas por seed fixa; cerca de 25% acesos por quadro.",
+    "quando_usar": "Flashback, documentário, história com estética de arquivo, junto com grain.",
+    "evitar": "Em vídeo de produto moderno ou com muita poeira acesa ao mesmo tempo.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "fps": 12,
+        "chance_acender": 0.25,
+        "elementos": 8
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "grain",
+      "bw-to-color",
+      "film-burn"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = manchas e riscos (posição base no centro), mix-blend-mode: screen ou multiply\nconst fps = 12, r = rng(31);\nfor (let k = 0; k < sceneDur * fps; k++) items.forEach((d) => { const on = r() < 0.25; tl.set(d, { opacity: on ? 0.5 + r() * 0.4 : 0, x: (r() - 0.5) * 1000, y: (r() - 0.5) * 1800 }, t + k / fps); });",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "echo-ghost",
+    "nome": "echo",
+    "nome_pt": "eco fantasma",
+    "aliases": [
+      "ghosting",
+      "echo",
+      "fantasma",
+      "after image",
+      "pós-imagem"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Cópias transparentes do elemento se expandem a partir dele e somem, como uma onda do próprio objeto, sem ele sair do lugar.",
+    "como_funciona": "Três cópias atrás do original começam com opacity 0,5 e crescem até scale 1,25 a 1,55 enquanto somem, com 0,08 s de atraso entre elas.",
+    "quando_usar": "Logo, ícone, palavra-chave na batida; reforça presença sem deslocar.",
+    "evitar": "Confundir com motion trail (ecos que seguem um deslocamento). Em texto longo vira borrão.",
+    "padrao": {
+      "duracao_s": 0.75,
+      "ease": "power2.out",
+      "parametros": {
+        "copias": 3,
+        "atraso_s": 0.08,
+        "escala_final": [
+          1.25,
+          1.4,
+          1.55
+        ]
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "pop-in",
+      "pulse",
+      "bloom"
+    ],
+    "gsap": "// items = cópias do elemento, atrás do original\nitems.forEach((g, i) => tl.fromTo(g, { scale: 1, opacity: 0.5 }, { scale: 1.25 + i * 0.15, opacity: 0, duration: 0.6, ease: \"power2.out\" }, t + i * 0.08));",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "film-burn",
+    "nome": "film burn",
+    "nome_pt": "queima de filme",
+    "aliases": [
+      "film burn overlay",
+      "queimado",
+      "película queimando",
+      "burn"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Manchas laranja e vermelhas queimam a borda da imagem e estouram quase em branco, como película derretendo no projetor, sem trocar de cena.",
+    "como_funciona": "Três divs de radial-gradient (âmbar, laranja, vermelho) com mix-blend-mode: screen entram de uma borda em stagger, crescendo em scale e opacity; voltam a 0 logo depois.",
+    "quando_usar": "Pico emocional de história, memória, vídeo com estética analógica.",
+    "evitar": "Como transição de cena (é do arquivo D); mais de uma vez por vídeo vira clichê.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power1.in",
+      "parametros": {
+        "camadas": 3,
+        "borda": "direita (ou qualquer)",
+        "pico_opacity": 0.9
+      }
+    },
+    "propriedades": [
+      "x",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "light-leak",
+      "grain",
+      "dust-scratches"
+    ],
+    "gsap": "// items = 3 radial-gradients (âmbar, laranja, vermelho), mix-blend-mode: screen, fora da borda direita\ntl.fromTo(items, { x: 400, scale: 0.8, opacity: 0 }, { x: 0, scale: 1.4, opacity: 0.9, duration: 0.45, ease: \"power1.in\", stagger: 0.06 }, t);\ntl.fromTo(items, { opacity: 0.9 }, { opacity: 0, duration: 0.4, ease: \"power2.out\", stagger: 0.04, immediateRender: false }, t + 0.55);",
+    "receita_hyperframes": "css-light",
+    "origem": "expansao"
+  },
+  {
+    "id": "frosted-glass",
+    "nome": "frosted glass",
+    "nome_pt": "vidro fosco",
+    "aliases": [
+      "vidro jateado",
+      "glassmorphism",
+      "fundo desfocado no card",
+      "vidro fosco aparecendo"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Um painel de vidro fosco se abre sobre a cena: o que está atrás dele fica desfocado e o conteúdo do painel aparece por cima.",
+    "como_funciona": "Uma cópia do fundo com filter blur, recortada no formato do cartão por clip-path inset com round, abre do centro enquanto o blur sobe de 0 a 28 px; o conteúdo entra em stagger.",
+    "quando_usar": "Cards de texto sobre vídeo, legendas destacadas, telas de app, preço sobre foto.",
+    "evitar": "Painel muito grande cobrindo o assunto; vários painéis de vidro na mesma cena pesam no render.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.out",
+      "parametros": {
+        "blur_px": 28,
+        "raio_px": 40,
+        "brilho": 1.15
+      }
+    },
+    "propriedades": [
+      "clip-path",
+      "filter",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "liquid-glass",
+      "stagger",
+      "fade-in"
+    ],
+    "gsap": "// el = cópia do fundo com filter blur, recortada no formato do cartão; items = conteúdo do cartão\ntl.fromTo(el, { clipPath: \"inset(50% 10% 50% 10% round 40px)\", filter: \"blur(0px) brightness(1)\" }, { clipPath: \"inset(30% 10% 30% 10% round 40px)\", filter: \"blur(28px) brightness(1.15)\", duration: 0.6, ease: \"power3.out\" }, t);\ntl.fromTo(items, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: \"power3.out\", stagger: 0.06 }, t + 0.2);",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "halftone",
+    "nome": "halftone",
+    "nome_pt": "retícula de pontos",
+    "aliases": [
+      "pontilhado",
+      "retícula",
+      "efeito jornal",
+      "pop art",
+      "halftone reveal"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "A imagem aparece formada por pontos de impressão que crescem até fechar a figura, como página de gibi ou jornal.",
+    "como_funciona": "A imagem usa mask-image com radial-gradient repetido (grade de 12 px) cujo raio vem da CSS var --dot; o tween leva --dot de 0 a 8 px e os pontos crescem até se fundirem.",
+    "quando_usar": "Fotos em estética pop art, editorial, capa de matéria, opinião com visual gráfico.",
+    "evitar": "Em rostos pequenos ou texto fino: a retícula destrói a leitura.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.out",
+      "parametros": {
+        "grade_px": 12,
+        "ponto_final_px": 8
+      }
+    },
+    "propriedades": [
+      "--dot"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "historia",
+      "explicativo"
+    ],
+    "combina_com": [
+      "duotone",
+      "paper-texture",
+      "posterize"
+    ],
+    "gsap": "// el = imagem com mask-image: radial-gradient(circle, #000 var(--dot), transparent calc(var(--dot) + 0.5px)); mask-size: 12px 12px\ntl.fromTo(el, { \"--dot\": \"0px\" }, { \"--dot\": \"8px\", duration: 0.8, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "lens-flare",
+    "nome": "lens flare",
+    "nome_pt": "reflexo de lente",
+    "aliases": [
+      "flare",
+      "reflexo de luz",
+      "brilho de lente",
+      "anamórfico"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Um ponto de luz forte passa pela cena e reflexos menores andam em sentido contrário, como sol batendo na lente.",
+    "como_funciona": "O núcleo do flare anda em x; cada reflexo (círculo ou hexágono translúcido) anda multiplicado por um fator negativo, espelhado pelo centro, o que simula a ótica real.",
+    "quando_usar": "Produto premium, revelação de logo, cena com sol, estética cinema.",
+    "evitar": "Mais de um por vídeo; flare em cena escura sem fonte de luz parece colado.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "sine.inOut",
+      "parametros": {
+        "fatores_reflexos": [
+          -0.4,
+          -0.8,
+          -1.3
+        ],
+        "percurso_px": 800
+      }
+    },
+    "propriedades": [
+      "x",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "bloom",
+      "light-leak"
+    ],
+    "gsap": "// items = [núcleo, reflexo1, reflexo2, reflexo3]; mix-blend-mode: screen\nconst [core, ...ghosts] = items, factors = [-0.4, -0.8, -1.3];\ntl.fromTo(core, { x: -400, opacity: 0 }, { x: 400, opacity: 1, duration: 1.2, ease: \"sine.inOut\" }, t);\nghosts.forEach((g, i) => tl.fromTo(g, { x: -400 * factors[i % 3], opacity: 0 }, { x: 400 * factors[i % 3], opacity: 0.5, duration: 1.2, ease: \"sine.inOut\" }, t));",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "light-leak",
+    "nome": "light leak",
+    "nome_pt": "vazamento de luz",
+    "aliases": [
+      "luz vazando",
+      "leak",
+      "luz quente",
+      "flare analógico"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Uma luz quente e difusa atravessa a imagem devagar e vai embora, como luz entrando pela câmera de filme.",
+    "como_funciona": "Duas ou três manchas de radial-gradient bem maiores que o quadro, com mix-blend-mode: screen, cruzam em x com sine.inOut enquanto a opacity sobe até 0,5 e volta.",
+    "quando_usar": "Depoimentos, momentos afetivos, aberturas suaves, B-roll de lifestyle.",
+    "evitar": "Em fundo claro (não aparece) ou com cor fria que briga com a cena.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "sine.inOut",
+      "parametros": {
+        "camadas": 2,
+        "pico_opacity": 0.5,
+        "travessia_px": 900
+      }
+    },
+    "propriedades": [
+      "x",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "film-burn",
+      "grain",
+      "push-in"
+    ],
+    "gsap": "// items = manchas de luz quente (radial-gradient, mix-blend-mode: screen), maiores que o quadro\ntl.fromTo(items, { x: -500, opacity: 0 }, { x: 400, duration: 1.6, ease: \"sine.inOut\", stagger: 0.2 }, t);\ntl.fromTo(items, { opacity: 0 }, { opacity: 0.5, duration: 0.8, ease: \"sine.inOut\", yoyo: true, repeat: 1, stagger: 0.2, immediateRender: false }, t);",
+    "receita_hyperframes": "css-light",
+    "origem": "expansao"
+  },
+  {
+    "id": "liquid-glass",
+    "nome": "liquid glass",
+    "nome_pt": "vidro líquido",
+    "aliases": [
+      "vidro líquido da apple",
+      "lente de vidro",
+      "refração",
+      "glass gelatinoso"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Uma peça de vidro grosso distorce o que está atrás como lente e se acomoda com elasticidade, com um reflexo passando na superfície.",
+    "como_funciona": "Um filtro SVG feDisplacementMap aplicado à cópia do fundo atrás do card tem attr scale animado de 80 a 18 com elastic.out; o card entra com back.out e um brilho especular cruza em xPercent.",
+    "quando_usar": "Interfaces estilo iOS recente, botões e cards de produto digital, chamadas de app.",
+    "evitar": "Em fundo liso (não há o que refratar) ou em muitos elementos ao mesmo tempo.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "elastic.out(1, 0.5)",
+      "parametros": {
+        "refracao_inicial": 80,
+        "refracao_final": 18,
+        "brilho_opacity": 0.7
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "attr:scale",
+      "xPercent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "frosted-glass",
+      "pop-in"
+    ],
+    "gsap": "// items = [card, <feDisplacementMap> do filtro do fundo atrás do card, faixa de brilho]\nconst [card, disp, shine] = items;\ntl.fromTo(card, { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: \"back.out(1.6)\" }, t);\ntl.fromTo(disp, { attr: { scale: 80 } }, { attr: { scale: 18 }, duration: 0.8, ease: \"elastic.out(1, 0.5)\" }, t);\ntl.fromTo(shine, { xPercent: -120, opacity: 0 }, { xPercent: 120, opacity: 0.7, duration: 0.9, ease: \"power2.inOut\" }, t + 0.2);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "motion-blur",
+    "nome": "motion blur",
+    "nome_pt": "desfoque de movimento",
+    "aliases": [
+      "borrão de movimento",
+      "blur direcional",
+      "rastro borrado",
+      "directional blur"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "O objeto chega tão rápido que fica borrado na direção do movimento e só fica nítido ao parar.",
+    "como_funciona": "O elemento usa um filtro SVG feGaussianBlur; o stdDeviation vai de \"40 0\" (borrão só no eixo X) a \"0 0\" com o mesmo ease do deslocamento em x.",
+    "quando_usar": "Entradas rápidas de produto, ícones, palavras; deixa movimentos de 0,3 s críveis.",
+    "evitar": "Em movimentos lentos; não confundir com whip pan (câmera inteira) nem motion trail (ecos).",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power4.out",
+      "parametros": {
+        "blur_max": "40 0",
+        "distancia_px": 700,
+        "direcoes": "horizontal (troque para \"0 40\" no vertical)"
+      }
+    },
+    "propriedades": [
+      "x",
+      "attr:stdDeviation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "motion-trail",
+      "slide-in",
+      "punch-zoom"
+    ],
+    "gsap": "// items = [elemento, <feGaussianBlur> do filtro aplicado a ele]\nconst [node, blur] = items;\ntl.fromTo(node, { x: -700 }, { x: 0, duration: 0.35, ease: \"power4.out\" }, t);\ntl.fromTo(blur, { attr: { stdDeviation: \"40 0\" } }, { attr: { stdDeviation: \"0 0\" }, duration: 0.35, ease: \"power4.out\" }, t);",
+    "receita_hyperframes": "motion-blur-streak",
+    "origem": "expansao"
+  },
+  {
+    "id": "neon-flicker",
+    "nome": "neon",
+    "nome_pt": "neon piscando",
+    "aliases": [
+      "glow outline",
+      "neon flicker",
+      "letreiro neon",
+      "contorno neon"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Um contorno ou letreiro neon liga falhando, pisca algumas vezes e fica aceso.",
+    "como_funciona": "O texto tem contorno colorido e drop-shadow fixos no CSS; tl.set troca a opacity numa sequência fixa de 0,05 s (apaga, meia luz, acende) até ficar em 1.",
+    "quando_usar": "Títulos noturnos, bar, gamer, chamada de destaque com estética urbana.",
+    "evitar": "Confundir com glow (ênfase curta): o neon é um estilo que liga e fica. Piscar a cena toda incomoda.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "none",
+      "parametros": {
+        "passo_s": 0.05,
+        "sequencia": [
+          0,
+          1,
+          0,
+          0.3,
+          1,
+          0,
+          1,
+          0.6,
+          1
+        ],
+        "cor": "#ff2fd1"
+      }
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "bloom",
+      "scanlines"
+    ],
+    "gsap": "// el = texto com -webkit-text-stroke e filter: drop-shadow(0 0 18px #ff2fd1) fixos no CSS\nconst seq = [0, 1, 0, 0.3, 1, 0, 1, 0.6, 1];\nseq.forEach((o, k) => tl.set(el, { opacity: o }, t + k * 0.05));",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "paper-texture",
+    "nome": "paper texture",
+    "nome_pt": "textura de papel",
+    "aliases": [
+      "papel",
+      "papel amassado",
+      "papel reciclado",
+      "textura craft"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Uma textura de papel cobre a cena e se ajusta levemente a 6 fps, como fotos de página tiradas uma a uma.",
+    "como_funciona": "Uma imagem de fibra de papel em mix-blend-mode: multiply alterna entre 3 posições e rotações mínimas fixas a 6 fps; a cena parece impressa.",
+    "quando_usar": "Colagens, recortes, roteiro em caderno, explicação com estética analógica.",
+    "evitar": "Com grain ao mesmo tempo (duas texturas brigam) ou em interface digital.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "fps": 6,
+        "blend": "multiply",
+        "opacity": 0.5
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "stop-motion",
+      "collage-stagger",
+      "halftone"
+    ],
+    "gsap": "const sceneDur = 4; // duração da cena em s (troque pela real)\n\n// el = textura de papel maior que o quadro, mix-blend-mode: multiply\nconst poses = [{ x: 0, y: 0, rotation: 0 }, { x: 6, y: -4, rotation: 0.3 }, { x: -5, y: 3, rotation: -0.2 }];\ntl.set(el, { opacity: 0.5 }, t);\nfor (let k = 0; k < sceneDur * 6; k++) tl.set(el, poses[k % poses.length], t + k / 6);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "pixel-sort",
+    "nome": "pixel sort fake",
+    "nome_pt": "pixels escorrendo",
+    "aliases": [
+      "pixel sort",
+      "pixel sorting",
+      "escorrer pixels",
+      "drip digital"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Colunas finas da imagem escorrem para baixo em comprimentos diferentes, como o efeito de ordenação de pixels, e voltam.",
+    "como_funciona": "Clones em colunas verticais (clip-path) esticam em scaleY a partir do topo, cada uma com um fator fixo sorteado de 1 a 1,8; depois retornam a 1 com power3.out.",
+    "quando_usar": "Fotos de impacto em estética arte digital, capa de clipe, transição interna de um retrato.",
+    "evitar": "Em imagens com texto ou em cenas com muito movimento já.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.in",
+      "parametros": {
+        "colunas": 24,
+        "esticamento_max": 1.8,
+        "volta_s": 0.3
+      }
+    },
+    "propriedades": [
+      "scaleY"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "datamosh",
+      "duotone"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = colunas verticais da imagem (clones recortados por clip-path)\nconst r = rng(5), amt = items.map(() => 1 + r() * 0.8);\nitems.forEach((c, i) => tl.fromTo(c, { scaleY: 1, transformOrigin: \"50% 0%\" }, { scaleY: amt[i], duration: 0.4, ease: \"power2.in\" }, t));\ntl.fromTo(items, { scaleY: (i) => amt[i] }, { scaleY: 1, duration: 0.3, ease: \"power3.out\", immediateRender: false }, t + 0.5);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "posterize",
+    "nome": "posterize",
+    "nome_pt": "posterização",
+    "aliases": [
+      "cores chapadas",
+      "poster",
+      "redução de cores",
+      "efeito cartaz"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "A imagem começa com poucas cores chapadas, como cartaz serigrafado, e vai ganhando tons em degraus até ficar normal.",
+    "como_funciona": "Um filtro SVG feComponentTransfer type=discrete aplicado à foto troca o tableValues dos canais R, G e B em degraus de 0,12 s (2, 3, 4, 5 níveis); no fim o filtro é removido.",
+    "quando_usar": "Abertura de capítulo, estética de cartaz, revelação de foto com cara artística.",
+    "evitar": "Em vídeo em movimento rápido (o filtro SVG pesa) ou em várias camadas ao mesmo tempo.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "steps",
+      "parametros": {
+        "niveis": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "passo_s": 0.12
+      }
+    },
+    "propriedades": [
+      "attr:tableValues",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "halftone",
+      "duotone"
+    ],
+    "gsap": "// items = [feFuncR, feFuncG, feFuncB] (type=\"discrete\") do <filter id=\"poster\">; el = foto com filter: url(#poster)\nconst tables = [\"0 1\", \"0 0.5 1\", \"0 0.33 0.67 1\", \"0 0.25 0.5 0.75 1\"];\ntl.set(el, { filter: \"url(#poster)\" }, t);\ntables.forEach((v, k) => tl.set(items, { attr: { tableValues: v } }, t + k * 0.12));\ntl.set(el, { filter: \"none\" }, t + tables.length * 0.12);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "rgb-split",
+    "nome": "rgb split",
+    "nome_pt": "separação de cores RGB",
+    "aliases": [
+      "chromatic aberration",
+      "aberração cromática",
+      "rgb shift",
+      "separação de canais"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Cópias vermelha e ciana do elemento se descolam alguns pixels e voltam, como lente barata ou tela com defeito.",
+    "como_funciona": "Duas cópias coloridas com mix-blend-mode: screen ficam sobre o original; tl.set desloca uma para a esquerda e outra para a direita em passos de 0,05 s com valores fixos, terminando alinhadas.",
+    "quando_usar": "Batida de áudio, palavra de impacto, estética tech e gamer, aplicado no próprio elemento.",
+    "evitar": "Como troca de cena (isso é o glitch de transição). Deixar o deslocamento constante cansa os olhos.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "none",
+      "parametros": {
+        "passo_s": 0.05,
+        "deslocamento_max_px": 18,
+        "direcoes": "horizontal (ou vertical/diagonal)"
+      }
+    },
+    "propriedades": [
+      "x",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "scanlines",
+      "slam",
+      "tv-static"
+    ],
+    "gsap": "// items = [cópia vermelha, cópia ciano] sobre o original, mix-blend-mode: screen\nconst [red, cyan] = items;\nconst offs = [0, 14, -8, 18, 6, 10, 0]; // px, valores fixos\ntl.set([red, cyan], { opacity: 0.8 }, t);\noffs.forEach((d, k) => { tl.set(red, { x: -d }, t + k * 0.05); tl.set(cyan, { x: d }, t + k * 0.05); });\ntl.set([red, cyan], { opacity: 0 }, t + offs.length * 0.05);",
+    "receita_hyperframes": "chromatic-glitch",
+    "origem": "expansao"
+  },
+  {
+    "id": "scanlines",
+    "nome": "scanlines",
+    "nome_pt": "linhas de varredura",
+    "aliases": [
+      "linhas de tv",
+      "scan lines",
+      "linhas horizontais",
+      "monitor antigo"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Linhas horizontais finas cobrem a cena e rolam devagar, como em monitor de tubo.",
+    "como_funciona": "Uma camada com repeating-linear-gradient de período 4 px e opacity 0,15 a 0,2 desliza y de 0 a 8 px em loop finito linear; como o deslocamento é múltiplo do período, o loop não tem emenda.",
+    "quando_usar": "Telas de computador simuladas, terminal, estética hacker ou retrô, fundo de títulos tech.",
+    "evitar": "Em imagens pequenas com muito detalhe (cria moiré) ou com opacity alta.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "periodo_px": 4,
+        "opacity": 0.18,
+        "ciclo_s": 0.5
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "opiniao"
+    ],
+    "combina_com": [
+      "rgb-split",
+      "crt-turn-on",
+      "vhs"
+    ],
+    "gsap": "const sceneDur = 4; // duração da cena em s (troque pela real)\n\n// el = camada com repeating-linear-gradient (linhas de 4 px), maior que o quadro\ntl.set(el, { opacity: 0.18 }, t);\ntl.fromTo(el, { y: 0 }, { y: 8, duration: 0.5, ease: \"none\", repeat: Math.floor(sceneDur / 0.5) - 1 }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "stop-motion",
+    "nome": "stop motion",
+    "nome_pt": "movimento quadro a quadro",
+    "aliases": [
+      "12 fps",
+      "on twos",
+      "step ease",
+      "animação travadinha",
+      "frame a frame"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "O movimento anda aos trancos, 12 quadros por segundo, com um leve tremido de mão em cada quadro, como animação de massinha.",
+    "como_funciona": "O tween usa ease steps(12) para andar em degraus e tl.set aplica uma rotação mínima diferente por quadro com valores fixos, imitando o objeto reposicionado a mão.",
+    "quando_usar": "Recortes de papel, colagens, conteúdo artesanal, humor, infantil.",
+    "evitar": "Misturar com movimentos suaves na mesma cena sem intenção; fica parecendo travamento de render.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "steps(12)",
+      "parametros": {
+        "fps": 12,
+        "tremido_graus": 1.5,
+        "distancia_px": 300
+      }
+    },
+    "propriedades": [
+      "x",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "paper-texture",
+      "boiling-line",
+      "collage-stagger"
+    ],
+    "gsap": "tl.fromTo(el, { x: -300 }, { x: 0, duration: 1, ease: \"steps(12)\" }, t);\nconst jit = [-1.5, 1, -0.5, 1.2, -1, 0.6]; // graus por quadro\nfor (let k = 0; k < 12; k++) tl.set(el, { rotation: jit[k % jit.length] }, t + k / 12);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "tv-static",
+    "nome": "noise flicker",
+    "nome_pt": "chiado de TV",
+    "aliases": [
+      "tv static",
+      "chiado",
+      "estática",
+      "tela fora do ar",
+      "ruído forte"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "Uma rajada de chiado de TV toma um elemento (tela, foto, card) por um instante e some.",
+    "como_funciona": "Uma camada de ruído forte (o dobro do tamanho do elemento) sobe de opacity e pula de posição a cada quadro (30 fps) com seed fixa durante 0,3 s; diferente do grain, é forte e curta.",
+    "quando_usar": "Simular sinal ruim, \"interferência\", mudança de canal num elemento, humor.",
+    "evitar": "Como troca de cena inteira (glitch é do arquivo D) ou por muito tempo.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "none",
+      "parametros": {
+        "fps": 30,
+        "pico_opacity": 0.85,
+        "salto_px": 200
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "tecnico",
+      "historia"
+    ],
+    "combina_com": [
+      "rgb-split",
+      "crt-turn-on"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// el = camada de ruído sobre o elemento (overflow: hidden no pai)\nconst r = rng(57), frames = 9; // 0,3 s a 30 fps\nfor (let k = 0; k < frames; k++) tl.set(el, { opacity: 0.85 - (k / frames) * 0.3, x: (r() - 0.5) * 200, y: (r() - 0.5) * 200 }, t + k / 30);\ntl.set(el, { opacity: 0 }, t + frames / 30);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "vhs",
+    "nome": "vhs",
+    "nome_pt": "fita VHS",
+    "aliases": [
+      "efeito vhs",
+      "fita velha",
+      "tracking",
+      "retrô anos 90"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "A cena ganha cara de fita VHS: faixas horizontais tremem de vez em quando e uma barra de tracking passa de cima para baixo.",
+    "como_funciona": "Clones da cena recortados em faixas (clip-path) recebem saltos de x a 15 fps, só em parte dos quadros, com seed fixa; uma barra clara desce em loop finito com yPercent.",
+    "quando_usar": "Nostalgia, memória, \"antigamente\", humor e opinião com tom retrô.",
+    "evitar": "Em conteúdo que precisa de leitura fina (dados, interface). Não use como transição de cena.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "fps": 15,
+        "chance_salto": 0.15,
+        "salto_max_px": 60,
+        "faixas": 20,
+        "volta_tracking_s": 2.5
+      }
+    },
+    "propriedades": [
+      "x",
+      "yPercent",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "scanlines",
+      "rgb-split",
+      "grain"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = faixas horizontais (clones recortados por clip-path); el = barra de tracking\nconst step = 1 / 15, r = rng(7);\nfor (let k = 0; k < sceneDur / step; k++) items.forEach((s) => tl.set(s, { x: r() < 0.15 ? (r() - 0.5) * 60 : 0 }, t + k * step));\ntl.fromTo(el, { yPercent: -100 }, { yPercent: 1900, duration: 2.5, ease: \"none\", repeat: Math.max(0, Math.floor(sceneDur / 2.5) - 1) }, t);",
+    "receita_hyperframes": "css-distortion",
+    "origem": "expansao"
+  },
+  {
+    "id": "vignette-pulse",
+    "nome": "vignette pulse",
+    "nome_pt": "vinheta pulsando",
+    "aliases": [
+      "vinheta",
+      "escurecer bordas",
+      "vignette",
+      "borda escura na batida"
+    ],
+    "familia": "estilizacao-textura",
+    "descricao": "As bordas da tela escurecem de repente na batida e voltam devagar, fechando o olhar no centro.",
+    "como_funciona": "Uma camada de radial-gradient escuro nas bordas sobe de opacity 0,35 para 0,75 e encolhe de scale 1,15 para 1 em 0,2 s; depois relaxa em 0,6 s.",
+    "quando_usar": "Frase de impacto, batida da música, momento de tensão.",
+    "evitar": "Pulsar em toda batida: escolha 2 ou 3 momentos.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.out",
+      "parametros": {
+        "opacity_base": 0.35,
+        "opacity_pico": 0.75,
+        "subida_s": 0.2,
+        "descida_s": 0.6
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "slam",
+      "punch-zoom",
+      "grain"
+    ],
+    "gsap": "// el = camada radial-gradient(transparent 50%, rgba(0,0,0,0.85)) cobrindo a tela\ntl.fromTo(el, { opacity: 0.35, scale: 1.15 }, { opacity: 0.75, scale: 1, duration: 0.2, ease: \"power2.out\" }, t);\ntl.fromTo(el, { opacity: 0.75, scale: 1 }, { opacity: 0.35, scale: 1.15, duration: 0.6, ease: \"power2.inOut\", immediateRender: false }, t + 0.2);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  }
+]

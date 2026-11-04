@@ -1,0 +1,1142 @@
+[
+  {
+    "id": "dolly-zoom",
+    "nome": "dolly zoom",
+    "nome_pt": "efeito vertigo",
+    "aliases": [
+      "vertigo",
+      "zolly",
+      "efeito Hitchcock",
+      "fundo cresce e o sujeito fica"
+    ],
+    "familia": "camera",
+    "descricao": "O fundo cresce (ou encolhe) enquanto o sujeito continua do mesmo tamanho, criando uma sensação de vertigem.",
+    "como_funciona": "O fundo escala de 1 para 1,6 e o sujeito compensa levemente (1 → 0,9) no mesmo tempo e ease, então só a perspectiva parece mudar.",
+    "quando_usar": "Momento de revelação, choque, 'caiu a ficha'. Funciona com sujeito recortado sobre fundo.",
+    "evitar": "Sem sujeito separado do fundo vira só um zoom. É efeito de pico: uma vez por vídeo.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power1.inOut",
+      "parametros": {
+        "escala_fundo": 1.6,
+        "escala_sujeito": 0.9
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "rack-focus",
+      "slam",
+      "freeze-frame"
+    ],
+    "gsap": "const bg = scene.querySelector(\".bg\"), subject = scene.querySelector(\".subject\");\ntl.fromTo(bg, { scale: 1 }, { scale: 1.6, duration: 1.2, ease: \"power1.inOut\" }, t);\ntl.fromTo(subject, { scale: 1 }, { scale: 0.9, duration: 1.2, ease: \"power1.inOut\" }, t);",
+    "receita_hyperframes": "viewport-change",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "parallax",
+    "nome": "parallax",
+    "nome_pt": "camadas em profundidade",
+    "aliases": [
+      "paralaxe",
+      "efeito de profundidade",
+      "truck",
+      "travelling lateral",
+      "camadas em velocidades diferentes"
+    ],
+    "familia": "camera",
+    "descricao": "As camadas da cena se movem em velocidades diferentes, como se a câmera andasse de lado diante de objetos em profundidades diferentes.",
+    "como_funciona": "Mesma duração e ease para todas as camadas, mas deslocamentos proporcionais à profundidade: fundo 0,2×, meio 0,5×, frente 1×. É o que um truck (travelling lateral) real produz.",
+    "quando_usar": "Cenas com fundo, objeto e texto separados em camadas; abertura de vídeo, paisagens, composições de produto.",
+    "evitar": "Todas as camadas com o mesmo deslocamento (some a profundidade). Menos de 3 velocidades distintas não convence.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "power1.inOut",
+      "parametros": {
+        "velocidades": {
+          "fundo": 0.2,
+          "meio": 0.5,
+          "frente": 1
+        },
+        "deslocamento_frente_px": -300,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "push-in",
+      "camera-drift",
+      "reveal-pan",
+      "blur-in"
+    ],
+    "gsap": "const bg = scene.querySelector(\".bg\"), mid = scene.querySelector(\".mid\"), fg = scene.querySelector(\".fg\");\n[[bg, 0.2], [mid, 0.5], [fg, 1]].forEach(([layer, k]) =>\n  tl.fromTo(layer, { x: 0 }, { x: -300 * k, duration: 1.6, ease: \"power1.inOut\" }, t));",
+    "receita_hyperframes": "3d-camera-flight",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "push-in",
+    "nome": "push-in",
+    "nome_pt": "aproximação lenta (Ken Burns)",
+    "aliases": [
+      "ken burns",
+      "zoom lento",
+      "aproximar devagar",
+      "dolly in",
+      "empurrar a câmera"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera se aproxima devagar da cena inteira durante toda a duração do plano, tirando a sensação de imagem parada.",
+    "como_funciona": "Escala o wrapper da cena (.world) de 1 para 1,12 ao longo da duração da cena com sine.inOut, com um leve deslocamento em x para não parecer zoom digital centrado.",
+    "quando_usar": "Cenas estáticas: gráfico, citação, foto, print de tela. Dá vida sem chamar atenção.",
+    "evitar": "Em cenas muito curtas (menos de 1,5 s) não dá tempo de perceber. Escala acima de 1,2 começa a cortar conteúdo importante.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "sine.inOut",
+      "parametros": {
+        "duracao": "duração da cena",
+        "escala_inicial": 1,
+        "escala_final": 1.12,
+        "deslocamento_x_px": -30
+      }
+    },
+    "propriedades": [
+      "scale",
+      "x"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "explicativo",
+      "dados",
+      "opiniao"
+    ],
+    "combina_com": [
+      "parallax",
+      "camera-drift",
+      "grain",
+      "float"
+    ],
+    "gsap": "const sceneDur = 4, sceneStart = t; // duração da cena em segundos\ntl.fromTo(scene, { scale: 1, x: 0 }, { scale: 1.12, x: -30, duration: sceneDur, ease: \"sine.inOut\" }, sceneStart);",
+    "receita_hyperframes": "multi-phase-camera",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "whip-pan",
+    "nome": "whip pan",
+    "nome_pt": "chicote de câmera",
+    "aliases": [
+      "chicote",
+      "swish pan",
+      "virada rápida de câmera",
+      "directional blur",
+      "pan rápido com borrão"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera gira rápido para o lado com borrão de movimento e cai direto na próxima cena.",
+    "como_funciona": "A sai para -W e B entra de +W no mesmo tempo com power4.inOut; um keyframe de blur 0 → 30 px → 0 nos dois faz o pico de borrão coincidir com o pico de velocidade.",
+    "quando_usar": "Troca de assunto com energia, sequência de dicas, antes/depois rápido.",
+    "evitar": "Sem blur vira slide de PowerPoint. Mais de 2 ou 3 por vídeo cansa.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power4.inOut",
+      "parametros": {
+        "blur_pico_px": 30,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "produto",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "motion-trail",
+      "push",
+      "crash-zoom"
+    ],
+    "gsap": "const W = 1080;\ntl.fromTo(a, { x: 0 }, { x: -W, duration: 0.35, ease: \"power4.inOut\" }, t);\ntl.fromTo(b, { x: W }, { x: 0, duration: 0.35, ease: \"power4.inOut\" }, t);\ntl.fromTo([a, b], { filter: \"blur(0px)\" }, { keyframes: { filter: [\"blur(0px)\", \"blur(30px)\", \"blur(0px)\"] }, duration: 0.35, ease: \"none\" }, t);",
+    "receita_hyperframes": "motion-blur-streak",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "birds-eye",
+    "nome": "bird's eye",
+    "nome_pt": "virada para visão de cima",
+    "aliases": [
+      "visão de cima",
+      "plano zenital",
+      "top view",
+      "bird's eye flip",
+      "deitar a cena"
+    ],
+    "familia": "camera",
+    "descricao": "O plano de frente deita até virar uma vista de cima, como se a câmera subisse e apontasse para o chão.",
+    "como_funciona": "Com perspectiva, o wrapper gira em rotationX de 0 para 55° com origem na base, sobe um pouco em y e encolhe para 0,85; o conteúdo vira um 'chão' visto de cima.",
+    "quando_usar": "Transformar uma tela em mapa, mostrar uma mesa, um tabuleiro, um fluxo de etapas como se fosse um piso.",
+    "evitar": "Texto pequeno fica ilegível quando deitado. Rotação perto de 90° some com o conteúdo.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power3.inOut",
+      "parametros": {
+        "rotacao_x_graus": 55,
+        "escala_final": 0.85,
+        "perspectiva_px": 1400
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "y",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "crane-up",
+      "fly-through",
+      "stagger"
+    ],
+    "gsap": "tl.set(scene, { transformPerspective: 1400, transformOrigin: \"50% 100%\" }, t);\ntl.fromTo(scene, { rotationX: 0, y: 0, scale: 1 }, { rotationX: 55, y: -200, scale: 0.85, duration: 1.2, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "3d-camera-flight",
+    "origem": "expansao"
+  },
+  {
+    "id": "camera-drift",
+    "nome": "camera drift",
+    "nome_pt": "deriva lenta da câmera",
+    "aliases": [
+      "drift",
+      "câmera flutuando",
+      "movimento ambiente",
+      "deriva"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera desliza bem devagar em diagonal com uma rotação mínima, como se estivesse flutuando, sem aproximar de verdade.",
+    "como_funciona": "Um único tween linear (ease none) no wrapper: x -40 px, y -20 px, rotação 0,6° e escala 1,04 ao longo de toda a cena. A diferença para o push-in é que o movimento é de translação, não de zoom.",
+    "quando_usar": "Fundo de texto, citação, cena de espera, transição entre blocos narrados.",
+    "evitar": "Somar com push-in na mesma camada deixa o movimento sem direção clara.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "duracao": "duração da cena",
+        "x_px": -40,
+        "y_px": -20,
+        "rotacao_graus": 0.6,
+        "escala": 1.04
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "scale"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "parallax",
+      "grain",
+      "float"
+    ],
+    "gsap": "const sceneDur = 5;\ntl.fromTo(scene, { x: 0, y: 0, rotation: 0, scale: 1.04 },\n  { x: -40, y: -20, rotation: 0.6, scale: 1.04, duration: sceneDur, ease: \"none\" }, t);",
+    "receita_hyperframes": "multi-phase-camera",
+    "origem": "expansao"
+  },
+  {
+    "id": "camera-shake",
+    "nome": "camera shake",
+    "nome_pt": "tremor de câmera no impacto",
+    "aliases": [
+      "screen shake",
+      "tremer a tela",
+      "impacto na câmera",
+      "terremoto"
+    ],
+    "familia": "camera",
+    "descricao": "O quadro inteiro chacoalha forte por um instante, como se algo tivesse batido na câmera, e logo para.",
+    "como_funciona": "Keyframes fixos e decrescentes em x, y e rotação no wrapper da cena (±24 px, ±1,5°) por 0,4 s com ease none, mais um blur de 4 px no primeiro frame. Diferente do shake (ênfase), mexe na câmera toda e não em um elemento.",
+    "quando_usar": "Impacto: número chocante, slam de palavra, explosão, batida forte da música.",
+    "evitar": "Em toda cena vira ruído. Sem decaimento parece bug.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "none",
+      "parametros": {
+        "amplitude_px": 24,
+        "rotacao_graus": 1.5,
+        "decaimento": "linear em 6 batidas"
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "motivacional",
+      "historia",
+      "dados"
+    ],
+    "combina_com": [
+      "slam",
+      "flash",
+      "snap-zoom"
+    ],
+    "gsap": "tl.fromTo(scene, { x: 0, y: 0, rotation: 0 }, {\n  keyframes: { x: [0, -24, 18, -12, 8, -4, 0], y: [0, 14, -12, 8, -5, 2, 0], rotation: [0, -1.5, 1.2, -0.8, 0.5, -0.2, 0] },\n  duration: 0.4, ease: \"none\" }, t);\ntl.fromTo(scene, { filter: \"blur(4px)\" }, { filter: \"blur(0px)\", duration: 0.12, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "crane-up",
+    "nome": "crane up",
+    "nome_pt": "grua subindo",
+    "aliases": [
+      "grua",
+      "pedestal",
+      "jib up",
+      "câmera subindo",
+      "subir a câmera"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera sobe na vertical e inclina para baixo ao mesmo tempo, como uma grua revelando o cenário de cima.",
+    "como_funciona": "O wrapper desce em y (+300 px, a câmera sobe) enquanto ganha rotationX de 0 a 10° em perspectiva; sem a rotação vira um pedestal puro (só subida).",
+    "quando_usar": "Final de vídeo, encerramento épico, revelar um público, uma cidade, uma mesa cheia de coisas.",
+    "evitar": "Com conteúdo chapado sem fundo alto, a subida mostra o vazio. Muito rápido perde a imponência.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "subida_px": 300,
+        "inclinacao_graus": 10,
+        "modo": [
+          "crane",
+          "pedestal (sem inclinação)"
+        ]
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotationX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "tilt",
+      "birds-eye",
+      "fade-in"
+    ],
+    "gsap": "tl.set(scene, { transformPerspective: 1600, transformOrigin: \"50% 100%\" }, t);\ntl.fromTo(scene, { y: 0, rotationX: 0 }, { y: 300, rotationX: 10, duration: 2.0, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "3d-camera-flight",
+    "origem": "expansao"
+  },
+  {
+    "id": "crash-zoom",
+    "nome": "crash zoom",
+    "nome_pt": "zoom brusco com borrão",
+    "aliases": [
+      "zoom de choque",
+      "zoom estourado",
+      "zoom rápido de novela",
+      "crash in"
+    ],
+    "familia": "camera",
+    "descricao": "Um zoom muito rápido e violento do plano aberto para um close extremo, com borrão de movimento, que normalmente termina num corte.",
+    "como_funciona": "Escala o wrapper de 1 para 2,4 em 0,15 s com power4.in (acelera até o fim, sem assentar) e blur subindo até 16 px; a origem fica no alvo. Diferente do punch zoom, não volta nem assenta.",
+    "quando_usar": "Reação exagerada, humor, 'olha isso', entrar num detalhe chocante logo antes de um corte.",
+    "evitar": "Usar sem corte logo depois deixa a imagem borrada parada. Mais de um por vídeo vira meme sem graça.",
+    "padrao": {
+      "duracao_s": 0.15,
+      "ease": "power4.in",
+      "parametros": {
+        "escala_final": 2.4,
+        "blur_final_px": 16,
+        "origem": "alvo"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "flash",
+      "slam",
+      "jump-cut"
+    ],
+    "gsap": "// origem no rosto/objeto alvo\ntl.fromTo(scene, { scale: 1, filter: \"blur(0px)\", transformOrigin: \"50% 38%\" },\n  { scale: 2.4, filter: \"blur(16px)\", duration: 0.15, ease: \"power4.in\" }, t);",
+    "receita_hyperframes": "motion-blur-streak",
+    "origem": "expansao"
+  },
+  {
+    "id": "dutch-angle",
+    "nome": "dutch angle",
+    "nome_pt": "câmera inclinada (roll)",
+    "aliases": [
+      "plano holandês",
+      "câmera torta",
+      "roll",
+      "inclinar o horizonte",
+      "canted angle"
+    ],
+    "familia": "camera",
+    "descricao": "O horizonte gira alguns graus e fica torto, criando tensão, desconforto ou estranheza.",
+    "como_funciona": "Gira o wrapper da cena de 0° para -8° com power2.out e escala para 1,12 ao mesmo tempo para esconder os cantos vazios que a rotação abre.",
+    "quando_usar": "Plot twist, momento de dúvida, 'algo está errado', vilão da história, erro comum.",
+    "evitar": "Sem a escala de compensação aparecem quinas pretas. Inclinação acima de 15° vira cartoon.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.out",
+      "parametros": {
+        "rotacao_graus": -8,
+        "escala_compensacao": 1.12
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "camera-shake",
+      "glitch",
+      "rack-focus"
+    ],
+    "gsap": "tl.fromTo(scene, { rotation: 0, scale: 1 }, { rotation: -8, scale: 1.12, duration: 0.8, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "viewport-change",
+    "origem": "expansao"
+  },
+  {
+    "id": "fly-through",
+    "nome": "fly-through",
+    "nome_pt": "voo de câmera em 3D",
+    "aliases": [
+      "voo pelas camadas",
+      "atravessar os cards",
+      "câmera voando",
+      "camera flight",
+      "3D fly"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera voa para dentro da cena, passando entre cartões ou camadas espalhados em profundidade até pousar no último.",
+    "como_funciona": "Os elementos ficam em translateZ diferentes dentro de um mundo preserve-3d; o mundo anda em z de 0 a 1800 px com power2.inOut e gira um pouco em rotationY. Os cartões que passam pela câmera somem por ficarem atrás dela.",
+    "quando_usar": "Abertura de vídeo de produto, mostrar várias telas de um app, listas de recursos com cara de 'universo'.",
+    "evitar": "Filter, opacity ou clip-path no .world achatam o 3D; aplique nos filhos. Voo longo demais cansa.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "profundidade_px": 1800,
+        "rotacao_y_graus": 8,
+        "perspectiva_px": 1200
+      }
+    },
+    "propriedades": [
+      "z",
+      "rotationY"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "orbit-3d",
+      "parallax",
+      "stagger"
+    ],
+    "gsap": "const world = scene.querySelector(\".world\"); // .stage com perspective: 1200px; .world preserve-3d\ntl.fromTo(world, { z: 0, rotationY: -8 }, { z: 1800, rotationY: 0, duration: 2.0, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "3d-camera-flight",
+    "origem": "expansao"
+  },
+  {
+    "id": "follow-cam",
+    "nome": "follow cam",
+    "nome_pt": "câmera que segue o objeto",
+    "aliases": [
+      "seguir o objeto",
+      "tracking",
+      "câmera acompanhando",
+      "travelling de acompanhamento"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera acompanha um objeto em movimento, mantendo-o perto do centro enquanto o cenário passa.",
+    "como_funciona": "O objeto anda no mundo (x 0 → 1600 px) e o wrapper do mundo contra-translada quase o mesmo valor com o tween começando 0,1 s depois; o pequeno atraso faz o objeto adiantar e a câmera alcançar, como uma câmera real.",
+    "quando_usar": "Cursor percorrendo uma interface, personagem andando, carro, linha do tempo com um marcador.",
+    "evitar": "Sem atraso o objeto parece colado na tela e o fundo é que se move. Atraso grande perde o objeto do quadro.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "percurso_px": 1600,
+        "atraso_camera_s": 0.1,
+        "compensacao_px": 1400
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "historia",
+      "produto"
+    ],
+    "combina_com": [
+      "parallax",
+      "motion-trail",
+      "zoom-to-target"
+    ],
+    "gsap": "// .subject fica dentro de .world: o sujeito anda no mundo e o mundo anda ao contrário (a câmera)\nconst subject = scene.querySelector(\".subject\"), world = scene.querySelector(\".world\");\ntl.fromTo(subject, { x: 0 }, { x: 1600, duration: 1.6, ease: \"power2.inOut\" }, t);\ntl.fromTo(world, { x: 0 }, { x: -1400, duration: 1.6, ease: \"power2.inOut\" }, t + 0.1); // câmera chega depois",
+    "receita_hyperframes": "camera-cursor-tracking",
+    "origem": "expansao"
+  },
+  {
+    "id": "freeze-frame",
+    "nome": "freeze frame",
+    "nome_pt": "congelar a imagem",
+    "aliases": [
+      "congelar",
+      "pausa na cena",
+      "frame congelado",
+      "parar a imagem",
+      "eu sei o que você está pensando"
+    ],
+    "familia": "camera",
+    "descricao": "A ação para de repente num quadro, que ganha um tranco, perde cor e recebe um rótulo, como nos vídeos 'esse sou eu'.",
+    "como_funciona": "No instante do congelamento a timeline do elemento para (a animação termina ali), um tl.set aplica grayscale e contraste, a cena dá um tranco de escala 1 → 1,06 com power4.out e um flash branco de 2 frames marca o momento.",
+    "quando_usar": "Apresentar personagem, piada, 'pausa: repara nesse detalhe', antes de uma explicação.",
+    "evitar": "Sem rótulo ou narração explicando, o congelamento parece travamento.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power4.out",
+      "parametros": {
+        "escala": 1.06,
+        "filtro": "grayscale(1) contrast(1.2)",
+        "flash_frames": 2
+      }
+    },
+    "propriedades": [
+      "filter",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pop-in",
+      "highlight",
+      "speed-ramp"
+    ],
+    "gsap": "const flashEl = scene.querySelector(\".flash\");\ntl.set(scene, { filter: \"grayscale(1) contrast(1.2)\" }, t);\ntl.fromTo(scene, { scale: 1 }, { scale: 1.06, duration: 0.3, ease: \"power4.out\" }, t);\ntl.fromTo(flashEl, { opacity: 0.9 }, { opacity: 0, duration: 0.067, ease: \"none\", immediateRender: false }, t); // .flash com opacity 0 no CSS",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "handheld",
+    "nome": "handheld",
+    "nome_pt": "câmera na mão",
+    "aliases": [
+      "câmera na mão",
+      "tremidinha de mão",
+      "handycam",
+      "câmera respirando",
+      "documental"
+    ],
+    "familia": "camera",
+    "descricao": "A imagem balança de leve o tempo todo, como se alguém estivesse segurando a câmera, dando cara de real e espontâneo.",
+    "como_funciona": "Keyframes fixos de x, y e rotação (±6 px, ±0,4°) num ciclo de 2 s com ease none, repetidos um número finito de vezes pela duração da cena; escala 1,04 esconde as bordas.",
+    "quando_usar": "Vlog, bastidores, depoimento, cena que precisa parecer gravada na hora.",
+    "evitar": "Amplitude grande enjoa. Não misturar com camera drift ou push-in forte na mesma cena.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "amplitude_px": 6,
+        "rotacao_graus": 0.4,
+        "ciclo_s": 2,
+        "escala_borda": 1.04
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "scale"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "grain",
+      "freeze-frame",
+      "camera-shake"
+    ],
+    "gsap": "const sceneDur = 6, cycle = 2;\nconst reps = Math.max(0, Math.floor(sceneDur / cycle) - 1); // loop finito\ntl.set(scene, { scale: 1.04 }, t);\ntl.fromTo(scene, { x: 0, y: 0, rotation: 0 }, {\n  keyframes: { x: [0, 4, -3, 5, -6, 2, 0], y: [0, -3, 4, -2, 3, -4, 0], rotation: [0, 0.3, -0.2, 0.4, -0.3, 0.1, 0] },\n  duration: cycle, ease: \"none\", repeat: reps }, t);",
+    "receita_hyperframes": "multi-phase-camera",
+    "origem": "expansao"
+  },
+  {
+    "id": "orbit-3d",
+    "nome": "orbit 3D",
+    "nome_pt": "órbita ao redor do sujeito",
+    "aliases": [
+      "orbitar",
+      "arc shot",
+      "câmera girando em volta",
+      "giro 3D no produto",
+      "orbit"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera faz um arco em volta do sujeito, mostrando-o de um ângulo e depois de outro.",
+    "como_funciona": "Com perspectiva no palco, o wrapper gira em rotationY de -20° a 20° enquanto translada em x no sentido oposto, para o centro do sujeito ficar parado; camadas da frente e de trás denunciam a volta.",
+    "quando_usar": "Produto, mockup de app, objeto 3D falso montado em camadas, apresentação de personagem.",
+    "evitar": "Em cena chapada sem camadas parece só um cartão girando. Ângulo acima de 30° deforma texto.",
+    "padrao": {
+      "duracao_s": 3.0,
+      "ease": "sine.inOut",
+      "parametros": {
+        "angulo_graus": 20,
+        "perspectiva_px": 1600,
+        "compensacao_x_px": 120
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "parallax",
+      "fly-through",
+      "glow"
+    ],
+    "gsap": "tl.set(scene, { transformPerspective: 1600, transformStyle: \"preserve-3d\" }, t);\ntl.fromTo(scene, { rotationY: -20, x: 120 }, { rotationY: 20, x: -120, duration: 3.0, ease: \"sine.inOut\" }, t);",
+    "receita_hyperframes": "3d-camera-flight",
+    "origem": "expansao"
+  },
+  {
+    "id": "pan",
+    "nome": "pan",
+    "nome_pt": "panorâmica horizontal",
+    "aliases": [
+      "panorâmica",
+      "pan lateral",
+      "varrer a cena",
+      "câmera girando de lado"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera gira no próprio eixo e varre uma cena mais larga que o quadro, de um lado ao outro.",
+    "como_funciona": "O wrapper da cena é mais largo que 1080 px (ex.: 2400 px) e anda em x de 0 até -(largura - 1080); um rotationY leve de 4° em perspectiva sugere giro, não deslocamento. Todas as camadas andam juntas (sem parallax).",
+    "quando_usar": "Panoramas, linhas do tempo horizontais, mostrar vários itens lado a lado no vertical.",
+    "evitar": "Pan longo e lento demais em vídeo curto. Se as camadas precisam de profundidade, use parallax (truck).",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "power1.inOut",
+      "parametros": {
+        "largura_mundo_px": 2400,
+        "rotacao_y_graus": 4,
+        "direcoes": [
+          "esquerda",
+          "direita"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "rotationY"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "explicativo",
+      "dados",
+      "produto"
+    ],
+    "combina_com": [
+      "tilt",
+      "camera-drift",
+      "stagger"
+    ],
+    "gsap": "// scene = mundo mais largo que o quadro (worldW px), com o conteúdo espalhado nele\nconst W = 1080, worldW = 2400;\ntl.set(scene, { transformPerspective: 1600 }, t);\ntl.fromTo(scene, { x: 0, rotationY: 4 }, { x: -(worldW - W), rotationY: -4, duration: 2.0, ease: \"power1.inOut\" }, t);",
+    "receita_hyperframes": "viewport-change",
+    "origem": "expansao"
+  },
+  {
+    "id": "pull-out",
+    "nome": "pull-out",
+    "nome_pt": "afastamento que revela o contexto",
+    "aliases": [
+      "zoom out",
+      "abrir o plano",
+      "afastar a câmera",
+      "dolly out",
+      "revelar o todo"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera começa colada num detalhe e se afasta até mostrar o quadro inteiro, revelando onde aquele detalhe estava.",
+    "como_funciona": "Escala o wrapper da cena de 1,35 para 1 com power2.inOut, com transformOrigin no detalhe inicial; o conteúdo de fora do quadro aparece conforme a escala cai.",
+    "quando_usar": "Revelar contexto: o print que vira o app inteiro, o número que vira o gráfico, o rosto que vira a multidão.",
+    "evitar": "Se o quadro inteiro não tiver nada a mais para mostrar, o efeito perde o sentido. Não confundir com push-in invertido em loop.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "escala_inicial": 1.35,
+        "escala_final": 1,
+        "origem": "50% 40%"
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "dados",
+      "produto"
+    ],
+    "combina_com": [
+      "zoom-to-target",
+      "stagger",
+      "fade-in"
+    ],
+    "gsap": "// origem no detalhe que abre o plano\ntl.fromTo(scene, { scale: 1.35, transformOrigin: \"50% 40%\" }, { scale: 1, duration: 1.6, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "multi-phase-camera",
+    "origem": "expansao"
+  },
+  {
+    "id": "rack-focus",
+    "nome": "rack focus",
+    "nome_pt": "troca de foco entre planos",
+    "aliases": [
+      "focus pull",
+      "puxar o foco",
+      "mudar o foco",
+      "focus breathing",
+      "desfoque seletivo"
+    ],
+    "familia": "camera",
+    "descricao": "O foco passa do plano da frente para o de trás (ou o contrário), guiando o olho para onde importa.",
+    "como_funciona": "O plano que perde foco vai de blur 0 para 14 px enquanto o outro vai de 14 px para 0, no mesmo tempo e ease; uma escala de 1 para 1,02 simula o focus breathing da lente.",
+    "quando_usar": "Trocar a atenção entre dois elementos da mesma cena: pergunta e resposta, produto e preço, pessoa e objeto.",
+    "evitar": "Blur em muitas camadas grandes pesa o render. Se só um plano existe, use blur in.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.inOut",
+      "parametros": {
+        "blur_px": 14,
+        "breathing_scale": 1.02
+      }
+    },
+    "propriedades": [
+      "filter",
+      "scale"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "produto",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "split-diopter",
+      "push-in",
+      "dolly-zoom"
+    ],
+    "gsap": "const fg = scene.querySelector(\".fg\"), bg = scene.querySelector(\".bg\");\ntl.fromTo(fg, { filter: \"blur(0px)\" }, { filter: \"blur(14px)\", duration: 0.8, ease: \"power2.inOut\" }, t);\ntl.fromTo(bg, { filter: \"blur(14px)\" }, { filter: \"blur(0px)\", duration: 0.8, ease: \"power2.inOut\" }, t);\ntl.fromTo(scene, { scale: 1 }, { scale: 1.02, duration: 0.8, ease: \"power2.inOut\" }, t); // focus breathing",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "reveal-pan",
+    "nome": "reveal pan",
+    "nome_pt": "pan que revela por trás de um obstáculo",
+    "aliases": [
+      "revelação lateral",
+      "sair de trás da parede",
+      "pan de revelação",
+      "wipe por objeto da cena"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera começa encoberta por um objeto em primeiro plano e anda de lado até ele sair do quadro, revelando o assunto.",
+    "como_funciona": "Um obstáculo grande e desfocado (blur 12 px) na frente anda 1,6× mais rápido que a cena, que faz um pan curto de 0,4×; o assunto aparece nítido quando o obstáculo sai.",
+    "quando_usar": "Apresentar pessoa, produto ou local com suspense; abertura de vídeo.",
+    "evitar": "Obstáculo pequeno não esconde nada. Se não houver nada atrás vale mais um mask reveal.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power2.inOut",
+      "parametros": {
+        "blur_obstaculo_px": 12,
+        "velocidade_obstaculo": 1.6,
+        "velocidade_cena": 0.4,
+        "direcoes": [
+          "esquerda",
+          "direita"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "parallax",
+      "push-in",
+      "fade-in"
+    ],
+    "gsap": "const occluder = scene.querySelector(\".occluder\"), stage = scene.querySelector(\".stage\");\ntl.set(occluder, { filter: \"blur(12px)\" }, t);\ntl.fromTo(occluder, { x: 0 }, { x: -1080 * 1.6, duration: 1.2, ease: \"power2.inOut\" }, t);\ntl.fromTo(stage, { x: 0 }, { x: -1080 * 0.4, duration: 1.2, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "viewport-change",
+    "origem": "expansao"
+  },
+  {
+    "id": "rewind",
+    "nome": "rewind",
+    "nome_pt": "rebobinar",
+    "aliases": [
+      "voltar a fita",
+      "rebobinar",
+      "reverse",
+      "voltar no tempo",
+      "rewind VHS"
+    ],
+    "familia": "camera",
+    "descricao": "A ação que acabou de acontecer volta para trás em alta velocidade, com tremida e distorção, como fita rebobinando.",
+    "como_funciona": "A animação fica numa timeline filha; a principal anima o progress dela de 1 para 0 em 0,6 s com power2.in, enquanto keyframes fixos de skewX e blur tremem a cena durante a volta.",
+    "quando_usar": "'Vamos voltar um pouco', mostrar o antes de novo, erro que precisa ser refeito, humor.",
+    "evitar": "Rebobinar algo que o público não viu acontecer não faz sentido. Não use como transição genérica.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.in",
+      "parametros": {
+        "velocidade": "cerca de 3x",
+        "skew_graus": 6,
+        "blur_px": 4
+      }
+    },
+    "propriedades": [
+      "progress",
+      "skewX",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "glitch",
+      "freeze-frame",
+      "speed-ramp"
+    ],
+    "gsap": "const inner = gsap.timeline({ paused: true });\ninner.fromTo(el, { x: 0, opacity: 1 }, { x: 600, opacity: 1, duration: 1.5, ease: \"power2.out\" });\ntl.fromTo(inner, { progress: 1 }, { progress: 0, duration: 0.6, ease: \"power2.in\" }, t);\ntl.fromTo(scene, { skewX: 0, filter: \"blur(0px)\" }, {\n  keyframes: { skewX: [0, 6, -4, 5, -3, 0], filter: [\"blur(0px)\", \"blur(4px)\", \"blur(2px)\", \"blur(4px)\", \"blur(1px)\", \"blur(0px)\"] },\n  duration: 0.6, ease: \"none\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "snap-zoom",
+    "nome": "snap zoom",
+    "nome_pt": "zoom em degraus",
+    "aliases": [
+      "zoom zoom zoom",
+      "zoom em etapas",
+      "zoom seco",
+      "step zoom",
+      "zoom de meme"
+    ],
+    "familia": "camera",
+    "descricao": "A imagem salta de enquadramento em dois ou três degraus secos, cada vez mais perto do rosto ou do objeto, sem movimento entre eles.",
+    "como_funciona": "Três tl.set de escala (1,25 → 1,6 → 2) a cada 0,25 s, sem tween, com um frame de blur leve em cada salto para dar o tranco; a origem fica no alvo.",
+    "quando_usar": "Reação dramática ou cômica, apontar uma frase do vídeo, olhar fixo para a câmera.",
+    "evitar": "Em conteúdo sério soa debochado. Degraus muito próximos parecem engasgo do render.",
+    "padrao": {
+      "duracao_s": 0.75,
+      "ease": "none",
+      "parametros": {
+        "escalas": [
+          1.25,
+          1.6,
+          2.0
+        ],
+        "intervalo_s": 0.25,
+        "origem": "alvo"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "camera-shake",
+      "crash-zoom",
+      "slam"
+    ],
+    "gsap": "const steps = [1.25, 1.6, 2.0];\ntl.set(scene, { scale: 1, transformOrigin: \"50% 35%\", filter: \"blur(0px)\" }, t);\nsteps.forEach((s, k) => {\n  tl.set(scene, { scale: s, filter: \"blur(3px)\" }, t + k * 0.25);\n  tl.set(scene, { filter: \"blur(0px)\" }, t + k * 0.25 + 0.034); // 1 frame a 30 fps\n});",
+    "receita_hyperframes": "coordinate-target-zoom",
+    "origem": "expansao"
+  },
+  {
+    "id": "speed-ramp",
+    "nome": "speed ramp",
+    "nome_pt": "rampa de velocidade (slow motion no meio)",
+    "aliases": [
+      "slow motion ramp",
+      "câmera lenta no meio",
+      "rampa",
+      "time remap",
+      "acelerar e desacelerar"
+    ],
+    "familia": "camera",
+    "descricao": "O movimento vem rápido, desacelera quase até parar no momento-chave e volta a acelerar.",
+    "como_funciona": "A animação do elemento fica numa timeline filha pausada; a timeline principal anima o progress dela com uma CustomEase rápido-lento-rápido. O ritmo muda sem mexer na animação original e continua seek-safe.",
+    "quando_usar": "Momento de impacto em esporte, produto girando, salto, o instante exato de uma virada.",
+    "evitar": "Rampa em movimento lento não aparece. Mais de uma por cena perde o efeito.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "CustomEase rápido-lento-rápido",
+      "parametros": {
+        "trecho_lento_pct": [
+          40,
+          60
+        ],
+        "velocidade_minima": 0.2
+      }
+    },
+    "propriedades": [
+      "progress"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "motion-trail",
+      "freeze-frame",
+      "whip-pan"
+    ],
+    "gsap": "// plugin: CustomEase\nconst inner = gsap.timeline({ paused: true });\ninner.fromTo(el, { x: -500, rotation: 0 }, { x: 500, rotation: 360, duration: 1, ease: \"none\" });\nconst ramp = CustomEase.create(\"ramp\", \"M0,0 C0.2,0.38 0.3,0.47 0.5,0.5 0.7,0.53 0.8,0.62 1,1\");\ntl.fromTo(inner, { progress: 0 }, { progress: 1, duration: 2.0, ease: ramp }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "split-diopter",
+    "nome": "split diopter",
+    "nome_pt": "dois planos em foco",
+    "aliases": [
+      "dioptria dividida",
+      "foco duplo",
+      "dois em foco",
+      "frente e fundo nítidos"
+    ],
+    "familia": "camera",
+    "descricao": "Dois elementos em profundidades diferentes ficam nítidos ao mesmo tempo, com uma faixa desfocada separando as duas metades do quadro.",
+    "como_funciona": "A cena base fica com blur 10 px; uma cópia nítida recortada por clip-path cobre a metade de cima e outra cópia nítida (ou o plano de trás) a de baixo. A borda da clip entra com power2.out, e uma faixa com blur leve esconde a costura.",
+    "quando_usar": "Confronto, comparação, duas pessoas em tensão, o personagem e o que ele observa.",
+    "evitar": "Costura muito dura denuncia a montagem. Não funciona se os dois sujeitos estão na mesma altura do quadro.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.out",
+      "parametros": {
+        "blur_base_px": 10,
+        "costura_y_pct": 50
+      }
+    },
+    "propriedades": [
+      "clipPath",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "rack-focus",
+      "dolly-zoom",
+      "push-in"
+    ],
+    "gsap": "const base = scene.querySelector(\".base\"), sharpTop = scene.querySelector(\".sharp-top\"), sharpBot = scene.querySelector(\".sharp-bottom\");\ntl.fromTo(base, { filter: \"blur(0px)\" }, { filter: \"blur(10px)\", duration: 0.6, ease: \"power2.out\" }, t);\ntl.fromTo(sharpTop, { clipPath: \"inset(0% 0% 100% 0%)\" }, { clipPath: \"inset(0% 0% 50% 0%)\", duration: 0.6, ease: \"power2.out\" }, t);\ntl.fromTo(sharpBot, { clipPath: \"inset(100% 0% 0% 0%)\" }, { clipPath: \"inset(55% 0% 0% 0%)\", duration: 0.6, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "tilt",
+    "nome": "tilt",
+    "nome_pt": "panorâmica vertical",
+    "aliases": [
+      "tilt down",
+      "tilt up",
+      "câmera descendo o olhar",
+      "inclinar a câmera"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera inclina para cima ou para baixo e percorre um conteúdo mais alto que a tela, como olhar de cima a baixo um prédio ou um pôster.",
+    "como_funciona": "O conteúdo alto (ex.: 3200 px) anda em y com sine.inOut enquanto um rotationX de ±6° em perspectiva dá o efeito de lente inclinando (keystone), diferente de um scroll chapado.",
+    "quando_usar": "Vídeo vertical com conteúdo alto: página de site, pôster, lista longa, revelar uma pessoa da cabeça aos pés.",
+    "evitar": "Rápido demais parece scroll de celular. Se o objetivo é parecer feed, use feed scroll.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "sine.inOut",
+      "parametros": {
+        "altura_mundo_px": 3200,
+        "rotacao_x_graus": 6,
+        "direcoes": [
+          "baixo",
+          "cima"
+        ]
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotationX"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pan",
+      "crane-up",
+      "fade-in"
+    ],
+    "gsap": "// scene = mundo mais alto que o quadro (worldH px), com o conteúdo espalhado nele\nconst H = 1920, worldH = 3200;\ntl.set(scene, { transformPerspective: 1800, transformOrigin: \"50% 0%\" }, t);\ntl.fromTo(scene, { y: 0, rotationX: 6 }, { y: -(worldH - H), rotationX: -6, duration: 2.0, ease: \"sine.inOut\" }, t);",
+    "receita_hyperframes": "3d-page-scroll",
+    "origem": "expansao"
+  },
+  {
+    "id": "zoom-to-target",
+    "nome": "zoom to target",
+    "nome_pt": "zoom até um ponto fora do centro",
+    "aliases": [
+      "zoom no ponto",
+      "zoom no detalhe",
+      "aproximar no elemento",
+      "focar na área",
+      "zoom na tela"
+    ],
+    "familia": "camera",
+    "descricao": "A câmera viaja e aproxima até um elemento que não está no centro, terminando com ele centralizado na tela.",
+    "como_funciona": "Escala o wrapper por k e contra-translada (x = -(px - 540)·k, y = -(py - 960)·k) com origem no centro; assim o ponto (px, py) termina no meio do quadro.",
+    "quando_usar": "Tutoriais de tela, destacar um botão, um número numa tabela, um trecho de um documento.",
+    "evitar": "Zoom alto demais (k > 3) em print de baixa resolução fica pixelado. Não use em todos os passos do tutorial.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power3.inOut",
+      "parametros": {
+        "escala": 2,
+        "alvo_px": {
+          "x": 820,
+          "y": 1300
+        }
+      }
+    },
+    "propriedades": [
+      "scale",
+      "x",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "produto",
+      "dados"
+    ],
+    "combina_com": [
+      "pull-out",
+      "highlight",
+      "pulse"
+    ],
+    "gsap": "const k = 2, px = 820, py = 1300, cx = 540, cy = 960; // alvo em px na cena 1080x1920\ntl.fromTo(scene, { scale: 1, x: 0, y: 0, transformOrigin: \"50% 50%\" },\n  { scale: k, x: -(px - cx) * k, y: -(py - cy) * k, duration: 1.0, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "coordinate-target-zoom",
+    "origem": "expansao"
+  }
+]

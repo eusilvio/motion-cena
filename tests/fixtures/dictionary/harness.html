@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Dicionário: harness de runtime</title>
+<!-- Abre direto no navegador (com rede) ou via run_dictionary.py, que serve o GSAP de um cache local. -->
+<style>
+  html, body { margin: 0; background: #000; }
+  #root {
+    position: relative; width: 1080px; height: 1920px; overflow: hidden;
+    background: #14181f; color: #f3ede2; font-family: "DejaVu Sans", Arial, sans-serif;
+  }
+  #root * { box-sizing: border-box; }
+  .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+  .backdrop {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(rgba(243, 237, 226, 0.06) 2px, transparent 2px) 0 0 / 120px 120px,
+      linear-gradient(90deg, rgba(243, 237, 226, 0.06) 2px, transparent 2px) 0 0 / 120px 120px,
+      radial-gradient(circle at 30% 20%, #23324a, #14181f 70%);
+  }
+  .center { display: flex; align-items: center; justify-content: center; text-align: center; }
+  .label { position: absolute; left: 24px; top: 24px; font: 700 40px/1 "DejaVu Sans", sans-serif; color: rgba(243, 237, 226, 0.55); }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/DrawSVGPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MorphSVGPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/SplitText.min.js"></script>
+<script src="harness.js"></script>
+</head>
+<body>
+<div id="root"></div>
+</body>
+</html>

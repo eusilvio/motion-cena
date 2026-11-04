@@ -1,0 +1,860 @@
+[
+  {
+    "id": "float",
+    "nome": "float",
+    "nome_pt": "flutuar",
+    "aliases": [
+      "flutuação",
+      "boiar",
+      "subir e descer devagar",
+      "levitar"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento sobe e desce devagar, em loop, como se estivesse boiando.",
+    "como_funciona": "y de 0 a -12 px em 1,2 s sine.inOut com yoyo; repeat calculado pela duração da cena (finito).",
+    "quando_usar": "Cenas estáticas (gráfico, citação, produto parado) para não ficarem congeladas.",
+    "evitar": "Em texto que precisa ser lido com atenção; amplitude grande deixa enjoativo.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "sine.inOut",
+      "parametros": {
+        "amplitude_px": 12,
+        "meio_periodo_s": 1.2
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "explicativo",
+      "motivacional",
+      "dados"
+    ],
+    "combina_com": [
+      "push-in",
+      "grain",
+      "breathing"
+    ],
+    "gsap": "// float: loop finito dentro da cena\nconst sceneDur = 6; // duração da cena em s\ntl.fromTo(el, { y: 0 }, { y: -12, duration: 1.2, ease: \"sine.inOut\", yoyo: true, repeat: Math.floor(sceneDur / 1.2) - 1 }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "blink-loop",
+    "nome": "blink loop",
+    "nome_pt": "pisca regular",
+    "aliases": [
+      "piscar em loop",
+      "led piscando",
+      "cursor piscando",
+      "rec piscando"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento acende e apaga em ritmo regular, como LED de gravação ou cursor de texto.",
+    "como_funciona": "tl.set alternando opacity 1/0 a cada 0,5 s durante a cena; cortes secos, sem fade.",
+    "quando_usar": "Ponto vermelho de REC, cursor de digitação, indicador de status.",
+    "evitar": "Em elementos grandes vira distração. Para alerta pontual use flash attention.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "meio_periodo_s": 0.5
+      }
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "typewriter",
+      "pulse-ring-loop"
+    ],
+    "gsap": "// blink loop: alterna a cada 0.5s\nconst sceneDur = 5;\nfor (let k = 0; k < sceneDur / 0.5; k++) tl.set(el, { opacity: (k + 1) % 2 }, t + k * 0.5);",
+    "receita_hyperframes": "gsap-effects",
+    "origem": "expansao"
+  },
+  {
+    "id": "blob-morph",
+    "nome": "blob morph loop",
+    "nome_pt": "bolha que se deforma",
+    "aliases": [
+      "blob",
+      "lava lamp",
+      "forma orgânica",
+      "mancha viva"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Uma forma orgânica muda de contorno devagar e sem parar, como gota ou lâmpada de lava.",
+    "como_funciona": "MorphSVGPlugin entre 3 paths de blob fechados (A → B → C → A) em sequência de 1,5 s com sine.inOut, repetido de forma finita; rotação lenta junto.",
+    "quando_usar": "Fundo decorativo, moldura de foto, avatar, marca com visual fluido.",
+    "evitar": "Paths com número de pontos muito diferente fazem o morph torcer; mantenha formas parecidas.",
+    "padrao": {
+      "duracao_s": 1.5,
+      "ease": "sine.inOut",
+      "parametros": {
+        "formas": 3,
+        "passo_s": 1.5
+      }
+    },
+    "propriedades": [
+      "attr.d",
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "motivacional",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "gradient-shift",
+      "rotate-loop",
+      "breathing"
+    ],
+    "gsap": "// blob morph: MorphSVGPlugin; el = <path>, shapes = d dos blobs (fixos)\nconst sceneDur = 9, step = 1.5;\nconst shapes = [\"M200,60 C280,60 340,140 320,220 C300,300 200,340 130,300 C60,260 60,140 200,60Z\",\n                \"M210,50 C300,80 330,170 300,240 C270,310 170,330 110,280 C50,230 100,60 210,50Z\",\n                \"M190,70 C260,40 350,120 330,200 C310,290 220,320 150,310 C80,300 90,110 190,70Z\"];\nfor (let k = 0; k < Math.floor(sceneDur / step); k++) {\n  tl.fromTo(el, { morphSVG: shapes[k % 3] }, { morphSVG: shapes[(k + 1) % 3], duration: step, ease: \"sine.inOut\", immediateRender: k === 0 }, t + k * step);\n}",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "breathing",
+    "nome": "breathing",
+    "nome_pt": "respiração",
+    "aliases": [
+      "respirar",
+      "breathe",
+      "inspirar e expirar",
+      "pulsar lento"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento cresce e encolhe muito devagar, no ritmo de uma respiração calma.",
+    "como_funciona": "scale 1 → 1,03 em 2 s sine.inOut com yoyo e repeat finito; às vezes acompanhado de opacity 0,9 → 1.",
+    "quando_usar": "Meditação, fundo de citação, logo em tela final, momento de pausa.",
+    "evitar": "Em texto e cards a respiração 'para parecer vivo' é barata; prefira em formas e fundos.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "sine.inOut",
+      "parametros": {
+        "escala": 1.03,
+        "meio_periodo_s": 2.0
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "motivacional",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "float",
+      "glow",
+      "gradient-shift"
+    ],
+    "gsap": "// breathing: loop finito\nconst sceneDur = 8;\ntl.fromTo(el, { scale: 1, opacity: 0.9 }, { scale: 1.03, opacity: 1, duration: 2, ease: \"sine.inOut\", yoyo: true, repeat: Math.floor(sceneDur / 2) - 1 }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "bubble-rise",
+    "nome": "bubble rise",
+    "nome_pt": "bolhas subindo",
+    "aliases": [
+      "bolhas",
+      "subir borbulhando",
+      "efervescente",
+      "bolinhas subindo"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Bolhas sobem do fundo até o topo em velocidades diferentes, balançando de leve, e se renovam ao longo da cena.",
+    "como_funciona": "Cada bolha sobe 1920 px com ease none e x em seno pequeno; duração e atraso por índice numa tabela fixa; repeat finito pela duração da cena.",
+    "quando_usar": "Bebidas, água, laboratório, fundo de cena leve e divertida.",
+    "evitar": "Bolhas na frente do texto atrapalham a leitura; mantenha atrás e com baixa opacidade.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "bolhas": 8,
+        "duracao_subida_s": [
+          3,
+          4.5
+        ]
+      }
+    },
+    "propriedades": [
+      "y",
+      "x",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "historia",
+      "explicativo"
+    ],
+    "combina_com": [
+      "drift",
+      "float",
+      "grain"
+    ],
+    "gsap": "// bubble rise: tabela fixa de durações/atrasos; repeat finito\nconst sceneDur = 9, durs = [3, 3.6, 4.2, 3.3, 4.5, 3.9];\nitems.forEach((b, i) => {\n  const d = durs[i % durs.length], start = i * 0.4, left = sceneDur - start; // o atraso também conta\n  tl.fromTo(b, { y: 0, opacity: 0.5 }, { y: -1920, opacity: 0, duration: d, ease: \"none\", repeat: Math.max(0, Math.floor(left / d) - 1) }, t + start);\n  tl.fromTo(b, { x: -10 }, { x: 10, duration: 0.8, ease: \"sine.inOut\", yoyo: true, repeat: Math.max(0, Math.floor(left / 0.8) - 1) }, t + start);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "drift",
+    "nome": "drift",
+    "nome_pt": "deriva",
+    "aliases": [
+      "derivar",
+      "andar devagar",
+      "deslizar constante",
+      "nuvem passando"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento atravessa a cena numa velocidade constante e baixa, como nuvem ou poeira no ar.",
+    "como_funciona": "Um único tween de x (e um pouco de y) por toda a cena com ease none; velocidade de 20 a 60 px/s. Não é loop: dura a cena.",
+    "quando_usar": "Nuvens, formas de fundo, partículas grandes, textura de fundo em cena parada.",
+    "evitar": "Usar ease out dá impressão de que parou; em drift, linear é o certo.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "velocidade_px_s": 40
+      }
+    },
+    "propriedades": [
+      "x",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "push-in",
+      "float",
+      "bubble-rise"
+    ],
+    "gsap": "// drift: velocidade constante pela cena toda\nconst sceneDur = 6, speed = 40;\ntl.fromTo(el, { x: 0, y: 0 }, { x: speed * sceneDur, y: -speed * sceneDur * 0.2, duration: sceneDur, ease: \"none\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "gradient-shift",
+    "nome": "gradient shift loop",
+    "nome_pt": "gradiente em movimento",
+    "aliases": [
+      "gradiente animado",
+      "degradê se mexendo",
+      "fundo fluido",
+      "aurora"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "As cores do gradiente de fundo deslizam devagar, fazendo o fundo parecer vivo sem chamar atenção.",
+    "como_funciona": "Uma camada com gradiente 2 a 3 vezes maior que a tela se move em x/y e gira alguns graus em yoyo lento (transform, não backgroundPosition, para render leve).",
+    "quando_usar": "Fundos de tela de abertura, citação, CTA final, vídeos de tom inspiracional.",
+    "evitar": "Cores muito contrastantes viram distração; troque de matiz próximo.",
+    "padrao": {
+      "duracao_s": 4.0,
+      "ease": "sine.inOut",
+      "parametros": {
+        "deslocamento_px": 300,
+        "rotacao_graus": 8,
+        "meio_periodo_s": 4
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "breathing",
+      "blob-morph",
+      "grain"
+    ],
+    "gsap": "// gradient shift: el = camada de gradiente com 300% do tamanho da cena\nconst sceneDur = 8;\ntl.fromTo(el, { x: 0, y: 0, rotation: 0 }, { x: -300, y: -150, rotation: 8, duration: 4, ease: \"sine.inOut\", yoyo: true, repeat: Math.floor(sceneDur / 4) - 1 }, t);",
+    "receita_hyperframes": "gradient-text-sweep",
+    "origem": "expansao"
+  },
+  {
+    "id": "idle-bob",
+    "nome": "idle bob",
+    "nome_pt": "balançinho parado",
+    "aliases": [
+      "idle",
+      "parado mas vivo",
+      "bob",
+      "pulinho parado"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Um movimento curto e ritmado de sobe e desce com leve achatamento, como personagem esperando parado.",
+    "como_funciona": "y de 0 a -6 px com scaleY 1,02 em 0,4 s power1.inOut, yoyo, repeat finito; mais rápido e mais 'personagem' que o float.",
+    "quando_usar": "Mascote, avatar, ícone de personagem, botão esperando ação.",
+    "evitar": "Em texto ou dados distrai. Ritmo muito rápido parece ansiedade.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power1.inOut",
+      "parametros": {
+        "amplitude_px": 6,
+        "meio_periodo_s": 0.4
+      }
+    },
+    "propriedades": [
+      "y",
+      "scaleY"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "squash-stretch",
+      "float",
+      "wiggle"
+    ],
+    "gsap": "// idle bob: sobe e desce curto, origem na base\nconst sceneDur = 4;\ntl.fromTo(el, { y: 0, scaleY: 1, transformOrigin: \"50% 100%\" }, { y: -6, scaleY: 1.02, duration: 0.4, ease: \"power1.inOut\", yoyo: true, repeat: Math.floor(sceneDur / 0.4) - 1 }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "light-flicker",
+    "nome": "flicker",
+    "nome_pt": "luz piscando falhando",
+    "aliases": [
+      "flicker de luz",
+      "lâmpada falhando",
+      "neon falhando",
+      "piscar irregular"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "A luz do elemento falha em pulsos irregulares, como lâmpada fluorescente ou neon com mau contato.",
+    "como_funciona": "Padrão fixo de opacidade/brilho (1, 0,3, 1, 1, 0,15, 1...) aplicado com tl.set em passos de 1/30 s, com longos trechos estáveis entre as falhas.",
+    "quando_usar": "Placa de neon, clima de suspense, tema 'falha', terror leve.",
+    "evitar": "Falhas constantes cansam e incomodam pessoas fotossensíveis; deixe 1 a 2 s estáveis entre rajadas.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "padrao": [
+          1,
+          0.3,
+          1,
+          1,
+          0.15,
+          1
+        ],
+        "intervalo_estavel_s": 1.5
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "opiniao",
+      "tecnico"
+    ],
+    "combina_com": [
+      "glow",
+      "impact-frame",
+      "grain"
+    ],
+    "gsap": "// flicker: rajadas fixas separadas por trechos estáveis\nconst f = 1 / 30, burst = [1, 0.3, 1, 1, 0.15, 0.8, 1], sceneDur = 6, gap = 1.5;\nfor (let b = 0; b * gap < sceneDur; b++) {\n  burst.forEach((o, k) => tl.set(el, { opacity: o }, t + b * gap + k * f));\n}",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "light-sheen",
+    "nome": "light sweep",
+    "nome_pt": "reflexo passando",
+    "aliases": [
+      "sheen",
+      "brilho passando",
+      "reflexo de luz",
+      "shine",
+      "brilho de vidro"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Uma faixa de luz diagonal atravessa o elemento de um lado ao outro, como reflexo em vidro ou metal.",
+    "como_funciona": "Uma faixa branca inclinada (skewX -20°) dentro de um contêiner com overflow hidden ou mask, x de -100% a 200% em 0,8 s power2.inOut, repetida a cada 2,5 s de forma finita.",
+    "quando_usar": "Botões de CTA, cartão de crédito, logo, celular, embalagem de produto.",
+    "evitar": "Passar o reflexo a cada segundo vira efeito barato de banner. Uma passada por cena basta.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.inOut",
+      "parametros": {
+        "angulo_graus": -20,
+        "intervalo_s": 2.5,
+        "opacidade": 0.5
+      }
+    },
+    "propriedades": [
+      "xPercent"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "glow",
+      "shimmer",
+      "pop-in"
+    ],
+    "gsap": "// light sweep: a = faixa de luz dentro de el (overflow hidden)\nconst sceneDur = 5, gap = 2.5;\ntl.fromTo(a, { xPercent: -100, skewX: -20, opacity: 0.5 }, { xPercent: 200, duration: 0.8, ease: \"power2.inOut\", repeat: Math.floor(sceneDur / gap) - 1, repeatDelay: gap - 0.8 }, t);",
+    "receita_hyperframes": "ambient-glow-bloom",
+    "origem": "expansao"
+  },
+  {
+    "id": "marquee",
+    "nome": "marquee",
+    "nome_pt": "faixa rolando",
+    "aliases": [
+      "letreiro",
+      "ticker",
+      "esteira de logos",
+      "texto correndo",
+      "faixa infinita"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Uma faixa de texto ou logos corre na horizontal sem parar, como letreiro de rodapé.",
+    "como_funciona": "Conteúdo duplicado lado a lado; xPercent de 0 a -50 com ease none, repetido N vezes pela duração da cena, então o salto de volta é invisível.",
+    "quando_usar": "Faixa de 'promoção', lista de clientes, palavras-chave em fundo, abertura de vídeo.",
+    "evitar": "Velocidade alta impede a leitura; texto principal nunca deve estar numa faixa rolando.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "segundos_por_ciclo": 6,
+        "direcao": "esquerda | direita"
+      }
+    },
+    "propriedades": [
+      "xPercent"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "drift",
+      "rotate-loop",
+      "grain"
+    ],
+    "gsap": "// marquee: el = trilho com o conteúdo duplicado (2 cópias)\nconst sceneDur = 12, cyc = 6;\ntl.fromTo(el, { xPercent: 0 }, { xPercent: -50, duration: cyc, ease: \"none\", repeat: Math.max(0, Math.floor(sceneDur / cyc) - 1) }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "orbit",
+    "nome": "orbit",
+    "nome_pt": "órbita",
+    "aliases": [
+      "orbitar",
+      "girar em volta",
+      "satélite",
+      "rodar em torno"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Elementos pequenos circulam em volta de um centro numa elipse, em velocidade constante.",
+    "como_funciona": "Cada satélite fica dentro de um braço com rotation 0 → 360×N (ease none) e se contragira para continuar de pé; a elipse vem de scaleY no pivô.",
+    "quando_usar": "Ícones em volta de um produto, integrações em volta de um app, ideias em volta de um tema.",
+    "evitar": "Muitos satélites sobrepostos confundem; até 6. Velocidade alta parece carregamento.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "segundos_por_volta": 6,
+        "raio_px": 320,
+        "satelites": 4
+      }
+    },
+    "propriedades": [
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "rotate-loop",
+      "magnetic-pull",
+      "pop-in"
+    ],
+    "gsap": "// orbit: items = braços (pivô no centro); cada braço tem 1 satélite filho\nconst sceneDur = 6, secPerTurn = 6, turns = 360 * (sceneDur / secPerTurn);\nitems.forEach((arm, i) => {\n  const start = (360 / items.length) * i;\n  tl.fromTo(arm, { rotation: start }, { rotation: start + turns, duration: sceneDur, ease: \"none\" }, t);\n  tl.fromTo(arm.firstElementChild, { rotation: -start }, { rotation: -start - turns, duration: sceneDur, ease: \"none\" }, t);\n});",
+    "receita_hyperframes": "orbit-3d-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "pulse-ring-loop",
+    "nome": "pulse ring loop",
+    "nome_pt": "anel pulsando em loop",
+    "aliases": [
+      "sonar",
+      "radar",
+      "ondas saindo",
+      "ponto ao vivo",
+      "live dot"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Anéis saem de um ponto em intervalos regulares e somem, como sonar ou indicador de 'ao vivo'.",
+    "como_funciona": "2 anéis defasados: scale 1 → 2,5 e opacity 0,6 → 0 em 1,2 s power1.out, repeat finito, o segundo começa meio ciclo depois.",
+    "quando_usar": "Ponto no mapa, 'ao vivo', localização, botão de gravação, sensor.",
+    "evitar": "Muitos anéis simultâneos poluem; 2 bastam.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power1.out",
+      "parametros": {
+        "aneis": 2,
+        "escala_final": 2.5,
+        "ciclo_s": 1.2
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "produto",
+      "dados"
+    ],
+    "combina_com": [
+      "ripple",
+      "heartbeat",
+      "outline-pulse"
+    ],
+    "gsap": "// pulse ring loop: items = 2 anéis no mesmo centro\nconst sceneDur = 6, cyc = 1.2;\nitems.forEach((r, i) => {\n  tl.fromTo(r, { scale: 1, opacity: 0.6 }, { scale: 2.5, opacity: 0, duration: cyc, ease: \"power1.out\", repeat: Math.floor(sceneDur / cyc) - 2 }, t + i * cyc / 2);\n});",
+    "receita_hyperframes": "cursor-click-ripple",
+    "origem": "expansao"
+  },
+  {
+    "id": "rotate-loop",
+    "nome": "rotate loop",
+    "nome_pt": "giro contínuo",
+    "aliases": [
+      "girar sem parar",
+      "rodar",
+      "spin",
+      "raios girando"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento gira em velocidade constante durante a cena, como raios de sol, engrenagem ou selo.",
+    "como_funciona": "rotation de 0 a 360 × N com ease none, onde N = voltas na duração da cena; um tween só, sem repeat infinito.",
+    "quando_usar": "Fundo de raios (sunburst), engrenagem, selo de 'novo', disco de vinil, carregamento.",
+    "evitar": "Rotação rápida em elemento grande cansa; abaixo de 1 volta a cada 8 s para fundos.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "segundos_por_volta": 8
+      }
+    },
+    "propriedades": [
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "breathing",
+      "glow",
+      "orbit"
+    ],
+    "gsap": "// rotate loop: velocidade constante, finito\nconst sceneDur = 6, secPerTurn = 8;\ntl.fromTo(el, { rotation: 0 }, { rotation: 360 * (sceneDur / secPerTurn), duration: sceneDur, ease: \"none\" }, t);",
+    "receita_hyperframes": "svg-icon-enrichment",
+    "origem": "expansao"
+  },
+  {
+    "id": "shimmer",
+    "nome": "shimmer",
+    "nome_pt": "cintilar",
+    "aliases": [
+      "tremeluzir",
+      "cintilância",
+      "brilho tremulando",
+      "reluzir"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O brilho do elemento oscila de leve e de forma irregular, como algo metálico ou molhado refletindo luz.",
+    "como_funciona": "brightness em valores fixos pseudoaleatórios (seed escrita no código) aplicados com tl.set a cada 0,1 s; nunca Math.random.",
+    "quando_usar": "Joias, ouro, troféu, água, texto dourado.",
+    "evitar": "Variação acima de 25% vira flicker de lâmpada.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "brilho_min": 0.92,
+        "brilho_max": 1.18,
+        "passo_s": 0.1
+      }
+    },
+    "propriedades": [
+      "filter"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "light-sheen",
+      "sparkle-loop",
+      "glow"
+    ],
+    "gsap": "// shimmer: sequência fixa de brilhos (determinística)\nconst sceneDur = 4, seq = [1.05, 0.96, 1.12, 1.0, 1.18, 0.93, 1.08, 1.02];\nconst steps = Math.floor(sceneDur / 0.1);\nfor (let k = 0; k < steps; k++) tl.set(el, { filter: \"brightness(\" + seq[(k * 3) % seq.length] + \")\" }, t + k * 0.1);",
+    "receita_hyperframes": "ambient-glow-bloom",
+    "origem": "expansao"
+  },
+  {
+    "id": "sparkle-loop",
+    "nome": "sparkle",
+    "nome_pt": "brilhinhos piscando",
+    "aliases": [
+      "sparkle loop",
+      "estrelinhas",
+      "faísca",
+      "brilho de estrela",
+      "twinkle"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Pequenas estrelas aparecem e somem em volta do elemento, em posições e tempos fixos, criando um brilho contínuo.",
+    "como_funciona": "Cada estrela faz scale 0 → 1 → 0 com rotation 90° em 0,6 s; posições e atrasos vêm de uma tabela fixa, repetidos de forma finita.",
+    "quando_usar": "Produto novo, conquista, algo 'mágico', limpeza (brilho de limpo).",
+    "evitar": "Estrelas demais poluem; 3 a 6 bastam.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "estrelas": 5,
+        "ciclo_s": 1.5
+      }
+    },
+    "propriedades": [
+      "scale",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "tada",
+      "shimmer",
+      "glow"
+    ],
+    "gsap": "// sparkle loop: atrasos fixos por estrela; repeat finito\nconst sceneDur = 6, cycle = 1.5, delays = [0, 0.35, 0.7, 0.2, 1.05];\nitems.forEach((s, i) => {\n  const delay = delays[i % delays.length], reps = Math.max(0, Math.floor((sceneDur - delay - 0.6) / cycle)); // o atraso também conta\n  tl.fromTo(s, { scale: 0, rotation: 0, opacity: 1 }, { keyframes: { scale: [0, 1, 0], rotation: [0, 45, 90] }, duration: 0.6, ease: \"none\", repeat: reps, repeatDelay: cycle - 0.6 }, t + delay);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "subtle-jitter",
+    "nome": "jitter",
+    "nome_pt": "tremor sutil contínuo",
+    "aliases": [
+      "jitter",
+      "tremidinha contínua",
+      "boiling line",
+      "linha fervendo",
+      "stop motion"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento treme muito pouco, em saltos de poucos pixels a 12 quadros por segundo, como desenho feito à mão ou stop motion.",
+    "como_funciona": "Posições e rotações fixas de uma tabela (±2 px, ±0,6°) aplicadas com tl.set a cada 1/12 s, sem interpolação.",
+    "quando_usar": "Visual artesanal, rabisco, colagem, vídeo de tom informal.",
+    "evitar": "Em interface ou dados parece bug. Amplitude acima de 4 px vira shake.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "amplitude_px": 2,
+        "fps": 12
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "grain",
+      "draw-on",
+      "drift"
+    ],
+    "gsap": "// jitter 12 fps: tabela fixa de poses\nconst sceneDur = 5, poses = [[1, -1, 0.4], [-2, 1, -0.6], [0, 2, 0.2], [2, 0, -0.3], [-1, -2, 0.5]];\nfor (let k = 0; k < sceneDur * 12; k++) {\n  const [x, y, r] = poses[(k * 2) % poses.length];\n  tl.set(el, { x, y, rotation: r }, t + k / 12);\n}",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "sway",
+    "nome": "sway",
+    "nome_pt": "balançar ao vento",
+    "aliases": [
+      "balanço",
+      "oscilar",
+      "planta ao vento",
+      "balançar suave"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento inclina de um lado para o outro devagar, preso pela base, como planta ao vento.",
+    "como_funciona": "rotation de -3° a 3° com origem na base, 1,6 s sine.inOut, yoyo, repeat finito.",
+    "quando_usar": "Plantas, placas, balões, ícones decorativos em cena calma.",
+    "evitar": "Origem no centro vira gangorra. Amplitude acima de 6° parece pendurado (use pendulum).",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "sine.inOut",
+      "parametros": {
+        "angulo_graus": 3,
+        "origem": "50% 100%"
+      }
+    },
+    "propriedades": [
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "float",
+      "drift",
+      "pendulum"
+    ],
+    "gsap": "// sway: preso pela base\nconst sceneDur = 6.4;\ntl.fromTo(el, { rotation: -3, transformOrigin: \"50% 100%\" }, { rotation: 3, duration: 1.6, ease: \"sine.inOut\", yoyo: true, repeat: Math.floor(sceneDur / 1.6) - 1 }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "tilt-loop",
+    "nome": "tilt loop",
+    "nome_pt": "inclinação 3D lenta",
+    "aliases": [
+      "girar 3D devagar",
+      "cartão inclinando",
+      "hover 3D",
+      "flutuar em 3D"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "O elemento inclina devagar em 3D, como um cartão segurado na mão que muda de ângulo, sem sair do lugar.",
+    "como_funciona": "rotationX e rotationY em yoyo lento com períodos diferentes (2 s e 2,6 s), dentro de um pai com perspective 1200 px; os períodos desencontrados evitam padrão óbvio.",
+    "quando_usar": "Cartão de crédito, celular, capa de produto, card de destaque.",
+    "evitar": "Ângulos acima de 15° deformam texto. Sem perspective no pai o efeito some.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "sine.inOut",
+      "parametros": {
+        "angulo_x_graus": 8,
+        "angulo_y_graus": 12,
+        "periodos_s": [
+          2,
+          2.6
+        ]
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "rotationY"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "light-sheen",
+      "float",
+      "glow"
+    ],
+    "gsap": "// tilt loop: pai com perspective: 1200px; períodos diferentes por eixo\nconst sceneDur = 8;\ntl.fromTo(el, { rotationY: -12 }, { rotationY: 12, duration: 2, ease: \"sine.inOut\", yoyo: true, repeat: Math.floor(sceneDur / 2) - 1 }, t);\ntl.fromTo(el, { rotationX: 8 }, { rotationX: -8, duration: 2.6, ease: \"sine.inOut\", yoyo: true, repeat: Math.floor(sceneDur / 2.6) - 1 }, t);",
+    "receita_hyperframes": "split-tilt-cards",
+    "origem": "expansao"
+  },
+  {
+    "id": "wave-loop",
+    "nome": "wave",
+    "nome_pt": "onda em sequência",
+    "aliases": [
+      "ola",
+      "onda",
+      "loading dots",
+      "pontinhos pulando",
+      "efeito ola"
+    ],
+    "familia": "loops-ambiente",
+    "descricao": "Uma fila de elementos sobe e desce um depois do outro, formando uma onda que corre pela fila.",
+    "como_funciona": "Todos fazem y 0 → -18 px yoyo com sine.inOut e repeat finito por item (dentro do stagger); o stagger pequeno (0,1 s) faz a onda andar.",
+    "quando_usar": "Pontinhos de 'digitando', barras de áudio, fileira de ícones, letras soltas de logo.",
+    "evitar": "Stagger igual à duração deixa todos dessincronizados sem leitura de onda.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "sine.inOut",
+      "parametros": {
+        "amplitude_px": 18,
+        "stagger_s": 0.1
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "idle-bob",
+      "stagger",
+      "float"
+    ],
+    "gsap": "// wave: fila de itens com defasagem fixa; repeat dentro do stagger (por item, finito)\n// no nível de cima o repeat repetiria a onda inteira e passaria da cena\nconst sceneDur = 4, half = 0.35, each = 0.1;\nconst pairs = Math.floor((sceneDur - each * (items.length - 1)) / (2 * half)); // idas e voltas que cabem\ntl.fromTo(items, { y: 0 }, { y: -18, duration: half, ease: \"sine.inOut\", stagger: { each, repeat: Math.max(1, pairs * 2) - 1, yoyo: true } }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  }
+]

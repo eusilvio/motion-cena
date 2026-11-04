@@ -1,0 +1,991 @@
+[
+  {
+    "id": "bar-grow",
+    "nome": "bar grow",
+    "nome_pt": "barra crescendo",
+    "aliases": [
+      "barra subindo",
+      "gráfico de barras",
+      "crescer a barra",
+      "bar chart"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Uma barra cresce a partir da base até o valor, enquanto o número conta junto.",
+    "como_funciona": "scaleX (ou scaleY) de 0 até valor / máximo com transformOrigin na base; um count-up no mesmo t, com a mesma duração e ease, mantém número e barra sincronizados.",
+    "quando_usar": "Comparar valores, mostrar crescimento, rankings simples, qualquer número com escala.",
+    "evitar": "Barras com escala falsa (começando fora do zero) ou muitas barras sem stagger.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.out",
+      "parametros": {
+        "com_count_up": true
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "count-up",
+      "stagger",
+      "chart-axes-build"
+    ],
+    "gsap": "// bar grow: scaleX a partir da esquerda + count-up no mesmo t\nconst bar = el, num = a, v = 72, max = 100;\ntl.fromTo(bar, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: v / max, duration: 0.8, ease: \"power3.out\" }, t);\nconst c = { v: 0 };\ntl.fromTo(c, { v: 0 }, { v, duration: 0.8, ease: \"power3.out\", onUpdate: () => (num.textContent = Math.round(c.v)) }, t);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "count-up",
+    "nome": "count-up",
+    "nome_pt": "número contando",
+    "aliases": [
+      "contador",
+      "número subindo",
+      "counter",
+      "contagem",
+      "counter com unidade"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Um número conta do zero até o valor final, com prefixo ou unidade fixos (R$, %, mil).",
+    "como_funciona": "Tween de um objeto { v } com onUpdate escrevendo o valor arredondado no texto; font-variant-numeric: tabular-nums evita que a largura trema. Prefixo e unidade ficam em spans separados.",
+    "quando_usar": "Números de impacto, faturamento, seguidores, porcentagens, qualquer dado-herói.",
+    "evitar": "Contar números pequenos (de 0 a 3 não tem graça) ou sem tabular-nums.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.out",
+      "parametros": {
+        "duracao_faixa_s": "0.8-1.2",
+        "tabular_nums": true
+      }
+    },
+    "propriedades": [
+      "textContent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "motivacional",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "bar-grow",
+      "scale-up",
+      "odometer",
+      "punch-zoom"
+    ],
+    "gsap": "// count-up: font-variant-numeric: tabular-nums para não tremer a largura\nconst num = el, n = { v: 0 };\ntl.fromTo(n, { v: 0 }, { v: 1000, duration: 1.0, ease: \"power2.out\", onUpdate: () => (num.textContent = Math.round(n.v).toLocaleString(\"pt-BR\")) }, t);",
+    "receita_hyperframes": "counting-dynamic-scale",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "area-fill",
+    "nome": "area fill",
+    "nome_pt": "área do gráfico preenchendo",
+    "aliases": [
+      "área sob a curva",
+      "gráfico de área",
+      "preencher embaixo da linha",
+      "area chart"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "A área sob a linha do gráfico se revela junto com a linha, com degradê suave, dando peso ao volume.",
+    "como_funciona": "O path da área (fechado na base) é revelado por clip-path inset da esquerda para a direita com o mesmo tempo e ease da linha; a opacidade sobe só até ~0,35 para não brigar com a linha.",
+    "quando_usar": "Volume acumulado, receita ao longo do tempo, comparar duas séries sobrepostas.",
+    "evitar": "Áreas opacas demais que escondem a grade, ou sem a linha de contorno por cima.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "none",
+      "parametros": {
+        "opacidade_final": 0.35,
+        "direcao": "esquerda para direita"
+      }
+    },
+    "propriedades": [
+      "clipPath",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "dados",
+      "explicativo"
+    ],
+    "combina_com": [
+      "line-chart-draw",
+      "chart-axes-build"
+    ],
+    "gsap": "// a = <path> da área (fill com degradê); acompanha a linha do line-chart-draw\ntl.fromTo(a, { clipPath: \"inset(0% 100% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 0%)\", duration: 1.2, ease: \"none\" }, t);\ntl.fromTo(a, { opacity: 0 }, { opacity: 0.35, duration: 0.6, ease: \"power2.out\" }, t + 0.2);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "bar-race",
+    "nome": "bar race",
+    "nome_pt": "corrida de barras (ranking)",
+    "aliases": [
+      "ranking animado",
+      "bar chart race",
+      "corrida de ranking",
+      "quem passa quem"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Barras de um ranking mudam de tamanho ao longo do tempo e trocam de posição quando uma ultrapassa a outra.",
+    "como_funciona": "Estados fixos (valores por instante); no primeiro, as linhas já começam no lugar e as barras crescem; nos seguintes, cada barra anima scaleX até o valor e cada linha anima y até rank × altura da linha. O rank é calculado contando quantas barras têm valor maior.",
+    "quando_usar": "Evolução de ranking (marcas, países, plataformas), virada histórica, 'quem liderou cada ano'.",
+    "evitar": "Mais de 8 linhas no vertical ou estados rápidos demais para ler os nomes.",
+    "padrao": {
+      "duracao_s": 3.0,
+      "ease": "power1.inOut",
+      "parametros": {
+        "linhas": 4,
+        "altura_linha_px": 140,
+        "estado_s": 1.0
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "historia",
+      "explicativo"
+    ],
+    "combina_com": [
+      "count-up",
+      "timeline-scrub",
+      "data-point-highlight"
+    ],
+    "gsap": "// items = linhas no mesmo ponto (y = rank x rowH), cada uma com .bar dentro; states = valores normalizados por instante\nconst rowH = 140, states = [[0.9, 0.7, 0.5, 0.3], [0.8, 0.95, 0.6, 0.35], [0.75, 0.9, 1.0, 0.4]];\nconst rank = (vals) => vals.map((v) => vals.filter((w) => w > v).length);\nstates.forEach((vals, k) => {\n  const r = rank(vals), at = t + k * 1.0;\n  items.forEach((row, i) => {\n    const bar = row.querySelector(\".bar\");\n    if (k === 0) { // fromTo: linhas já no lugar desde o início, barras crescem\n      tl.fromTo(row, { y: r[i] * rowH }, { y: r[i] * rowH, duration: 0.4, ease: \"none\" }, at);\n      tl.fromTo(bar, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: vals[i], duration: 0.4, ease: \"power3.out\" }, at);\n    } else { tl.to(bar, { scaleX: vals[i], duration: 0.6, ease: \"power1.inOut\" }, at - 0.6); tl.to(row, { y: r[i] * rowH, duration: 0.5, ease: \"power2.inOut\" }, at - 0.5); }\n  });\n});",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "before-after-slider",
+    "nome": "before/after slider",
+    "nome_pt": "slider de antes e depois",
+    "aliases": [
+      "antes e depois",
+      "comparador",
+      "slider de comparação",
+      "before after"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Uma divisória vertical desliza sobre duas imagens sobrepostas, revelando o depois, passa do meio e volta para o centro.",
+    "como_funciona": "A imagem de depois fica por cima com clip-path inset à esquerda; o inset e o x da alça animam juntos com o mesmo ease: primeiro até 20%, depois assenta em 50%.",
+    "quando_usar": "Reforma, edição de foto, redesign de site, resultado de tratamento, antes e depois de um app.",
+    "evitar": "Imagens com enquadramento diferente (o corte entrega a montagem) ou ida e volta repetida muitas vezes.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "paradas_pct": [
+          80,
+          50
+        ],
+        "largura_px": 1080
+      }
+    },
+    "propriedades": [
+      "clipPath",
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "comparison-bars",
+      "cursor-drag",
+      "match-cut"
+    ],
+    "gsap": "// el = imagem 'depois' por cima, a = alça da divisória\nconst after = el, handle = a, W = 1080;\ntl.fromTo(after, { clipPath: \"inset(0% 0% 0% 100%)\" }, { clipPath: \"inset(0% 0% 0% 20%)\", duration: 0.9, ease: \"power2.inOut\" }, t);\ntl.fromTo(handle, { x: W }, { x: W * 0.2, duration: 0.9, ease: \"power2.inOut\" }, t);\ntl.to(after, { clipPath: \"inset(0% 0% 0% 50%)\", duration: 0.6, ease: \"power2.inOut\" }, t + 1.0);\ntl.to(handle, { x: W * 0.5, duration: 0.6, ease: \"power2.inOut\" }, t + 1.0);",
+    "receita_hyperframes": "control-target-sync",
+    "origem": "expansao"
+  },
+  {
+    "id": "chart-axes-build",
+    "nome": "chart axes build",
+    "nome_pt": "eixos do gráfico se montando",
+    "aliases": [
+      "montar o gráfico",
+      "grade aparecendo",
+      "eixos",
+      "estrutura do gráfico"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Os eixos x e y se desenham a partir da origem, as linhas de grade entram em cascata e os rótulos aparecem, preparando o palco para os dados.",
+    "como_funciona": "Eixo x por scaleX e eixo y por scaleY, ambos com origem no canto da origem; gridlines com scaleX e opacidade até 0,25 em stagger; rótulos com fade e y curto.",
+    "quando_usar": "Antes de qualquer gráfico mais elaborado, para o público entender a escala antes dos dados.",
+    "evitar": "Demorar mais que 0,8 s na estrutura ou animar grade tão forte quanto os dados.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.inOut",
+      "parametros": {
+        "opacidade_grade": 0.25,
+        "stagger_grade_s": 0.05
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "dados",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "line-chart-draw",
+      "bar-grow",
+      "stacked-bar"
+    ],
+    "gsap": "// items = [eixoX, eixoY]; .gridline e .tick no scene\nconst [xAxis, yAxis] = items, grid = scene.querySelectorAll(\".gridline\"), ticks = scene.querySelectorAll(\".tick\");\ntl.fromTo(xAxis, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.fromTo(yAxis, { scaleY: 0, transformOrigin: \"50% 100%\" }, { scaleY: 1, duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.fromTo(grid, { scaleX: 0, opacity: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, opacity: 0.25, duration: 0.4, ease: \"power2.out\", stagger: 0.05 }, t + 0.3);\ntl.fromTo(ticks, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, ease: \"power2.out\", stagger: 0.03 }, t + 0.4);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "chart-scrub-readout",
+    "nome": "chart scrub readout",
+    "nome_pt": "cursor percorrendo o gráfico com leitura",
+    "aliases": [
+      "tooltip andando",
+      "scrub no gráfico",
+      "leitura do valor",
+      "cursor no gráfico"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Com o gráfico já desenhado, uma linha vertical percorre o eixo x, um marcador segue a curva e o valor atual aparece numa etiqueta.",
+    "como_funciona": "Um único proxy de progresso move a linha vertical, posiciona o marcador interpolando entre os pontos fixos do polyline e escreve o valor interpolado na etiqueta, tudo no onUpdate.",
+    "quando_usar": "Explicar uma série ponto a ponto, mostrar o pico, narrar 'em março caiu, em junho subiu'.",
+    "evitar": "Antes de o gráfico estar desenhado ou indo e voltando várias vezes.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "power1.inOut",
+      "parametros": {
+        "pontos": 6
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "textContent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "line-chart-draw",
+      "data-point-highlight"
+    ],
+    "gsap": "// el = linha vertical, a = marcador, b = etiqueta; pts em px do polyline já desenhado\nconst pts = [[0, 600], [180, 520], [360, 560], [540, 380], [720, 300], [900, 180]], vals = [12, 18, 15, 29, 36, 48];\nconst vline = el, dot = a, label = b, p = { u: 0 };\ntl.fromTo(p, { u: 0 }, { u: 1, duration: 2.0, ease: \"power1.inOut\", onUpdate: () => {\n  const f = p.u * (pts.length - 1), i = Math.min(Math.floor(f), pts.length - 2), k = f - i;\n  const x = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k, y = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k;\n  vline.style.transform = \"translateX(\" + x + \"px)\"; dot.style.transform = \"translate(\" + x + \"px, \" + y + \"px)\";\n  label.textContent = Math.round(vals[i] + (vals[i + 1] - vals[i]) * k) + \"%\";\n} }, t);",
+    "receita_hyperframes": "chart-scrub-readout",
+    "origem": "expansao"
+  },
+  {
+    "id": "comparison-bars",
+    "nome": "comparison split bars",
+    "nome_pt": "barras de comparação lado a lado",
+    "aliases": [
+      "versus",
+      "comparação",
+      "barras opostas",
+      "butterfly chart",
+      "x contra y"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Duas barras crescem a partir de um eixo central em direções opostas, e a vencedora ganha um brilho no fim.",
+    "como_funciona": "Barra da esquerda com origem à direita e barra da direita com origem à esquerda, ambas scaleX até o valor com o mesmo ease; depois um drop-shadow na maior.",
+    "quando_usar": "Antes e depois em números, homem e mulher, plano A versus plano B, mito versus fato.",
+    "evitar": "Comparar mais de dois itens por linha ou valores quase iguais sem rótulo.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.out",
+      "parametros": {
+        "valor_a": 0.62,
+        "valor_b": 0.38
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "count-up",
+      "before-after-slider",
+      "glow"
+    ],
+    "gsap": "// a = barra esquerda, b = barra direita, nascem do eixo central\nconst left = a, right = b, vA = 0.62, vB = 0.38;\ntl.fromTo(left, { scaleX: 0, transformOrigin: \"100% 50%\" }, { scaleX: vA, duration: 0.8, ease: \"power3.out\" }, t);\ntl.fromTo(right, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: vB, duration: 0.8, ease: \"power3.out\" }, t);\ntl.fromTo(left, { filter: \"drop-shadow(0 0 0px rgba(208,89,44,0))\" }, { filter: \"drop-shadow(0 0 30px rgba(208,89,44,0.8))\", duration: 0.3, ease: \"power2.out\" }, t + 0.8);",
+    "receita_hyperframes": "split-tilt-cards",
+    "origem": "expansao"
+  },
+  {
+    "id": "data-point-highlight",
+    "nome": "highlight data point",
+    "nome_pt": "destacar um ponto do gráfico",
+    "aliases": [
+      "destaque no dado",
+      "callout",
+      "focar um valor",
+      "anotação no gráfico"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Os outros dados escurecem, o ponto escolhido cresce, e uma linha guia leva a uma etiqueta com o valor.",
+    "como_funciona": "Os demais itens descem para opacity 0,25; o ponto herói faz scale até 1,6 com back.out; a linha guia usa DrawSVGPlugin e a etiqueta entra com fade e y curto depois.",
+    "quando_usar": "Quando a narração fala de um número específico dentro de um gráfico já mostrado.",
+    "evitar": "Destacar mais de um ponto por vez ou apagar os outros por completo (perde o contexto).",
+    "padrao": {
+      "duracao_s": 0.75,
+      "ease": "back.out(2)",
+      "parametros": {
+        "opacidade_outros": 0.25,
+        "escala_destaque": 1.6
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "scale",
+      "drawSVG",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "line-chart-draw",
+      "circle-draw",
+      "pulse",
+      "push-in"
+    ],
+    "gsap": "// items = outros pontos, el = ponto herói, a = etiqueta, b = linha guia (DrawSVGPlugin)\nconst others = items, hero = el, callout = a, leader = b;\ntl.fromTo(others, { opacity: 1 }, { opacity: 0.25, duration: 0.35, ease: \"power2.out\" }, t);\ntl.fromTo(hero, { scale: 1 }, { scale: 1.6, duration: 0.4, ease: \"back.out(2)\", transformOrigin: \"50% 50%\" }, t);\ntl.fromTo(leader, { drawSVG: \"0%\" }, { drawSVG: \"100%\", duration: 0.3, ease: \"power2.out\" }, t + 0.25);\ntl.fromTo(callout, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: \"power3.out\" }, t + 0.45);",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "donut-fill",
+    "nome": "donut fill",
+    "nome_pt": "rosca/pizza preenchendo",
+    "aliases": [
+      "pie chart",
+      "gráfico de pizza",
+      "donut chart",
+      "fatias",
+      "gráfico de rosca"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "As fatias de um gráfico de rosca se desenham em sequência ao redor do círculo, cada uma emendando na anterior.",
+    "como_funciona": "Cada fatia é um circle com stroke grosso girado -90°; DrawSVGPlugin anima de \"x% x%\" até \"x% y%\", onde x é a soma das anteriores. Com ease none e início proporcional, a volta é contínua.",
+    "quando_usar": "Divisão de um todo: orçamento, participação de mercado, tempo gasto por atividade.",
+    "evitar": "Mais de 5 fatias, fatias menores que 5% ou pizza cheia em 3D.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "none",
+      "parametros": {
+        "valores_pct": [
+          45,
+          30,
+          25
+        ],
+        "volta_total_s": 1.0
+      }
+    },
+    "propriedades": [
+      "drawSVG"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo"
+    ],
+    "combina_com": [
+      "count-up",
+      "percent-ring",
+      "stagger"
+    ],
+    "gsap": "// DrawSVGPlugin: items = <circle> por fatia (mesmo r, stroke grosso, rotação -90°)\nconst vals = [45, 30, 25], total = 1.0; let acc = 0;\nitems.forEach((s, i) => {\n  const from = acc, to = acc + vals[i]; acc = to;\n  tl.fromTo(s, { drawSVG: from + \"% \" + from + \"%\" }, { drawSVG: from + \"% \" + to + \"%\", duration: total * vals[i] / 100, ease: \"none\" }, t + total * from / 100);\n});",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "funnel-reveal",
+    "nome": "funnel reveal",
+    "nome_pt": "funil se montando",
+    "aliases": [
+      "funil",
+      "funil de vendas",
+      "etapas afunilando",
+      "conversão"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "As etapas de um funil entram de cima para baixo, cada uma mais estreita, abrindo do centro para os lados.",
+    "como_funciona": "Cada faixa (já com a largura final e formato trapezoidal) anima scaleX de 0,2 a 1, opacity e y curto, em stagger de 0,18 s; os percentuais de conversão entram com count-up em cada faixa.",
+    "quando_usar": "Funil de vendas, retenção, 'de 1000 que viram, 30 compraram'.",
+    "evitar": "Mais de 5 etapas no vertical ou faixas com larguras que não respeitam a proporção dos dados.",
+    "padrao": {
+      "duracao_s": 1.1,
+      "ease": "power3.out",
+      "parametros": {
+        "etapas": 4,
+        "stagger_s": 0.18
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "count-up",
+      "data-point-highlight",
+      "stagger"
+    ],
+    "gsap": "// items = faixas do funil de cima para baixo, já com largura final\ntl.fromTo(items, { scaleX: 0.2, opacity: 0, y: -30, transformOrigin: \"50% 50%\" }, { scaleX: 1, opacity: 1, y: 0, duration: 0.45, ease: \"power3.out\", stagger: 0.18 }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "gauge-needle",
+    "nome": "gauge needle",
+    "nome_pt": "ponteiro de medidor",
+    "aliases": [
+      "velocímetro",
+      "medidor",
+      "ponteiro",
+      "gauge",
+      "termômetro de nota"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "O ponteiro de um medidor semicircular sobe até o valor, passa um pouco e balança antes de parar, enquanto o arco colorido preenche.",
+    "como_funciona": "rotation do ponteiro de -90° até -90° + 180° × valor, com origem na base e elastic.out para o balanço; o arco usa DrawSVGPlugin até o mesmo percentual com ease power3.out.",
+    "quando_usar": "Nível de risco, nota, satisfação, velocidade, 'quanto você está perto de X'.",
+    "evitar": "Para comparar vários valores (use barras) ou com elastic forte demais em tema sério.",
+    "padrao": {
+      "duracao_s": 1.1,
+      "ease": "elastic.out(1, 0.6)",
+      "parametros": {
+        "valor_pct": 78,
+        "arco_graus": 180
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "drawSVG"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "count-up",
+      "percent-ring",
+      "pulse"
+    ],
+    "gsap": "// el = ponteiro (origem na base), a = arco <path> semicircular (DrawSVGPlugin)\nconst needle = el, arc = a, pct = 0.78;\ntl.fromTo(needle, { rotation: -90, transformOrigin: \"50% 90%\" }, { rotation: -90 + 180 * pct, duration: 1.1, ease: \"elastic.out(1, 0.6)\" }, t);\ntl.fromTo(arc, { drawSVG: \"0%\" }, { drawSVG: pct * 100 + \"%\", duration: 0.9, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "heatmap-fade",
+    "nome": "heatmap fade",
+    "nome_pt": "mapa de calor acendendo",
+    "aliases": [
+      "heatmap",
+      "mapa de calor",
+      "grade de intensidade",
+      "calendário de atividade"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "As células de uma grade acendem em onda diagonal, cada uma até a intensidade do seu dado.",
+    "como_funciona": "Todas as células têm a mesma cor; a opacidade final de cada uma vem de um array de dados fixo (0,08 a 1). O atraso soma coluna e linha × 0,06 s, criando a diagonal.",
+    "quando_usar": "Frequência por dia e hora, hábitos, uso de app, calendário de commits.",
+    "evitar": "Grades enormes com células menores que 40 px no vertical (vira textura sem leitura).",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.out",
+      "parametros": {
+        "colunas": 4,
+        "atraso_celula_s": 0.06
+      }
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "dados",
+      "tecnico"
+    ],
+    "combina_com": [
+      "shape-grid-stagger",
+      "data-point-highlight"
+    ],
+    "gsap": "// items = células (mesma cor no CSS); opacidade final = intensidade do dado\nconst data = [0.1, 0.3, 0.8, 0.5, 0.2, 0.9, 1.0, 0.6, 0.4, 0.7, 0.3, 0.1], cols = 4;\nitems.forEach((c, i) => tl.fromTo(c, { opacity: 0 }, { opacity: 0.08 + data[i % data.length] * 0.92, duration: 0.5, ease: \"power2.out\" }, t + ((i % cols) + Math.floor(i / cols)) * 0.06));",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "line-chart-draw",
+    "nome": "line chart draw",
+    "nome_pt": "gráfico de linha se desenhando",
+    "aliases": [
+      "linha do gráfico",
+      "sparkline",
+      "curva crescendo",
+      "gráfico de tendência"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "A linha do gráfico se desenha da esquerda para a direita e cada ponto de dado acende quando a linha passa por ele.",
+    "como_funciona": "stroke-dashoffset da linha com ease none (velocidade constante no eixo x); os pontos entram com stagger igual a duração / (pontos - 1), assim cada um acende no momento em que a ponta chega.",
+    "quando_usar": "Evolução no tempo, tendência, antes e depois de uma decisão. Em versão pequena, vira sparkline ao lado de um número.",
+    "evitar": "Ease com aceleração na linha (os pontos dessincronizam) ou linhas com mais de 3 séries.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "none",
+      "parametros": {
+        "pontos": 6
+      }
+    },
+    "propriedades": [
+      "strokeDashoffset",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "area-fill",
+      "chart-axes-build",
+      "data-point-highlight",
+      "chart-scrub-readout"
+    ],
+    "gsap": "// el = <path> da linha; items = bolinhas dos pontos na ordem do eixo x\nconst L = el.getTotalLength(), dur = 1.2;\ntl.fromTo(el, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: dur, ease: \"none\" }, t);\ntl.fromTo(items, { scale: 0 }, { scale: 1, duration: 0.2, ease: \"back.out(2)\", stagger: dur / (items.length - 1) }, t);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "map-pin-drop",
+    "nome": "map pin drop",
+    "nome_pt": "pino caindo no mapa",
+    "aliases": [
+      "pin no mapa",
+      "marcador caindo",
+      "localização",
+      "pin drop"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Um pino de localização cai do alto, achata ao tocar o mapa, e uma onda se espalha do ponto de impacto.",
+    "como_funciona": "y de -300 a 0 com ease in (aceleração da queda); ao tocar, keyframes de scaleX/scaleY com origem na base fazem o squash; a sombra cresce durante a queda e um anel expande e some.",
+    "quando_usar": "Marcar cidade, endereço, ponto de encontro, 'onde isso aconteceu'.",
+    "evitar": "Vários pinos caindo juntos sem stagger ou pinos sobre áreas do mapa sem contraste.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power3.in",
+      "parametros": {
+        "altura_queda_px": 300
+      }
+    },
+    "propriedades": [
+      "y",
+      "scaleX",
+      "scaleY",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "map-route-draw",
+      "push-in",
+      "stagger"
+    ],
+    "gsap": "// el = pino, a = sombra elíptica, b = anel de impacto\nconst pin = el, shadow = a, ring = b;\ntl.fromTo(pin, { y: -300, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: \"power3.in\" }, t);\ntl.fromTo(pin, { scaleX: 1, scaleY: 1 }, { keyframes: { scaleY: [1, 0.75, 1.08, 1], scaleX: [1, 1.2, 0.95, 1] }, duration: 0.35, ease: \"none\", transformOrigin: \"50% 100%\", immediateRender: false }, t + 0.45);\ntl.fromTo(shadow, { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 0.35, duration: 0.45, ease: \"power3.in\" }, t);\ntl.fromTo(ring, { scale: 0.2, opacity: 0.8 }, { scale: 2.5, opacity: 0, duration: 0.6, ease: \"power2.out\" }, t + 0.45);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "map-route-draw",
+    "nome": "map route draw",
+    "nome_pt": "rota se desenhando no mapa",
+    "aliases": [
+      "trajeto no mapa",
+      "rota",
+      "caminho de viagem",
+      "route animation"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "A rota se desenha sobre o mapa com um marcador andando na ponta, e o pino de destino aparece na chegada.",
+    "como_funciona": "DrawSVGPlugin na rota e MotionPathPlugin no marcador, ambos com a mesma duração e ease, para o marcador ficar colado na ponta da linha; o destino entra com pop no fim.",
+    "quando_usar": "Viagens, logística, entrega, trajeto de um personagem na história.",
+    "evitar": "Rotas que cruzam a área de legenda, ou duração diferente entre linha e marcador.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "power1.inOut",
+      "parametros": {
+        "duracao_s_por_1000px": 1.2
+      }
+    },
+    "propriedades": [
+      "drawSVG",
+      "x",
+      "y",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "map-pin-drop",
+      "path-follow",
+      "push-in"
+    ],
+    "gsap": "// DrawSVGPlugin + MotionPathPlugin: rota desenha e o marcador acompanha a ponta\nconst route = el, marker = a, dest = b, dur = 2.0;\ntl.fromTo(route, { drawSVG: \"0%\" }, { drawSVG: \"100%\", duration: dur, ease: \"power1.inOut\" }, t);\ntl.set(marker, { x: 0, y: 0 }, t);\ntl.to(marker, { motionPath: { path: route, align: route, alignOrigin: [0.5, 0.5] }, duration: dur, ease: \"power1.inOut\" }, t);\ntl.fromTo(dest, { scale: 0, transformOrigin: \"50% 100%\" }, { scale: 1, duration: 0.35, ease: \"back.out(2)\" }, t + dur - 0.1);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "odometer",
+    "nome": "odometer",
+    "nome_pt": "número rolando por dígito",
+    "aliases": [
+      "number ticker",
+      "hodômetro",
+      "placar rolando",
+      "slot machine de número",
+      "rolling digits"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Cada dígito rola verticalmente numa coluna até o valor, com as casas da direita girando mais voltas, como um hodômetro.",
+    "como_funciona": "Cada casa é uma tira vertical de dígitos repetidos dentro de uma máscara; anima y até -(voltas × 10 + dígito) × altura do dígito. As casas menores recebem mais voltas e duração um pouco maior.",
+    "quando_usar": "Placar, contador de visualizações, preço, data mudando de ano.",
+    "evitar": "Para número que só precisa aparecer (count-up é mais leve) ou com fonte sem tabular-nums.",
+    "padrao": {
+      "duracao_s": 1.4,
+      "ease": "power3.out",
+      "parametros": {
+        "altura_digito_px": 160,
+        "atraso_extra_por_casa_s": 0.1
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "count-up",
+      "slam",
+      "punch-zoom"
+    ],
+    "gsap": "// items = colunas de dígito (tira 0-9 repetida, dentro de máscara), da esquerda para a direita\nconst target = \"4827\", H = 160, cols = items.length;\nitems.forEach((col, i) => {\n  const d = Number(target[i]), turns = cols - 1 - i; // casas da direita giram mais\n  tl.fromTo(col, { y: 0 }, { y: -(turns * 10 + d) * H, duration: 1.4 + i * 0.1, ease: \"power3.out\" }, t);\n});",
+    "receita_hyperframes": "vertical-spring-ticker",
+    "origem": "expansao"
+  },
+  {
+    "id": "percent-ring",
+    "nome": "percent ring",
+    "nome_pt": "anel de porcentagem",
+    "aliases": [
+      "anel de progresso",
+      "círculo de porcentagem",
+      "progress ring",
+      "ring chart"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Um anel único fecha até a porcentagem enquanto o número no centro conta até o mesmo valor.",
+    "como_funciona": "DrawSVGPlugin num circle com stroke-linecap round, girado -90° para começar no topo; um count-up com a mesma duração e ease escreve o número central.",
+    "quando_usar": "Um único percentual de destaque: taxa de aprovação, economia, conclusão.",
+    "evitar": "Para dividir um todo em partes (use donut-fill) ou com anel fino demais para ler no celular.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power3.out",
+      "parametros": {
+        "valor_pct": 87,
+        "espessura_px": 36
+      }
+    },
+    "propriedades": [
+      "drawSVG",
+      "rotation",
+      "textContent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "count-up",
+      "pulse",
+      "liquid-fill"
+    ],
+    "gsap": "// DrawSVGPlugin: el = <circle> do anel, a = número central\nconst ring = el, num = a, pct = 87, c = { v: 0 };\ntl.fromTo(ring, { drawSVG: \"0%\", rotation: -90, transformOrigin: \"50% 50%\" }, { drawSVG: pct + \"%\", duration: 1.2, ease: \"power3.out\" }, t);\ntl.fromTo(c, { v: 0 }, { v: pct, duration: 1.2, ease: \"power3.out\", onUpdate: () => (num.textContent = Math.round(c.v) + \"%\") }, t);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "pictogram-fill",
+    "nome": "pictogram fill",
+    "nome_pt": "pictograma acendendo",
+    "aliases": [
+      "icon array",
+      "1 em cada 10",
+      "bonequinhos",
+      "grade de pessoas",
+      "waffle chart"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Uma grade de ícones (pessoas, casas, moedas) aparece em cinza e, em seguida, só a quantidade do dado acende na cor de destaque.",
+    "como_funciona": "Camada cinza com 100 ícones e camada colorida igual por cima; os N primeiros coloridos entram com scale e opacity em stagger de 0,8 s / N, na ordem de leitura.",
+    "quando_usar": "Proporções humanas: '1 em cada 4 brasileiros', 'só 3 de 100 empresas'.",
+    "evitar": "Para valores com casas decimais ou grades com ícones pequenos demais para o celular.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "back.out(2)",
+      "parametros": {
+        "grade": [
+          10,
+          10
+        ],
+        "acesos": 27
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "count-up",
+      "stagger",
+      "pulse"
+    ],
+    "gsap": "// items = 100 ícones coloridos sobre 100 cinzas (grade 10x10); acende os N primeiros\nconst N = 27, lit = items.slice(0, N);\ntl.fromTo(lit, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: \"back.out(2)\", stagger: 0.8 / N }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "progress-bar",
+    "nome": "progress bar",
+    "nome_pt": "barra de progresso",
+    "aliases": [
+      "carregamento",
+      "progresso",
+      "barra de meta",
+      "loading bar"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Uma barra preenche um trilho até a porcentagem, com uma etiqueta de valor que viaja colada na ponta.",
+    "como_funciona": "Preenchimento por scaleX com origem à esquerda; a etiqueta anima x até largura × porcentagem e o número conta junto, os três com o mesmo ease in-out. Diferente do bar grow, o trilho cheio fica visível como referência de 100%.",
+    "quando_usar": "Meta de arrecadação, avanço de um curso, etapas de projeto, 'faltam X%'.",
+    "evitar": "Etiqueta que escapa do trilho em valores perto de 100% (prenda no limite) ou ease diferente entre barra e etiqueta.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "valor_pct": 64,
+        "largura_trilho_px": 800
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "x",
+      "textContent"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "dados",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "count-up",
+      "progress-steps",
+      "liquid-fill"
+    ],
+    "gsap": "// el = preenchimento, a = etiqueta na ponta, b = número dentro da etiqueta\nconst fill = el, tag = a, num = b, W = 800, pct = 0.64, c = { v: 0 };\ntl.fromTo(fill, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: pct, duration: 1.0, ease: \"power2.inOut\" }, t);\ntl.fromTo(tag, { x: 0 }, { x: W * pct, duration: 1.0, ease: \"power2.inOut\" }, t);\ntl.fromTo(c, { v: 0 }, { v: pct * 100, duration: 1.0, ease: \"power2.inOut\", onUpdate: () => (num.textContent = Math.round(c.v) + \"%\") }, t);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "scatter-pop",
+    "nome": "scatter pop",
+    "nome_pt": "pontos de dispersão surgindo",
+    "aliases": [
+      "gráfico de dispersão",
+      "scatter plot",
+      "nuvem de pontos",
+      "dot plot",
+      "pontos pipocando"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Os pontos de um gráfico de dispersão pipocam em ordem embaralhada e, no fim, uma linha de tendência atravessa a nuvem.",
+    "como_funciona": "Ordem de entrada definida por um array de índices embaralhado à mão (determinístico); cada ponto faz scale 0 → 1 com back.out; a linha de tendência usa DrawSVGPlugin depois do último ponto.",
+    "quando_usar": "Correlação, distribuição, mostrar que existe um padrão no meio do caos.",
+    "evitar": "Centenas de pontos individuais (anime em grupos) ou ordem da esquerda para a direita, que sugere série temporal.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "back.out(2.2)",
+      "parametros": {
+        "stagger_s": 0.05,
+        "linha_tendencia": true
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "drawSVG"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "tecnico"
+    ],
+    "combina_com": [
+      "chart-axes-build",
+      "data-point-highlight"
+    ],
+    "gsap": "// items = pontos posicionados; el = linha de tendência (DrawSVGPlugin)\nconst order = [3, 7, 0, 9, 5, 1, 8, 2, 6, 4];\norder.forEach((idx, k) => {\n  const d = items[idx];\n  if (d) tl.fromTo(d, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: \"back.out(2.2)\" }, t + k * 0.05);\n});\ntl.fromTo(el, { drawSVG: \"0%\" }, { drawSVG: \"100%\", duration: 0.6, ease: \"power2.inOut\" }, t + order.length * 0.05 + 0.1);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "stacked-bar",
+    "nome": "stacked bar",
+    "nome_pt": "barra empilhada",
+    "aliases": [
+      "barra segmentada",
+      "composição",
+      "barra 100%",
+      "stacked chart"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Uma barra se monta por partes: cada segmento cresce a partir do fim do anterior, e o rótulo de cada um aparece em seguida.",
+    "como_funciona": "Segmentos já posicionados no CSS (left = soma dos anteriores) animam scaleX 0 → 1 com origem à esquerda e stagger igual à duração de cada um, criando um crescimento contínuo; rótulos com fade e pequeno y atrasados.",
+    "quando_usar": "Composição de custo, de tempo ou de público; mostrar 'de onde vem' um total.",
+    "evitar": "Mais de 5 segmentos ou cores parecidas entre vizinhos.",
+    "padrao": {
+      "duracao_s": 1.3,
+      "ease": "power2.out",
+      "parametros": {
+        "segmentos": 4,
+        "duracao_segmento_s": 0.4,
+        "stagger_s": 0.3
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo"
+    ],
+    "combina_com": [
+      "count-up",
+      "chart-axes-build",
+      "bar-grow"
+    ],
+    "gsap": "// items = segmentos posicionados (left = soma dos anteriores); rótulos em .seg-label\ntl.fromTo(items, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.4, ease: \"power2.out\", stagger: 0.3 }, t);\ntl.fromTo(scene.querySelectorAll(\".seg-label\"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.25, ease: \"power2.out\", stagger: 0.3 }, t + 0.25);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "timeline-scrub",
+    "nome": "timeline scrub",
+    "nome_pt": "linha do tempo avançando",
+    "aliases": [
+      "linha do tempo",
+      "timeline",
+      "cronologia",
+      "marcos acendendo"
+    ],
+    "familia": "dados-infografico",
+    "descricao": "Uma linha do tempo horizontal se preenche com uma cabeça andando, e cada marco acende quando a cabeça passa por ele.",
+    "como_funciona": "Preenchimento por scaleX e cabeça por x com ease none (tempo uniforme); cada marco guarda a posição relativa (0 a 1) em data-at e acende em t + at × duração.",
+    "quando_usar": "Histórias com datas, evolução de produto, etapas de carreira, 'como chegamos aqui'.",
+    "evitar": "Mais de 6 marcos no vertical ou ease com aceleração (os marcos acendem fora de hora).",
+    "padrao": {
+      "duracao_s": 2.4,
+      "ease": "none",
+      "parametros": {
+        "largura_px": 900,
+        "marcos": 5
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "x",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "dot-to-line",
+      "text-swap",
+      "bar-race"
+    ],
+    "gsap": "// el = linha de progresso, a = cabeça; items = marcos com data-at (0 a 1)\nconst W = 900, dur = 2.4;\ntl.fromTo(el, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: dur, ease: \"none\" }, t);\ntl.fromTo(a, { x: 0 }, { x: W, duration: dur, ease: \"none\" }, t);\nitems.forEach((m) => {\n  const at = t + Number(m.dataset.at) * dur;\n  tl.fromTo(m, { scale: 0.6, opacity: 0.3 }, { scale: 1, opacity: 1, duration: 0.25, ease: \"back.out(2)\" }, at);\n});",
+    "receita_hyperframes": "chart-scrub-readout",
+    "origem": "expansao"
+  }
+]

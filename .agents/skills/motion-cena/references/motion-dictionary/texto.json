@@ -1,0 +1,2586 @@
+[
+  {
+    "id": "highlight",
+    "nome": "highlight",
+    "nome_pt": "marca-texto",
+    "aliases": [
+      "grifar",
+      "marcador",
+      "destacar a palavra",
+      "grifo"
+    ],
+    "familia": "texto",
+    "descricao": "Um marca-texto passa por trás da palavra, da esquerda para a direita.",
+    "como_funciona": "Um div .hl absoluto atrás da palavra cresce de scaleX 0 a 1 com transformOrigin à esquerda (pseudo-elemento não é tweenável).",
+    "quando_usar": "Palavra-chave da narração, número importante, termo que o espectador precisa guardar.",
+    "evitar": "Grifar várias palavras na mesma frase: o destaque deixa de destacar.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power2.out",
+      "parametros": {
+        "origem": "esquerda",
+        "opacidade_barra": 0.35,
+        "sangria_px": 6
+      }
+    },
+    "propriedades": [
+      "scaleX"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "dados",
+      "opiniao"
+    ],
+    "combina_com": [
+      "word-reveal",
+      "pulse",
+      "highlight-follow"
+    ],
+    "gsap": "// highlight: el = div .hl absoluto atrás da palavra\ntl.fromTo(el, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.4, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "css-marker-patterns",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "line-reveal",
+    "nome": "line reveal",
+    "nome_pt": "revelação por linha",
+    "aliases": [
+      "linha por linha",
+      "texto subindo da máscara",
+      "reveal de linhas"
+    ],
+    "familia": "texto",
+    "descricao": "Cada linha do texto sobe de trás de uma máscara invisível, uma depois da outra.",
+    "como_funciona": "Cada linha fica num wrapper com overflow hidden e o span interno vai de yPercent 110 a 0 com power4.out e stagger de 0,08 s. SplitText com mask: \"lines\" monta a estrutura (grátis desde 3.13).",
+    "quando_usar": "Parágrafos curtos, citações, títulos de duas ou três linhas com cara editorial.",
+    "evitar": "Mais de 5 linhas: o stagger passa de 0,8 s e perde o ritmo.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power4.out",
+      "parametros": {
+        "stagger_s": 0.08,
+        "y_percent_inicial": 110
+      }
+    },
+    "propriedades": [
+      "yPercent"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "explicativo",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "quote-reveal",
+      "fade-in",
+      "push-in"
+    ],
+    "gsap": "// line reveal: items = spans de linha, cada um dentro de <div class=\"line\" style=\"overflow:hidden\">\ntl.fromTo(items, { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: \"power4.out\", stagger: 0.08 }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "scramble",
+    "nome": "scramble",
+    "nome_pt": "embaralhar e decodificar",
+    "aliases": [
+      "decode",
+      "texto hacker",
+      "letras embaralhadas",
+      "decodificar"
+    ],
+    "familia": "texto",
+    "descricao": "As letras ficam trocando por símbolos aleatórios e vão se fixando na palavra certa, da esquerda para a direita.",
+    "como_funciona": "Um proxy vai de 0 a 1 em 0,8 s; a cada update as letras já reveladas mostram o caractere real e as outras mostram um glifo escolhido por hash de (índice, passo de tempo a 20 fps). Nada de Math.random.",
+    "quando_usar": "Títulos de tecnologia, IA, segurança, revelação de código ou senha.",
+    "evitar": "Usar em todo título; e nunca com Math.random, que quebra o render.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "none",
+      "parametros": {
+        "fps_glifos": 20,
+        "glifos": "!<>-_/[]{}=+*^?#A-Z0-9"
+      }
+    },
+    "propriedades": [
+      "textContent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "glitch",
+      "ascii-decode",
+      "glow"
+    ],
+    "gsap": "// scramble: glifo determinístico por (índice, passo de tempo); revela da esquerda\nconst GL = \"!<>-_/[]{}=+*^?#ABCDEFGHJKMNPRSTUVWXYZ0123456789\", word = el.dataset.text, sc = { p: 0 };\ntl.fromTo(sc, { p: 0 }, { p: 1, duration: 0.8, ease: \"none\", onUpdate: () => {\n  const shown = Math.floor(sc.p * word.length), step = Math.floor(tl.time() * 20);\n  el.textContent = [...word].map((ch, i) => i < shown || ch === \" \" ? ch : GL[(i * 31 + step * 17) % GL.length]).join(\"\");\n} }, t);",
+    "receita_hyperframes": "hacker-flip-3d",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "slam",
+    "nome": "slam",
+    "nome_pt": "palavra batendo na tela",
+    "aliases": [
+      "bater na tela",
+      "palavra caindo com impacto",
+      "impacto",
+      "kinetic slam"
+    ],
+    "familia": "texto",
+    "descricao": "A palavra cai grande na tela e \"bate\", fazendo o quadro tremer.",
+    "como_funciona": "A palavra vai de scale 2,4 e opacity 0 para 1 em 0,22 s com power4.out; logo depois o palco recebe um shake curto em y com keyframes fixos.",
+    "quando_usar": "Números chocantes, palavra de virada, batidas da música em tipografia cinética.",
+    "evitar": "Mais de 1-3 slams por vídeo vira barulho; não use em texto longo.",
+    "padrao": {
+      "duracao_s": 0.22,
+      "ease": "power4.out",
+      "parametros": {
+        "escala_inicial": 2.4,
+        "shake_px": [
+          14,
+          -9,
+          5
+        ]
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "shake",
+      "flash",
+      "anticipation"
+    ],
+    "gsap": "// slam: el = palavra, scene = palco que treme\ntl.fromTo(el, { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: \"power4.out\" }, t);\ntl.fromTo(scene, { y: 0 }, { keyframes: { y: [0, 14, -9, 5, 0] }, duration: 0.3, ease: \"none\" }, t + 0.2);",
+    "receita_hyperframes": "kinetic-beat-slam",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "text-swap",
+    "nome": "text swap",
+    "nome_pt": "troca de palavra",
+    "aliases": [
+      "trocar a palavra",
+      "palavra que muda",
+      "substituir palavra"
+    ],
+    "familia": "texto",
+    "descricao": "Uma palavra sai e outra entra no mesmo lugar, enquanto o resto da frase fica parado.",
+    "como_funciona": "As duas palavras ficam empilhadas dentro de um .slot com overflow hidden; a antiga vai de yPercent 0 a -100 e a nova de 100 a 0, mesma duração e ease power3.inOut.",
+    "quando_usar": "Antes/depois, \"ideia vira vídeo\", corrigir um termo, mostrar duas opções.",
+    "evitar": "Trocas em sequência longa: para 3 ou mais palavras em ciclo use rotating-words.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power3.inOut",
+      "parametros": {
+        "direcao": "sai para cima, entra por baixo"
+      }
+    },
+    "propriedades": [
+      "yPercent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "rotating-words",
+      "highlight",
+      "pulse"
+    ],
+    "gsap": "// text swap: a = palavra antiga, b = palavra nova, empilhadas dentro de .slot { overflow: hidden }\ntl.fromTo(a, { yPercent: 0 }, { yPercent: -100, duration: 0.35, ease: \"power3.inOut\" }, t);\ntl.fromTo(b, { yPercent: 100 }, { yPercent: 0, duration: 0.35, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "vertical-spring-ticker",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "typewriter",
+    "nome": "typewriter",
+    "nome_pt": "máquina de escrever",
+    "aliases": [
+      "letra por letra",
+      "digitando",
+      "efeito de digitação",
+      "type on"
+    ],
+    "familia": "texto",
+    "descricao": "As letras aparecem uma a uma, como se alguém digitasse na hora, com um cursor piscando no fim.",
+    "como_funciona": "O texto completo fica em data-text e um contador vai de 0 ao total de caracteres em ease none; a cada atualização o textContent recebe o slice até o contador. O cursor pisca com tl.set alternando a opacidade a cada 0,5 s, num número finito de vezes.",
+    "quando_usar": "Prompts, buscas, comandos de terminal, frases curtas que simulam alguém escrevendo.",
+    "evitar": "Frases acima de 30 caracteres sem narração ficam lentas; aí prefira word reveal. Não use em legenda corrida.",
+    "padrao": {
+      "duracao_s": 1.05,
+      "ease": "none",
+      "parametros": {
+        "ms_por_letra": 35,
+        "duracao_ref": "30 letras × 35 ms",
+        "faixa_ms": [
+          25,
+          40
+        ],
+        "cursor_pisca_s": 0.5
+      }
+    },
+    "propriedades": [
+      "textContent",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "type-correct",
+      "chat-bubble-typing",
+      "fade-in"
+    ],
+    "gsap": "// typewriter: texto completo em data-text, revela por contagem (seek-safe)\nconst full = el.dataset.text, p = { n: 0 };\ntl.fromTo(p, { n: 0 }, { n: full.length, duration: full.length * 0.035, ease: \"none\",\n  onUpdate: () => { el.textContent = full.slice(0, Math.round(p.n)); } }, t);\n// cursor piscando em loop finito\nconst cursor = scene.querySelector(\".cursor\"), blinks = Math.ceil((full.length * 0.035 + 1) / 0.5);\nfor (let k = 0; k < blinks; k++) tl.set(cursor, { opacity: k % 2 ? 0 : 1 }, t + k * 0.5);",
+    "receita_hyperframes": "gsap-effects",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "word-reveal",
+    "nome": "word reveal",
+    "nome_pt": "revelação por palavra",
+    "aliases": [
+      "palavra por palavra",
+      "revelar as palavras",
+      "texto sincronizado com a fala"
+    ],
+    "familia": "texto",
+    "descricao": "As palavras da frase aparecem em sequência, de preferência no instante em que são faladas.",
+    "como_funciona": "Cada palavra é um span; com words.json, cada span vai de opacity 0,15 a 1 em 0,12 s no início da palavra falada. Sem áudio, um stagger de 0,12 s sobe as palavras 20 px com fade.",
+    "quando_usar": "Frases narradas, legendas de destaque, frases de efeito com mais de 30 caracteres.",
+    "evitar": "Sem timestamps e com frases longas o stagger fica arrastado; corte a frase em blocos.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power3.out",
+      "parametros": {
+        "stagger_s": 0.12,
+        "opacidade_inicial_com_audio": 0.15,
+        "y_px": 20
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "karaoke",
+      "highlight",
+      "caption-chunks"
+    ],
+    "gsap": "// word reveal: items = spans .w; tempos de words.json em data-words\nconst words = JSON.parse(scene.dataset.words || \"[]\");\nif (words.length) words.forEach((w, i) => tl.fromTo(items[i], { opacity: 0.15 }, { opacity: 1, duration: 0.12 }, w.start - 0.05));\nelse tl.fromTo(items, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: \"power3.out\", stagger: 0.12 }, t);",
+    "receita_hyperframes": "asr-keyword-glow",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "ascii-decode",
+    "nome": "ascii decode",
+    "nome_pt": "revelação em ASCII",
+    "aliases": [
+      "ascii",
+      "texto se formando em caracteres",
+      "densidade de caracteres",
+      "ascii reveal"
+    ],
+    "familia": "texto",
+    "descricao": "As letras \"revelam\" como uma imagem ASCII: passam de pontinhos a símbolos cada vez mais densos até virar o texto, do centro para fora.",
+    "como_funciona": "Um proxy de 0 a 1 avança a rampa \" .:-=+*#%@\" em cada letra; a letra do centro começa primeiro (atraso proporcional à distância do centro) e, ao fim da rampa, mostra data-char. Diferente do scramble, a progressão é ordenada por densidade, não aleatória.",
+    "quando_usar": "Estética retrô de computador, terminal, dados se formando.",
+    "evitar": "Fontes proporcionais (a largura pula a cada troca): use monoespaçada.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "none",
+      "parametros": {
+        "rampa": " .:-=+*#%@",
+        "ordem": "centro → bordas"
+      }
+    },
+    "propriedades": [
+      "textContent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "scramble",
+      "grain",
+      "typewriter"
+    ],
+    "gsap": "// cada letra atravessa a rampa de densidade e assenta; ordem do centro para fora\nconst RAMP = \" .:-=+*#%@\", n = items.length, p = { v: 0 };\ntl.fromTo(p, { v: 0 }, { v: 1, duration: 1.0, ease: \"none\", onUpdate: () => {\n  items.forEach((ch, i) => {\n    const d = Math.abs(i - (n - 1) / 2) / Math.max(n / 2, 1), local = Math.min(Math.max((p.v - d * 0.4) / 0.6, 0), 1);\n    ch.textContent = local >= 1 ? ch.dataset.char : RAMP[Math.floor(local * (RAMP.length - 1))];\n  });\n} }, t);",
+    "receita_hyperframes": "hacker-flip-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "blur-focus-words",
+    "nome": "blur focus",
+    "nome_pt": "foco passando de palavra em palavra",
+    "aliases": [
+      "rack focus no texto",
+      "palavra em foco",
+      "desfoque nas outras",
+      "focus words"
+    ],
+    "familia": "texto",
+    "descricao": "A frase fica toda desfocada e o foco passa de uma palavra para a outra; só a palavra da vez fica nítida.",
+    "como_funciona": "Todas as palavras começam com blur de 10 px e opacity 0,5; cada uma ganha nitidez em 0,2 s no seu instante e volta a desfocar quando a próxima entra.",
+    "quando_usar": "Leitura guiada de frases de efeito, narração pausada, cenas contemplativas.",
+    "evitar": "Muitas palavras na tela (blur em muitas camadas pesa no render) e narração rápida.",
+    "padrao": {
+      "duracao_s": 0.2,
+      "ease": "power2.out",
+      "parametros": {
+        "blur_px": 10,
+        "opacidade_fora": 0.5,
+        "tempo_por_palavra_s": 0.4
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "word-reveal",
+      "push-in",
+      "grain"
+    ],
+    "gsap": "// todas desfocadas; o foco passa de uma palavra para a próxima\nconst per = 0.4;\ntl.set(items, { filter: \"blur(10px)\", opacity: 0.5 }, t);\nitems.forEach((w, i) => {\n  tl.to(w, { filter: \"blur(0px)\", opacity: 1, duration: 0.2, ease: \"power2.out\" }, t + i * per);\n  if (i < items.length - 1) tl.to(w, { filter: \"blur(10px)\", opacity: 0.5, duration: 0.2, ease: \"power2.in\" }, t + (i + 1) * per);\n});",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "breaking-letters",
+    "nome": "breaking letters",
+    "nome_pt": "letras desmoronando",
+    "aliases": [
+      "letras caindo da palavra",
+      "desmoronar",
+      "letras se soltando",
+      "palavra quebrando"
+    ],
+    "familia": "texto",
+    "descricao": "As letras se soltam uma a uma, balançam e despencam com gravidade, como uma placa caindo aos pedaços.",
+    "como_funciona": "Em ordem embaralhada fixa, cada letra dá um tranco de rotação de ±9° em 0,12 s e depois cai até y 1400 girando, com power2.in (aceleração de queda).",
+    "quando_usar": "Fracasso, \"o plano desabou\", mitos derrubados, saídas com humor.",
+    "evitar": "Saída rápida de cena (leva mais de 1 s) ou em texto que ainda precisa ser lido.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.in",
+      "parametros": {
+        "queda_px": 1400,
+        "intervalo_s": 0.07,
+        "ordem": [
+          3,
+          0,
+          5,
+          1,
+          4,
+          2,
+          6,
+          8,
+          7
+        ]
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "y"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "shake",
+      "anticipation",
+      "text-explode"
+    ],
+    "gsap": "// letras se soltam em ordem fixa embaralhada, balançam e caem com gravidade\nconst order = [3, 0, 5, 1, 4, 2, 6, 8, 7];\nitems.forEach((ch, i) => {\n  const d = (order[i % order.length] + Math.floor(i / order.length) * order.length) * 0.07, s = i % 2 ? 1 : -1;\n  tl.fromTo(ch, { rotation: 0, y: 0 }, { rotation: 9 * s, duration: 0.12, ease: \"power1.out\" }, t + d);\n  tl.to(ch, { y: 1400, rotation: 50 * s, duration: 0.7, ease: \"power2.in\" }, t + d + 0.12);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "caption-chunks",
+    "nome": "caption chunks",
+    "nome_pt": "legenda em blocos",
+    "aliases": [
+      "legenda",
+      "subtitle",
+      "legenda limpa",
+      "legenda por frase"
+    ],
+    "familia": "texto",
+    "descricao": "A legenda troca em blocos de 3-5 palavras, discreta, com uma leve subida a cada bloco novo.",
+    "como_funciona": "Cada bloco tem data-start/data-end vindos de words.json; entra com opacity 0 → 1 e y 12 → 0 em 0,15 s e sai com tl.set seco no fim, sem destaque por palavra.",
+    "quando_usar": "Vídeos explicativos, entrevistas, conteúdo longo em que a legenda serve à leitura e não ao estilo.",
+    "evitar": "Blocos de mais de 2 linhas na tela vertical; animação forte demais compete com a fala.",
+    "padrao": {
+      "duracao_s": 0.15,
+      "ease": "power2.out",
+      "parametros": {
+        "palavras_por_bloco": "3-5",
+        "y_px": 12,
+        "max_linhas": 2
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "historia",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "karaoke",
+      "word-reveal",
+      "lower-third"
+    ],
+    "gsap": "// items = blocos de legenda com data-start/data-end (de words.json)\nitems.forEach((chunk) => {\n  const s = Number(chunk.dataset.start), e = Number(chunk.dataset.end);\n  tl.fromTo(chunk, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.15, ease: \"power2.out\" }, s);\n  tl.set(chunk, { opacity: 0 }, e);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "caption-pop",
+    "nome": "caption pop",
+    "nome_pt": "legenda estilo TikTok",
+    "aliases": [
+      "legenda pulando",
+      "legenda do tiktok",
+      "legenda reels",
+      "palavra ativa colorida"
+    ],
+    "familia": "texto",
+    "descricao": "Blocos de 2-3 palavras entram com um pulinho e a palavra falada no momento fica maior e na cor de destaque.",
+    "como_funciona": "Cada bloco entra com scale 0,8 → 1 em back.out(2) no início do trecho e some com tl.set no fim. Dentro dele, cada palavra pulsa (1 → 1,15 → 1,08) no seu start e liga uma cópia na cor de acento (.hot), desligada no end.",
+    "quando_usar": "Shorts e Reels narrados, falas de opinião, cortes de podcast.",
+    "evitar": "Blocos de mais de 4 palavras ou fonte fina: a legenda vira parágrafo e perde o pique.",
+    "padrao": {
+      "duracao_s": 0.15,
+      "ease": "back.out(2)",
+      "parametros": {
+        "palavras_por_bloco": "2-3",
+        "escala_palavra_ativa": 1.08,
+        "fonte_tempos": "data-start/data-end"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "motivacional",
+      "historia",
+      "explicativo"
+    ],
+    "combina_com": [
+      "karaoke",
+      "one-word-flash",
+      "punch-zoom"
+    ],
+    "gsap": "// items = blocos (.chunk) com data-start/end; cada .w tem data-start/end e uma cópia colorida .hot\nitems.forEach((chunk) => {\n  const c0 = Number(chunk.dataset.start), c1 = Number(chunk.dataset.end);\n  tl.fromTo(chunk, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.15, ease: \"back.out(2)\" }, c0);\n  tl.set(chunk, { opacity: 0 }, c1);\n  chunk.querySelectorAll(\".w\").forEach((w) => {\n    const s = Number(w.dataset.start), e = Number(w.dataset.end), hot = w.querySelector(\".hot\");\n    tl.fromTo(w, { scale: 1 }, { keyframes: { scale: [1, 1.15, 1.08] }, duration: 0.18, ease: \"power2.out\" }, s);\n    tl.fromTo(hot, { opacity: 0 }, { opacity: 1, duration: 0.05 }, s);\n    tl.set(hot, { opacity: 0 }, e);\n    tl.set(w, { scale: 1 }, e);\n  });\n});",
+    "receita_hyperframes": "asr-keyword-glow",
+    "origem": "expansao"
+  },
+  {
+    "id": "char-drop",
+    "nome": "char drop",
+    "nome_pt": "letras caindo do alto",
+    "aliases": [
+      "letras caindo",
+      "drop de letras",
+      "chuva de letras quicando"
+    ],
+    "familia": "texto",
+    "descricao": "As letras despencam do topo, levemente tortas, e quicam até assentar na palavra.",
+    "como_funciona": "Cada letra parte de y -600 com uma rotação fixa por índice e cai até 0 com bounce.out, em stagger de 0,06 s; a rotação zera junto com a queda.",
+    "quando_usar": "Títulos divertidos, conteúdo infantil, palavras de comemoração.",
+    "evitar": "Assuntos sérios ou técnicos: o quique soa infantil. Não use em frases longas.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "bounce.out",
+      "parametros": {
+        "altura_px": 600,
+        "stagger_s": 0.06,
+        "rotacoes_graus": [
+          -14,
+          9,
+          -6,
+          12,
+          -10,
+          7
+        ]
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "squash-stretch",
+      "shake",
+      "ransom-note"
+    ],
+    "gsap": "// letras caem e quicam; rotação inicial fixa por índice (determinística)\nconst ROT = [-14, 9, -6, 12, -10, 7];\ntl.fromTo(items, { y: -600, rotation: (i) => ROT[i % ROT.length], opacity: 0 },\n  { y: 0, rotation: 0, opacity: 1, duration: 0.8, ease: \"bounce.out\", stagger: 0.06 }, t);",
+    "receita_hyperframes": "kinetic-beat-slam",
+    "origem": "expansao"
+  },
+  {
+    "id": "chat-bubble-typing",
+    "nome": "chat bubble typing",
+    "nome_pt": "balão de conversa digitando",
+    "aliases": [
+      "três pontinhos",
+      "mensagem chegando",
+      "chat",
+      "digitando no whatsapp"
+    ],
+    "familia": "texto",
+    "descricao": "Aparece um balão com três pontinhos pulando e, em seguida, ele vira a mensagem de texto, como numa conversa de celular.",
+    "como_funciona": "O balão dos pontos entra com scale 0,6 → 1 em back.out a partir do canto; os pontos fazem keyframes y [0, -10, 0] com stagger e repeat finito; no fim o balão some e o balão da mensagem (b) entra com o mesmo pop.",
+    "quando_usar": "Simular conversa, depoimento, pergunta de cliente, roteiros com diálogo.",
+    "evitar": "Muitas mensagens seguidas com espera longa: corte a espera para 1-2 ciclos.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "back.out(1.6)",
+      "parametros": {
+        "ciclos_pontos": 3,
+        "ciclo_s": 0.45,
+        "origem": "canto inferior do balão"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "typewriter",
+      "pop-in",
+      "stagger"
+    ],
+    "gsap": "// a = balão com 3 pontos (items = pontos); b = balão com a mensagem\nconst beats = 3, cyc = 0.45, tMsg = t + 0.2 + beats * cyc + 0.24;\ntl.fromTo(a, { scale: 0.6, opacity: 0, transformOrigin: \"0% 100%\" }, { scale: 1, opacity: 1, duration: 0.25, ease: \"back.out(1.8)\" }, t);\ntl.fromTo(items, { y: 0 }, { keyframes: { y: [0, -10, 0] }, duration: cyc, ease: \"sine.inOut\", stagger: 0.12, repeat: beats - 1 }, t + 0.2);\ntl.set(a, { opacity: 0 }, tMsg);\ntl.fromTo(b, { scale: 0.6, opacity: 0, transformOrigin: \"0% 100%\" }, { scale: 1, opacity: 1, duration: 0.3, ease: \"back.out(1.6)\" }, tMsg);",
+    "receita_hyperframes": "discrete-text-sequence",
+    "origem": "expansao"
+  },
+  {
+    "id": "circle-word",
+    "nome": "circle a word",
+    "nome_pt": "circular a palavra",
+    "aliases": [
+      "circular",
+      "círculo em volta",
+      "marcar com caneta",
+      "circle"
+    ],
+    "familia": "texto",
+    "descricao": "Uma elipse de caneta se desenha em volta da palavra, com a ponta passando um pouco do começo, como alguém circulando no papel.",
+    "como_funciona": "Um path de elipse aberta (o fim passa do início) é desenhado por strokeDashoffset de L a 0 com power2.inOut, enquanto gira de -4° a 0° para parecer gesto de mão.",
+    "quando_usar": "Apontar o item certo numa lista, o número que importa num print, a resposta correta.",
+    "evitar": "Elipse perfeita (vira botão) ou circular várias coisas na mesma cena.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.inOut",
+      "parametros": {
+        "rotacao_inicial_graus": -4,
+        "sobra_do_traco": "10-15% além do início"
+      }
+    },
+    "propriedades": [
+      "strokeDashoffset",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "dados"
+    ],
+    "combina_com": [
+      "underline-draw",
+      "pulse",
+      "punch-zoom"
+    ],
+    "gsap": "// el = <path> da elipse aberta em volta da palavra\nconst L = el.getTotalLength();\ntl.fromTo(el, { strokeDasharray: L, strokeDashoffset: L, rotation: -4, transformOrigin: \"50% 50%\" },\n  { strokeDashoffset: 0, rotation: 0, duration: 0.7, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "css-marker-patterns",
+    "origem": "expansao"
+  },
+  {
+    "id": "flip-in-chars",
+    "nome": "flip in",
+    "nome_pt": "letras girando em 3D",
+    "aliases": [
+      "virar as letras",
+      "flip 3d",
+      "letras tombando",
+      "3d flip text"
+    ],
+    "familia": "texto",
+    "descricao": "Cada letra gira para frente a partir da base, como uma plaquinha levantando, uma após a outra.",
+    "como_funciona": "O pai tem perspective 800px; cada letra vai de rotationX -100 e opacity 0 a 0 e 1 com back.out(1,4), transformOrigin na base, stagger de 0,04 s. Sem troca de glifo (isso é split flap).",
+    "quando_usar": "Títulos de produto, listas curtas, nomes com entrada elegante.",
+    "evitar": "Sem perspective (vira um achatamento sem profundidade) ou em frases longas.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "back.out(1.4)",
+      "parametros": {
+        "perspective_px": 800,
+        "stagger_s": 0.04,
+        "rotacao_inicial": -100
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "motivacional"
+    ],
+    "combina_com": [
+      "letter-cascade",
+      "stagger",
+      "glow"
+    ],
+    "gsap": "// pai com perspective: 800px; letras levantam a partir da base\ntl.fromTo(items, { rotationX: -100, opacity: 0, transformOrigin: \"50% 100%\" },\n  { rotationX: 0, opacity: 1, duration: 0.6, ease: \"back.out(1.4)\", stagger: 0.04 }, t);",
+    "receita_hyperframes": "hacker-flip-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "glitch-text",
+    "nome": "glitch text",
+    "nome_pt": "texto com glitch",
+    "aliases": [
+      "texto bugado",
+      "título glitch",
+      "texto falhando",
+      "rgb no texto"
+    ],
+    "familia": "texto",
+    "descricao": "O título entra falhando: cópias vermelha e ciano saltam para os lados em fatias e tudo encaixa limpo no fim.",
+    "como_funciona": "Duas cópias coloridas (a, b) recebem tl.set a cada 0,05 s com x de uma lista fixa e clip-path em fatias horizontais diferentes; o texto principal ganha um leve x e skewX no mesmo passo e o último passo zera tudo.",
+    "quando_usar": "Títulos de tecnologia, erro, hacker, games, cortes de tom ácido.",
+    "evitar": "Usar como transição de cena (isso é glitch da família transições) ou em todos os títulos.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "none",
+      "parametros": {
+        "passo_s": 0.05,
+        "deslocamentos_px": [
+          16,
+          -22,
+          9,
+          -12,
+          18,
+          -5,
+          0
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "skewX",
+      "opacity",
+      "clip-path"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "tecnico",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "scramble",
+      "glitch",
+      "flash"
+    ],
+    "gsap": "// el = texto; a = cópia vermelha; b = cópia ciano (sobrepostas, mix-blend: screen)\nconst offs = [16, -22, 9, -12, 18, -5, 0];\nconst SL = [\"inset(10% 0% 60% 0%)\", \"inset(55% 0% 20% 0%)\", \"inset(30% 0% 45% 0%)\", \"inset(70% 0% 5% 0%)\", \"inset(0% 0% 80% 0%)\", \"inset(40% 0% 35% 0%)\", \"inset(0% 0% 0% 0%)\"];\noffs.forEach((o, k) => {\n  const tk = t + k * 0.05;\n  tl.set(a, { x: o, opacity: o ? 0.8 : 0, clipPath: SL[k] }, tk);\n  tl.set(b, { x: -o, opacity: o ? 0.8 : 0, clipPath: SL[(k + 3) % SL.length] }, tk);\n  tl.set(el, { x: o * 0.3, skewX: o * 0.4 }, tk);\n});",
+    "receita_hyperframes": "chromatic-glitch",
+    "origem": "expansao"
+  },
+  {
+    "id": "handwriting",
+    "nome": "handwriting",
+    "nome_pt": "escrita à mão",
+    "aliases": [
+      "lettering se desenhando",
+      "assinatura",
+      "caneta escrevendo",
+      "handwritten"
+    ],
+    "familia": "texto",
+    "descricao": "Uma palavra em letra cursiva se escreve na tela, traço a traço, na ordem em que uma caneta escreveria.",
+    "como_funciona": "O lettering é um conjunto de paths de traço único na ordem da escrita; com DrawSVG cada path vai de 0% a 100%, com duração proporcional ao comprimento (~900 px/s) e uma pausa de 0,04 s entre traços, como a caneta saindo do papel.",
+    "quando_usar": "Assinaturas, nomes, frases afetivas, conteúdo pessoal ou artesanal.",
+    "evitar": "Fontes cursivas convertidas direto em contorno (desenha a borda dupla); traços todos com a mesma duração.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power1.inOut",
+      "parametros": {
+        "velocidade_px_s": 900,
+        "pausa_entre_tracos_s": 0.04
+      }
+    },
+    "propriedades": [
+      "drawSVG"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "outline-to-fill",
+      "fade-in",
+      "jitter-type"
+    ],
+    "gsap": "// DrawSVG (grátis no 3.13+): items = traços do lettering na ordem da escrita\nlet acc = 0;\nitems.forEach((s) => {\n  const L = s.getTotalLength(), d = L / 900; // ~900 px/s de \"caneta\"\n  tl.fromTo(s, { drawSVG: \"0%\" }, { drawSVG: \"100%\", duration: d, ease: \"power1.inOut\" }, t + acc);\n  acc += d + 0.04;\n});",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "highlight-follow",
+    "nome": "highlight follow",
+    "nome_pt": "destaque que segue a palavra",
+    "aliases": [
+      "caixa seguindo a fala",
+      "pill que pula de palavra",
+      "marcador andando",
+      "active word box"
+    ],
+    "familia": "texto",
+    "descricao": "Uma caixa de cor desliza de palavra em palavra atrás da frase, sempre embaixo da palavra que está sendo dita.",
+    "como_funciona": "No setup mede offsetLeft e offsetWidth de cada palavra; a caixa (largura base 100 px, origem à esquerda) recebe x e scaleX = largura/100 e salta para a próxima palavra em 0,2 s com power3.inOut.",
+    "quando_usar": "Legendas destacadas em vídeo narrado, leitura guiada, listas lidas em voz alta.",
+    "evitar": "Caixas com border-radius grande (o scaleX deforma o canto); palavras quebrando linha no meio da frase.",
+    "padrao": {
+      "duracao_s": 0.2,
+      "ease": "power3.inOut",
+      "parametros": {
+        "tempo_por_palavra_s": 0.35,
+        "largura_base_px": 100
+      }
+    },
+    "propriedades": [
+      "x",
+      "scaleX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "karaoke",
+      "highlight",
+      "caption-chunks"
+    ],
+    "gsap": "// el = caixa de acento atrás da frase; items = palavras (posição medida no setup)\nconst per = 0.35, pos = Array.from(items).map((w) => [w.offsetLeft, w.offsetWidth / 100]);\ntl.set(el, { x: pos[0][0], scaleX: pos[0][1], transformOrigin: \"0% 50%\" }, t);\npos.forEach(([x, k], i) => { if (i) tl.to(el, { x: x, scaleX: k, duration: 0.2, ease: \"power3.inOut\" }, t + i * per); });",
+    "receita_hyperframes": "css-marker-patterns",
+    "origem": "expansao"
+  },
+  {
+    "id": "ink-bleed",
+    "nome": "ink bleed",
+    "nome_pt": "tinta espalhando",
+    "aliases": [
+      "tinta",
+      "nanquim",
+      "texto se formando como tinta",
+      "gooey text"
+    ],
+    "familia": "texto",
+    "descricao": "O texto se forma como tinta escorrendo no papel: borrões orgânicos que se juntam e ganham bordas definidas.",
+    "como_funciona": "O pai tem fundo sólido e filter contrast(18); o texto anima blur de 28 px a 0 com fade e scale 0,92 → 1. O contraste alto transforma o borrão em mancha de borda dura que \"cresce\".",
+    "quando_usar": "Conteúdo artístico, histórias, temas de escrita, aquarela, café.",
+    "evitar": "Sobre vídeo ou gradiente (o contraste precisa de fundo chapado) e em muitas camadas.",
+    "padrao": {
+      "duracao_s": 1.1,
+      "ease": "power2.out",
+      "parametros": {
+        "blur_px": 28,
+        "contraste_pai": 18
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "handwriting",
+      "grain",
+      "fade-in"
+    ],
+    "gsap": "// pai: background sólido + filter: contrast(18); o blur do texto vira borda de tinta\ntl.fromTo(el, { filter: \"blur(28px)\", opacity: 0, scale: 0.92 }, { filter: \"blur(0px)\", opacity: 1, scale: 1, duration: 1.1, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "jitter-type",
+    "nome": "jitter type",
+    "nome_pt": "texto tremendo (boiling)",
+    "aliases": [
+      "texto nervoso",
+      "letras tremendo",
+      "boiling text",
+      "texto fervendo"
+    ],
+    "familia": "texto",
+    "descricao": "As letras tremem levemente sem parar, como animação desenhada à mão quadro a quadro.",
+    "como_funciona": "A 12 fps, cada letra recebe tl.set com x, y e rotação de uma tabela fixa de 4 posições, indexada por (letra + passo); dá o \"boiling\" de animação tradicional sem Math.random.",
+    "quando_usar": "Textos com estética de desenho, nervosismo, frio, susto, humor.",
+    "evitar": "Legendas longas (cansa a leitura) e amplitudes acima de 3 px.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "fps": 12,
+        "amplitude_px": 2,
+        "duracao_cena_s": 3
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "handwriting",
+      "grain",
+      "ransom-note"
+    ],
+    "gsap": "// texto \"fervendo\": cada letra salta entre offsets fixos a 12 fps durante a cena\nconst sceneDur = 3, fps = 12, J = [[2, -1, 1], [-2, 1, -1], [1, 2, 0.5], [-1, -2, -0.5]];\nfor (let k = 0; k < sceneDur * fps; k++) items.forEach((ch, i) => {\n  const j = J[(i + k * 3) % J.length];\n  tl.set(ch, { x: j[0], y: j[1], rotation: j[2] }, t + k / fps);\n});",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "karaoke",
+    "nome": "karaoke",
+    "nome_pt": "legenda karaokê",
+    "aliases": [
+      "palavra ativa",
+      "legenda preenchendo",
+      "karaoke caption",
+      "palavra acende"
+    ],
+    "familia": "texto",
+    "descricao": "A frase inteira fica na tela e a cor vai preenchendo cada palavra no ritmo exato da fala.",
+    "como_funciona": "Cada palavra tem uma cópia colorida (.fill) por cima, recortada por clip-path inset(0 100% 0 0); no início da palavra em words.json o inset vai a 0 com ease none durante a duração falada.",
+    "quando_usar": "Músicas, narração com timestamps, legendas em que o ritmo da fala importa.",
+    "evitar": "Sem timestamps reais: o preenchimento fora do tempo da voz incomoda mais do que ajuda.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "fonte_tempos": "words.json (start/end por palavra)"
+      }
+    },
+    "propriedades": [
+      "clip-path"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "word-reveal",
+      "caption-chunks",
+      "highlight-follow"
+    ],
+    "gsap": "// items = palavras; cada uma tem cópia colorida .fill por cima; tempos de words.json\nconst words = JSON.parse(scene.dataset.words || \"[]\");\nitems.forEach((w, i) => {\n  const fill = w.querySelector(\".fill\"), ww = words[i] || { start: t + i * 0.3, end: t + i * 0.3 + 0.3 };\n  tl.fromTo(fill, { clipPath: \"inset(0% 100% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 0%)\", duration: ww.end - ww.start, ease: \"none\" }, ww.start);\n});",
+    "receita_hyperframes": "asr-keyword-glow",
+    "origem": "expansao"
+  },
+  {
+    "id": "keyword-color-swap",
+    "nome": "keyword color swap",
+    "nome_pt": "palavra muda de cor",
+    "aliases": [
+      "trocar a cor da palavra",
+      "palavra acende na cor",
+      "keyword color",
+      "colorir palavra-chave"
+    ],
+    "familia": "texto",
+    "descricao": "Dentro da frase parada, uma palavra muda para a cor de destaque e dá uma levantadinha no instante em que é falada.",
+    "como_funciona": "Cor não é tweenada: uma cópia da palavra na cor de acento (el) fica sobreposta à original (a); a cópia vai de opacity 0 a 1 em 0,15 s enquanto as duas sobem 6 px juntas.",
+    "quando_usar": "Termos-chave da narração em frase já visível, palavra que resume a ideia.",
+    "evitar": "Colorir mais de 2 palavras por frase; cores sem contraste com o restante do texto.",
+    "padrao": {
+      "duracao_s": 0.15,
+      "ease": "power2.out",
+      "parametros": {
+        "y_px": -6,
+        "cor": "acento do tema"
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "word-reveal",
+      "pulse",
+      "highlight"
+    ],
+    "gsap": "// a = palavra original; el = cópia na cor de acento, sobreposta (crossfade em vez de tweenar color)\ntl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: \"power2.out\" }, t);\ntl.fromTo([a, el], { y: 0 }, { y: -6, duration: 0.15, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "asr-keyword-glow",
+    "origem": "expansao"
+  },
+  {
+    "id": "kinetic-stack",
+    "nome": "kinetic stack",
+    "nome_pt": "pilha cinética",
+    "aliases": [
+      "empilhar frases",
+      "texto empilhando",
+      "stack de linhas",
+      "kinetic typography"
+    ],
+    "familia": "texto",
+    "descricao": "Frases curtas entram uma abaixo da outra em tamanhos diferentes, e o bloco todo sobe para abrir espaço para a próxima.",
+    "como_funciona": "Cada linha entra com scale 1,6 → 1 e fade em 0,3 s; ao mesmo tempo a coluna inteira (el) desliza meia altura de linha para cima com power3.inOut, mantendo a linha nova perto do centro.",
+    "quando_usar": "Frases motivacionais, letras de música, narrações ritmadas em blocos de 2-4 palavras.",
+    "evitar": "Linhas longas ou tamanhos iguais: o efeito depende do contraste de tamanho e peso entre as linhas.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power4.out",
+      "parametros": {
+        "intervalo_s": 0.45,
+        "altura_linha_px": 220,
+        "escala_inicial": 1.6
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "slam",
+      "weight-morph"
+    ],
+    "gsap": "// items = linhas (tamanhos variados no CSS); el = coluna que sobe a cada linha nova\nconst gap = 0.45, lineH = 220;\ntl.set(el, { y: 0 }, t);\nitems.forEach((line, i) => {\n  tl.fromTo(line, { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: \"power4.out\" }, t + i * gap);\n  if (i > 0) tl.to(el, { y: -i * lineH * 0.5, duration: 0.3, ease: \"power3.inOut\" }, t + i * gap);\n});",
+    "receita_hyperframes": "kinetic-beat-slam",
+    "origem": "expansao"
+  },
+  {
+    "id": "letter-cascade",
+    "nome": "letter cascade",
+    "nome_pt": "cascata de letras",
+    "aliases": [
+      "letra subindo",
+      "char reveal",
+      "letras em cascata",
+      "letter rise"
+    ],
+    "familia": "texto",
+    "descricao": "Cada letra sobe de trás de uma máscara, uma logo após a outra, formando uma onda rápida.",
+    "como_funciona": "SplitText divide em chars com mask; cada letra vai de yPercent 110 a 0 com power4.out e stagger de 0,03 s, então a palavra se monta da esquerda para a direita.",
+    "quando_usar": "Títulos de uma ou duas palavras, nomes de marca, abertura de seção.",
+    "evitar": "Frases longas: com muitas letras a onda demora; acima de 20 caracteres use line-reveal.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power4.out",
+      "parametros": {
+        "stagger_s": 0.03,
+        "y_percent_inicial": 110,
+        "ordem": "start | center | end"
+      }
+    },
+    "propriedades": [
+      "yPercent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "line-reveal",
+      "text-shine",
+      "push-in"
+    ],
+    "gsap": "// SplitText (chars + mask): items = letras dentro de wrapper com overflow:hidden\ntl.fromTo(items, { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: \"power4.out\", stagger: 0.03 }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "lower-third",
+    "nome": "lower third",
+    "nome_pt": "tarja de nome",
+    "aliases": [
+      "gc",
+      "crédito de nome",
+      "nome e cargo",
+      "legenda de identificação"
+    ],
+    "familia": "texto",
+    "descricao": "Uma barra entra no terço inferior com o nome e o cargo da pessoa, fica alguns segundos e sai pelo mesmo caminho.",
+    "como_funciona": "A barra (el) cresce em scaleX a partir da esquerda; o nome (a) é revelado por clip-path inset da esquerda e o cargo (b) sobe de yPercent 100; após o tempo de leitura, os textos somem e a barra recolhe para a direita.",
+    "quando_usar": "Entrevistas, apresentação de quem fala, créditos de especialista.",
+    "evitar": "Deixar na tela o vídeo inteiro; posicionar na área coberta pela interface do Reels/Shorts (base da tela).",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.out",
+      "parametros": {
+        "segurar_s": 3,
+        "posicao": "acima da zona da interface (≈ y 1400 em 1920)"
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "clip-path",
+      "x",
+      "yPercent",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "opiniao",
+      "tecnico",
+      "historia"
+    ],
+    "combina_com": [
+      "caption-chunks",
+      "slide-in",
+      "title-card"
+    ],
+    "gsap": "// el = barra de fundo; a = nome; b = cargo; entra, segura e sai\nconst hold = 3;\ntl.fromTo(el, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.4, ease: \"power3.out\" }, t);\ntl.fromTo(a, { clipPath: \"inset(0% 100% 0% 0%)\", x: -20 }, { clipPath: \"inset(0% 0% 0% 0%)\", x: 0, duration: 0.4, ease: \"power3.out\" }, t + 0.15);\ntl.fromTo(b, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35, ease: \"power3.out\" }, t + 0.3);\ntl.to([a, b], { opacity: 0, duration: 0.25, ease: \"power2.in\" }, t + hold);\ntl.to(el, { scaleX: 0, transformOrigin: \"100% 50%\", duration: 0.35, ease: \"power3.in\" }, t + hold + 0.1);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "marker-scribble",
+    "nome": "marker scribble",
+    "nome_pt": "rabisco de caneta",
+    "aliases": [
+      "rabiscar",
+      "rasurar",
+      "riscar com raiva",
+      "scribble"
+    ],
+    "familia": "texto",
+    "descricao": "Um rabisco em zigue-zague cobre a palavra, rasurando de vez, como quem desiste dela.",
+    "como_funciona": "Um path em zigue-zague apertado é desenhado por strokeDashoffset em ease none (velocidade de mão constante) enquanto o texto embaixo cai para opacity 0,6.",
+    "quando_usar": "Ideias descartadas, \"esquece isso\", erros comuns, humor.",
+    "evitar": "Quando a palavra ainda precisa ser lida: o rabisco esconde; use strike-through.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "none",
+      "parametros": {
+        "voltas_zigzag": 6,
+        "opacidade_texto": 0.6
+      }
+    },
+    "propriedades": [
+      "strokeDashoffset",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "historia"
+    ],
+    "combina_com": [
+      "strike-through",
+      "shake",
+      "text-swap"
+    ],
+    "gsap": "// el = <path> em zigue-zague sobre a palavra; a = texto rasurado\nconst L = el.getTotalLength();\ntl.fromTo(el, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.45, ease: \"none\" }, t);\ntl.fromTo(a, { opacity: 1 }, { opacity: 0.6, duration: 0.3, ease: \"power2.out\" }, t + 0.1);",
+    "receita_hyperframes": "css-marker-patterns",
+    "origem": "expansao"
+  },
+  {
+    "id": "marquee-type",
+    "nome": "big type marquee",
+    "nome_pt": "letreiro de texto gigante",
+    "aliases": [
+      "marquee",
+      "texto correndo",
+      "faixa de texto",
+      "letreiro"
+    ],
+    "familia": "texto",
+    "descricao": "Uma faixa de texto enorme atravessa a tela lateralmente, em velocidade constante, durante a cena.",
+    "como_funciona": "O texto é repetido duas vezes numa faixa (el) e anima de xPercent 0 a -50 em ease none pela duração da cena: uma passada só, finita. Duas faixas em sentidos opostos dão contraste.",
+    "quando_usar": "Fundos tipográficos, vinhetas, chamadas de evento, cenas de marca.",
+    "evitar": "Texto que precisa ser lido por inteiro, ou faixas demais na mesma cena.",
+    "padrao": {
+      "duracao_s": 4.0,
+      "ease": "none",
+      "parametros": {
+        "deslocamento": "xPercent 0 → -50",
+        "direcao": "esquerda | direita (inverta para a 2ª faixa)"
+      }
+    },
+    "propriedades": [
+      "xPercent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "parallax",
+      "vertical-ticker",
+      "grain"
+    ],
+    "gsap": "// el = faixa com o texto repetido 2x; atravessa uma vez por cena (finito, linear)\nconst sceneDur = 4;\ntl.fromTo(el, { xPercent: 0 }, { xPercent: -50, duration: sceneDur, ease: \"none\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "matrix-rain-text",
+    "nome": "matrix rain text",
+    "nome_pt": "chuva de código virando texto",
+    "aliases": [
+      "matrix",
+      "código caindo",
+      "chuva digital",
+      "glifos caindo"
+    ],
+    "familia": "texto",
+    "descricao": "Cada letra desce como uma coluna de caracteres trocando sem parar e trava na letra certa ao chegar, em momentos diferentes.",
+    "como_funciona": "As letras caem de y -700 a 0 com power1.in, cada uma com duração fixa por índice; um proxy troca o glifo a 15 fps por hash (índice, passo) até a letra pousar, quando passa a mostrar data-char.",
+    "quando_usar": "Temas de código, IA, dados, ficção científica.",
+    "evitar": "Fundo claro (perde o brilho verde) ou textos de mais de uma linha.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power1.in",
+      "parametros": {
+        "altura_px": 700,
+        "fps_glifos": 15,
+        "pouso_s": "0,4-0,88 por letra"
+      }
+    },
+    "propriedades": [
+      "y",
+      "textContent"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "scramble",
+      "glow",
+      "grain"
+    ],
+    "gsap": "// items = letras com data-char; cada uma cai e troca de glifo até pousar\nconst GL = \"アイウエオカキクケコサシスセソ0123456789\", p = { v: 0 }, land = (i) => 0.4 + ((i * 37) % 9) * 0.06;\ntl.fromTo(items, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: \"none\" }, t); // escondidas até a chuva começar\ntl.fromTo(items, { y: -700 }, { y: 0, duration: (i) => land(i), ease: \"power1.in\" }, t);\ntl.fromTo(p, { v: 0 }, { v: 1, duration: 1.0, ease: \"none\", onUpdate: () => {\n  const s = tl.time() - t, step = Math.floor(tl.time() * 15);\n  items.forEach((ch, i) => { ch.textContent = s >= land(i) ? ch.dataset.char : GL[(i * 13 + step * 7) % GL.length]; });\n} }, t);",
+    "receita_hyperframes": "hacker-flip-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "mirror-text",
+    "nome": "mirror text",
+    "nome_pt": "texto com reflexo",
+    "aliases": [
+      "reflexo",
+      "espelhado",
+      "texto refletido no chão",
+      "mirror"
+    ],
+    "familia": "texto",
+    "descricao": "O texto sobe até uma linha de chão enquanto o reflexo dele, invertido e apagado, desce do outro lado e os dois se encontram.",
+    "como_funciona": "O texto (a) vai de yPercent 100 a 0 com fade; a cópia espelhada (b, scaleY -1 e máscara em gradiente no CSS) vai de yPercent -100 a 0 até opacity 0,35, mesma duração e ease.",
+    "quando_usar": "Títulos com cara de vitrine/produto premium, logos, cenas de reflexão.",
+    "evitar": "Fundos com textura forte (o reflexo vira sujeira) ou texto de várias linhas.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.out",
+      "parametros": {
+        "opacidade_reflexo": 0.35
+      }
+    },
+    "propriedades": [
+      "yPercent",
+      "scaleY",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "glow",
+      "push-in",
+      "text-shine"
+    ],
+    "gsap": "// a = texto; b = cópia espelhada embaixo (máscara em gradiente no CSS)\ntl.fromTo(a, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: \"power3.out\" }, t);\ntl.fromTo(b, { yPercent: -100, scaleY: -1, opacity: 0 }, { yPercent: 0, scaleY: -1, opacity: 0.35, duration: 0.6, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "one-word-flash",
+    "nome": "one word at a time",
+    "nome_pt": "uma palavra por vez",
+    "aliases": [
+      "palavra por vez no centro",
+      "rsvp",
+      "flash de palavras",
+      "word stack"
+    ],
+    "familia": "texto",
+    "descricao": "Só uma palavra aparece por vez, no centro da tela, trocando no ritmo da fala.",
+    "como_funciona": "Todas as palavras ficam no mesmo ponto, escondidas desde o início (fromTo com opacity 0); cada uma liga no seu instante e faz um ajuste rápido de scale 1,25 → 1, e é desligada no instante da próxima. Com words.json, use w.start no lugar do intervalo fixo.",
+    "quando_usar": "Narração rápida estilo Reels, frases de impacto lidas palavra a palavra, ganchos dos primeiros 3 segundos.",
+    "evitar": "Por mais de 10 segundos cansa a leitura; palavras muito longas ficam pouco tempo na tela.",
+    "padrao": {
+      "duracao_s": 0.12,
+      "ease": "power3.out",
+      "parametros": {
+        "tempo_por_palavra_s": 0.25,
+        "escala_inicial": 1.25
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "slam",
+      "caption-pop",
+      "punch-zoom"
+    ],
+    "gsap": "// items = palavras empilhadas no mesmo ponto; uma por vez, todas escondidas desde o início\nconst per = 0.25;\nitems.forEach((w, i) => {\n  tl.fromTo(w, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: \"none\" }, t + i * per);\n  tl.fromTo(w, { scale: 1.25 }, { scale: 1, duration: 0.12, ease: \"power3.out\" }, t + i * per);\n  if (i < items.length - 1) tl.set(w, { opacity: 0 }, t + (i + 1) * per);\n});",
+    "receita_hyperframes": "kinetic-beat-slam",
+    "origem": "expansao"
+  },
+  {
+    "id": "outline-to-fill",
+    "nome": "outline to fill",
+    "nome_pt": "contorno que vira preenchimento",
+    "aliases": [
+      "desenhar o contorno e preencher",
+      "stroke to fill",
+      "letras se desenhando"
+    ],
+    "familia": "texto",
+    "descricao": "O contorno de cada letra se desenha sozinho e, em seguida, a letra ganha preenchimento.",
+    "como_funciona": "O texto vira paths SVG; cada path tem strokeDasharray e strokeDashoffset iguais ao comprimento (getTotalLength) e o offset vai a 0; perto do fim do traço, fill-opacity vai de 0 a 1. Stagger leve de 0,06 s por letra.",
+    "quando_usar": "Logos, títulos de abertura, nomes que merecem uma entrada mais elaborada.",
+    "evitar": "Fontes muito finas (o traço some) ou texto longo: vira lento e pesado de renderizar.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power2.inOut",
+      "parametros": {
+        "stagger_s": 0.06,
+        "inicio_fill_s": 0.7,
+        "fill_s": 0.35
+      }
+    },
+    "propriedades": [
+      "strokeDashoffset",
+      "fillOpacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "handwriting",
+      "glow",
+      "push-in"
+    ],
+    "gsap": "// items = <path> das letras (texto convertido em curvas), com stroke e fill\nitems.forEach((p, i) => {\n  const L = p.getTotalLength(), ti = t + i * 0.06;\n  tl.fromTo(p, { strokeDasharray: L, strokeDashoffset: L, fillOpacity: 0 }, { strokeDashoffset: 0, duration: 0.9, ease: \"power2.inOut\" }, ti);\n  tl.to(p, { fillOpacity: 1, duration: 0.35, ease: \"power2.out\" }, ti + 0.7);\n});",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "quote-reveal",
+    "nome": "quote reveal",
+    "nome_pt": "revelação de citação",
+    "aliases": [
+      "citação",
+      "frase com aspas",
+      "quote card",
+      "depoimento"
+    ],
+    "familia": "texto",
+    "descricao": "Aspas grandes entram primeiro, as linhas da citação sobem por máscara e, por último, o nome do autor desliza.",
+    "como_funciona": "As aspas (a) fazem pop com rotação de -12° a 0°; as linhas (items) sobem de yPercent 110 a 0 em stagger de 0,12 s; o autor (b) entra de x -40 com fade depois da última linha.",
+    "quando_usar": "Citações, depoimentos de clientes, frases de livro ou de pessoas conhecidas.",
+    "evitar": "Citações acima de 4 linhas na tela vertical; autor entrando antes do texto.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power4.out",
+      "parametros": {
+        "stagger_linhas_s": 0.12,
+        "atraso_autor_s": 0.4
+      }
+    },
+    "propriedades": [
+      "scale",
+      "rotation",
+      "opacity",
+      "yPercent",
+      "x"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "opiniao",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "line-reveal",
+      "push-in",
+      "grain"
+    ],
+    "gsap": "// a = aspas grandes; items = linhas da citação (spans em máscara); b = autor\ntl.fromTo(a, { scale: 0.4, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: \"back.out(1.6)\" }, t);\ntl.fromTo(items, { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: \"power4.out\", stagger: 0.12 }, t + 0.3);\ntl.fromTo(b, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: \"power3.out\" }, t + 0.3 + items.length * 0.12 + 0.4);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "ransom-note",
+    "nome": "ransom note",
+    "nome_pt": "letras recortadas de revista",
+    "aliases": [
+      "recorte de revista",
+      "colagem de letras",
+      "bilhete de resgate",
+      "letras coladas"
+    ],
+    "familia": "texto",
+    "descricao": "Letras com fundos e fontes diferentes, como recortes de revista, pulam uma a uma tortinhas na tela.",
+    "como_funciona": "Cada letra (estilo variado no CSS) vai de scale 0 com rotação triplicada até scale 1 e uma rotação fixa por índice (-10° a 9°) com back.out(2,2), em stagger de 0,07 s.",
+    "quando_usar": "Humor, colagem, estética zine, títulos de conteúdo jovem ou de crime.",
+    "evitar": "Mais de 12 letras (fica longo) ou marcas que precisam de leitura limpa.",
+    "padrao": {
+      "duracao_s": 0.28,
+      "ease": "back.out(2.2)",
+      "parametros": {
+        "stagger_s": 0.07,
+        "rotacoes_graus": [
+          -8,
+          5,
+          -3,
+          9,
+          -6,
+          4,
+          -10,
+          7
+        ]
+      }
+    },
+    "propriedades": [
+      "scale",
+      "rotation"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "jitter-type",
+      "reaction-word",
+      "char-drop"
+    ],
+    "gsap": "// items = letras recortadas (fundos/fontes variados no CSS); tilt fixo por índice\nconst ROT = [-8, 5, -3, 9, -6, 4, -10, 7];\ntl.fromTo(items, { scale: 0, rotation: (i) => ROT[i % ROT.length] * 3 },\n  { scale: 1, rotation: (i) => ROT[i % ROT.length], duration: 0.28, ease: \"back.out(2.2)\", stagger: 0.07 }, t);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "reaction-word",
+    "nome": "reaction words",
+    "nome_pt": "palavra-reação",
+    "aliases": [
+      "onomatopeia",
+      "uau na tela",
+      "sticker de texto",
+      "pow"
+    ],
+    "familia": "texto",
+    "descricao": "Uma palavra curta de reação (\"UAU\", \"OPA\", \"SÉRIO?\") pula na tela girada como adesivo, treme e some.",
+    "como_funciona": "A palavra vai de scale 0 e rotação -25° a 1 e -8° com back.out(2,6), faz um tremido em x com keyframes fixos e sai com back.in em scale 0 após cerca de 1 s.",
+    "quando_usar": "Reações a um fato, humor, cortes de podcast, momentos de surpresa.",
+    "evitar": "Mais de uma reação por cena ou em conteúdo sério; sem emoji, o peso está na tipografia.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "back.out(2.6)",
+      "parametros": {
+        "rotacao_final_graus": -8,
+        "tempo_na_tela_s": 1.2
+      }
+    },
+    "propriedades": [
+      "scale",
+      "rotation",
+      "x"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "shake",
+      "punch-zoom",
+      "ransom-note"
+    ],
+    "gsap": "// el = palavra-reação estilo adesivo\ntl.fromTo(el, { scale: 0, rotation: -25 }, { scale: 1, rotation: -8, duration: 0.3, ease: \"back.out(2.6)\" }, t);\ntl.fromTo(el, { x: 0 }, { keyframes: { x: [0, -8, 7, -4, 0] }, duration: 0.25, ease: \"none\" }, t + 0.3);\ntl.to(el, { scale: 0, rotation: 12, duration: 0.2, ease: \"back.in(2)\" }, t + 1.2);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "redaction-reveal",
+    "nome": "redaction reveal",
+    "nome_pt": "tarja preta revelando",
+    "aliases": [
+      "tarja preta",
+      "documento censurado",
+      "censurar",
+      "redacted"
+    ],
+    "familia": "texto",
+    "descricao": "Palavras escondidas por tarjas pretas, como documento confidencial, vão sendo reveladas uma por uma (ou censuradas, no sentido inverso).",
+    "como_funciona": "Cada tarja é um bloco sobre a palavra; vai de scaleX 1 a 0 com origem à direita e power3.inOut, em stagger de 0,18 s. Para censurar, inverta o fromTo e a origem.",
+    "quando_usar": "Segredos, bastidores, \"o que não te contam\", investigação, true crime.",
+    "evitar": "Esconder informação que o espectador precisa ler sem depois revelar.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power3.inOut",
+      "parametros": {
+        "stagger_s": 0.18,
+        "modo": "revelar | censurar"
+      }
+    },
+    "propriedades": [
+      "scaleX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "spotlight-word",
+      "typewriter",
+      "grain"
+    ],
+    "gsap": "// items = tarjas pretas sobre as palavras; recolhem para a direita, uma por vez\ntl.fromTo(items, { scaleX: 1, transformOrigin: \"100% 50%\" }, { scaleX: 0, duration: 0.3, ease: \"power3.inOut\", stagger: 0.18 }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "rolling-letters",
+    "nome": "rolling letters",
+    "nome_pt": "letras rolando (odômetro)",
+    "aliases": [
+      "odômetro de texto",
+      "caça-níquel de letras",
+      "rolling text",
+      "slot de letras"
+    ],
+    "familia": "texto",
+    "descricao": "Cada letra é uma fita que rola na vertical, como caça-níquel, e para na letra certa; as da direita param depois.",
+    "como_funciona": "Cada letra é uma coluna (.reel) com o alfabeto empilhado dentro de uma máscara; a coluna vai de yPercent 0 até -100 × índice/linhas, com duração crescendo 0,08 s por posição e power3.out.",
+    "quando_usar": "Revelar nomes, códigos, palavras-surpresa, sorteios.",
+    "evitar": "Palavras com muitas letras repetidas não mostram a rolagem; não confundir com count-up (números são dados).",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power3.out",
+      "parametros": {
+        "atraso_por_letra_s": 0.08,
+        "conteudo_fita": "A-Z"
+      }
+    },
+    "propriedades": [
+      "yPercent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "dados"
+    ],
+    "combina_com": [
+      "split-flap",
+      "text-swap",
+      "pop-in"
+    ],
+    "gsap": "// items = colunas .reel com data-index (letra alvo) e data-rows (total de linhas), dentro de máscara\nitems.forEach((reel, i) => {\n  const idx = Number(reel.dataset.index), rows = Number(reel.dataset.rows);\n  tl.fromTo(reel, { yPercent: 0 }, { yPercent: -100 * idx / rows, duration: 0.9 + i * 0.08, ease: \"power3.out\" }, t);\n});",
+    "receita_hyperframes": "vertical-spring-ticker",
+    "origem": "expansao"
+  },
+  {
+    "id": "rotating-words",
+    "nome": "rotating words",
+    "nome_pt": "palavras girando em tambor",
+    "aliases": [
+      "carrossel de palavras",
+      "palavra rotativa",
+      "cubo de palavras",
+      "word carousel"
+    ],
+    "familia": "texto",
+    "descricao": "Numa frase fixa, uma palavra gira como a face de um cubo e dá lugar à próxima, em ciclo: \"feito para criadores / marcas / você\".",
+    "como_funciona": "As palavras ficam num tambor 3D (pai com perspective, transformOrigin com z negativo); cada uma entra de rotationX 90 → 0 e sai de 0 → -90 com power3.inOut, segurando 0,9 s entre trocas.",
+    "quando_usar": "Listar públicos, usos ou benefícios sem trocar a frase toda.",
+    "evitar": "Mais de 5 palavras no ciclo ou palavras de tamanhos muito diferentes (a frase pula de largura).",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.inOut",
+      "parametros": {
+        "segurar_s": 0.9,
+        "profundidade_px": 60
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "motivacional"
+    ],
+    "combina_com": [
+      "text-swap",
+      "highlight",
+      "pulse"
+    ],
+    "gsap": "// items = palavras empilhadas num tambor 3D (pai com perspective: 800px)\nconst hold = 0.9, spin = 0.4;\nitems.forEach((w, i) => {\n  const ti = t + i * hold;\n  // from com immediateRender: todas começam escondidas no tambor\n  tl.fromTo(w, { rotationX: 90, opacity: 0, transformOrigin: \"50% 50% -60px\" }, { rotationX: 0, opacity: 1, duration: spin, ease: \"power3.inOut\" }, ti);\n  if (i < items.length - 1) tl.fromTo(w, { rotationX: 0, opacity: 1 }, { rotationX: -90, opacity: 0, duration: spin, ease: \"power3.inOut\", immediateRender: false }, ti + hold);\n});",
+    "receita_hyperframes": "vertical-spring-ticker",
+    "origem": "expansao"
+  },
+  {
+    "id": "split-flap",
+    "nome": "split flap",
+    "nome_pt": "painel de aeroporto",
+    "aliases": [
+      "placa de aeroporto",
+      "flip board",
+      "solari",
+      "letreiro de estação"
+    ],
+    "familia": "texto",
+    "descricao": "Cada letra gira como as plaquinhas de um painel de aeroporto, passando por várias letras até parar na certa.",
+    "como_funciona": "Cada letra repete um giro curto de rotationX -90 → 0 (repeat finito, diferente por índice) enquanto um proxy troca o glifo a cada passo de 0,06 s por hash de (índice, passo); no último passo trava no caractere real. Letras começam com 0,04 s de defasagem.",
+    "quando_usar": "Destinos, datas, lançamentos, anúncio de resultado, tema viagem.",
+    "evitar": "Fontes que não sejam monoespaçadas ou blocos sem fundo de placa: perde a referência mecânica.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power1.out",
+      "parametros": {
+        "passo_s": 0.06,
+        "giros_por_letra": "6-10",
+        "defasagem_s": 0.04
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "textContent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "dados",
+      "historia"
+    ],
+    "combina_com": [
+      "rolling-letters",
+      "scramble",
+      "count-up"
+    ],
+    "gsap": "// items = letras com data-char, pai com perspective: 600px\nconst GL = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\", step = 0.06, p = { v: 0 };\nconst flips = (i) => 6 + ((i * 3) % 5), dur = items.length * 0.04 + 11 * step;\ntl.fromTo(p, { v: 0 }, { v: 1, duration: dur, ease: \"none\", onUpdate: () => {\n  const s = tl.time() - t;\n  items.forEach((ch, i) => {\n    const k = Math.floor((s - i * 0.04) / step);\n    ch.textContent = k >= flips(i) - 1 ? ch.dataset.char : GL[(i * 7 + Math.max(k, 0) * 11) % GL.length];\n  });\n} }, t);\nitems.forEach((ch, i) => tl.fromTo(ch, { rotationX: -90 }, { rotationX: 0, duration: step, ease: \"power1.out\", repeat: flips(i) - 1 }, t + i * 0.04));",
+    "receita_hyperframes": "hacker-flip-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "split-halves",
+    "nome": "split text",
+    "nome_pt": "texto cortado ao meio",
+    "aliases": [
+      "metade de cima e de baixo",
+      "texto partido",
+      "split horizontal",
+      "fatiar o texto"
+    ],
+    "familia": "texto",
+    "descricao": "A palavra é cortada na horizontal: a metade de cima vem de um lado, a de baixo do outro, e elas se encaixam no meio.",
+    "como_funciona": "Duas cópias da palavra, uma recortada com clip-path inset(0 0 50% 0) e outra com inset(50% 0 0 0); a de cima vai de x -700 a 0 e a de baixo de x 700 a 0, mesma duração e power4.out.",
+    "quando_usar": "Títulos fortes, contrastes (\"antes/depois\", \"nós/eles\"), abertura de vídeo.",
+    "evitar": "Fontes finas (o corte fica imperceptível) ou textos longos.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power4.out",
+      "parametros": {
+        "distancia_px": 700,
+        "corte": "50% (horizontal)"
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "slam",
+      "shake",
+      "mirror-text"
+    ],
+    "gsap": "// a = metade de cima (clip-path inset(0 0 50% 0)); b = metade de baixo (inset(50% 0 0 0))\ntl.fromTo(a, { x: -700 }, { x: 0, duration: 0.6, ease: \"power4.out\" }, t);\ntl.fromTo(b, { x: 700 }, { x: 0, duration: 0.6, ease: \"power4.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "spotlight-word",
+    "nome": "spotlight",
+    "nome_pt": "holofote no texto",
+    "aliases": [
+      "lanterna no texto",
+      "luz passando",
+      "spotlight",
+      "revelar com luz"
+    ],
+    "familia": "texto",
+    "descricao": "Um círculo de luz percorre a frase escura e só o trecho iluminado aparece; no fim a luz abre e revela tudo.",
+    "como_funciona": "Uma cópia clara do texto (el) por cima da versão escura é recortada por clip-path circle(12%) cujo centro vai de 0% a 100% em x com sine.inOut; depois o raio abre para 80%.",
+    "quando_usar": "Mistério, revelações, \"o detalhe que ninguém viu\", cenas noturnas.",
+    "evitar": "Frases de várias linhas (o círculo passa só por uma faixa) ou fundos claros.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "sine.inOut",
+      "parametros": {
+        "raio": "12%",
+        "raio_final": "80%"
+      }
+    },
+    "propriedades": [
+      "clip-path"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "redaction-reveal",
+      "glow",
+      "push-in"
+    ],
+    "gsap": "// el = camada de texto iluminado sobre o texto escuro; o recorte circular percorre a frase\ntl.fromTo(el, { clipPath: \"circle(12% at 0% 50%)\" }, { clipPath: \"circle(12% at 100% 50%)\", duration: 1.6, ease: \"sine.inOut\" }, t);\ntl.to(el, { clipPath: \"circle(80% at 100% 50%)\", duration: 0.4, ease: \"power2.out\" }, t + 1.6);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "stencil-cut",
+    "nome": "stencil cut",
+    "nome_pt": "texto vazado (stencil)",
+    "aliases": [
+      "texto recortado",
+      "vídeo dentro do texto",
+      "knockout",
+      "texto máscara"
+    ],
+    "familia": "texto",
+    "descricao": "Uma placa sólida cobre a tela com o texto vazado; pelas letras se vê o vídeo de fundo, e o texto encolhe de gigante até o tamanho final.",
+    "como_funciona": "O painel (el) tem o texto como furo (mask ou mix-blend no CSS) e escala de 8 a 1 com expo.inOut; o vídeo atrás (scene) faz um leve scale 1,15 → 1 para dar profundidade.",
+    "quando_usar": "Aberturas com imagem forte, nome de lugar sobre a paisagem, títulos de marca.",
+    "evitar": "Fundos sem detalhe (as letras ficam chapadas) ou fontes finas.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "expo.inOut",
+      "parametros": {
+        "escala_inicial": 8,
+        "fonte": "black/heavy"
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "word-zoom-through",
+      "push-in",
+      "mask-reveal"
+    ],
+    "gsap": "// el = painel sólido com o texto vazado; scene = vídeo de fundo visto pelas letras\ntl.fromTo(el, { scale: 8, transformOrigin: \"50% 50%\" }, { scale: 1, duration: 1.2, ease: \"expo.inOut\" }, t);\ntl.fromTo(scene, { scale: 1.15 }, { scale: 1, duration: 1.6, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "stretch-type",
+    "nome": "stretch type",
+    "nome_pt": "texto esticando como borracha",
+    "aliases": [
+      "texto elástico",
+      "esticar",
+      "rubber text",
+      "letras de borracha"
+    ],
+    "familia": "texto",
+    "descricao": "A palavra desce esticada na vertical, bate na base e volta ao formato normal balançando como borracha.",
+    "como_funciona": "Com transformOrigin na base, a palavra vai de scaleY 3, scaleX 0,6 e y -300 a escala 1 e y 0 com elastic.out(1, 0,45), que faz o vai e volta da borracha.",
+    "quando_usar": "Conteúdo divertido, apps, marcas jovens, palavras como \"pula\", \"estica\", \"flexível\".",
+    "evitar": "Temas sérios; elastic forte em texto longo fica caricato.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "elastic.out(1, 0.45)",
+      "parametros": {
+        "escalaY_inicial": 3,
+        "escalaX_inicial": 0.6,
+        "origem": "base"
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "squash-stretch",
+      "bounce",
+      "pop-in"
+    ],
+    "gsap": "// estica no eixo da entrada e volta como borracha (origem na base)\ntl.fromTo(el, { scaleY: 3, scaleX: 0.6, y: -300, opacity: 0, transformOrigin: \"50% 100%\" },\n  { scaleY: 1, scaleX: 1, y: 0, opacity: 1, duration: 0.9, ease: \"elastic.out(1, 0.45)\" }, t);",
+    "receita_hyperframes": "press-release-spring",
+    "origem": "expansao"
+  },
+  {
+    "id": "strike-through",
+    "nome": "strike-through",
+    "nome_pt": "riscar e corrigir",
+    "aliases": [
+      "riscado",
+      "tachado",
+      "riscar a palavra",
+      "preço riscado"
+    ],
+    "familia": "texto",
+    "descricao": "Uma linha reta risca a palavra, que esmaece, e a palavra certa aparece ao lado ou acima.",
+    "como_funciona": "Uma barra fina (el) sobre o texto cresce de scaleX 0 a 1 a partir da esquerda; a palavra riscada (a) cai para opacity 0,45 e a correção (b) entra com um pequeno pop em back.out.",
+    "quando_usar": "Preço antigo vs novo, mito vs verdade, \"não é X, é Y\".",
+    "evitar": "Usar sem a correção quando a ideia é cancelar com raiva: aí marker-scribble é mais expressivo.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power3.out",
+      "parametros": {
+        "espessura_px": 6,
+        "opacidade_riscado": 0.45,
+        "correcao_atraso_s": 0.4
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "produto",
+      "dados"
+    ],
+    "combina_com": [
+      "text-swap",
+      "pop-in",
+      "highlight"
+    ],
+    "gsap": "// el = linha sobre o texto; a = palavra riscada; b = correção\ntl.fromTo(el, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.35, ease: \"power3.out\" }, t);\ntl.fromTo(a, { opacity: 1 }, { opacity: 0.45, duration: 0.25, ease: \"power2.out\" }, t + 0.25);\ntl.fromTo(b, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: \"back.out(1.6)\" }, t + 0.4);",
+    "receita_hyperframes": "css-marker-patterns",
+    "origem": "expansao"
+  },
+  {
+    "id": "swing-in-letters",
+    "nome": "swing in nas letras",
+    "nome_pt": "letras penduradas balançando",
+    "aliases": [
+      "letras balançando",
+      "pendurado",
+      "swing",
+      "placa pendurada"
+    ],
+    "familia": "texto",
+    "descricao": "As letras entram penduradas pelo topo, como plaquinhas num prego, e balançam até parar retas.",
+    "como_funciona": "Com transformOrigin no topo da letra, cada uma vai de rotação ±70° (alternando o lado) a 0 com elastic.out(1, 0,35), em stagger de 0,05 s.",
+    "quando_usar": "Títulos leves, lojas, placas, temas de casa, infantil.",
+    "evitar": "Fontes muito altas e finas (o balanço parece quebrado) ou contexto sério.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "elastic.out(1, 0.35)",
+      "parametros": {
+        "rotacao_inicial_graus": 70,
+        "stagger_s": 0.05,
+        "origem": "topo"
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto"
+    ],
+    "combina_com": [
+      "char-drop",
+      "wiggle",
+      "pop-in"
+    ],
+    "gsap": "// letras penduradas pelo topo; lado alternado por índice\ntl.fromTo(items, { rotation: (i) => (i % 2 ? 70 : -70), opacity: 0, transformOrigin: \"50% 0%\" },\n  { rotation: 0, opacity: 1, duration: 1.0, ease: \"elastic.out(1, 0.35)\", stagger: 0.05 }, t);",
+    "receita_hyperframes": "press-release-spring",
+    "origem": "expansao"
+  },
+  {
+    "id": "text-echo",
+    "nome": "text echo",
+    "nome_pt": "eco do texto",
+    "aliases": [
+      "ecos",
+      "repetições se afastando",
+      "texto ecoando",
+      "echo"
+    ],
+    "familia": "texto",
+    "descricao": "A palavra aparece e cópias dela se soltam por trás, crescendo e sumindo em sequência, como ondas de som.",
+    "como_funciona": "A palavra (el) entra com fade e scale 0,9 → 1; quatro cópias (items) atrás dela vão de opacity 0,6 a 0 e scale 1 a 1,25 + 0,2 × índice com power2.out, em stagger de 0,1 s.",
+    "quando_usar": "Palavras ligadas a som, grito, eco, repetição; chamadas fortes.",
+    "evitar": "Mais de 5 ecos ou repetir em toda cena; não confundir com motion trail (rastro de movimento).",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.out",
+      "parametros": {
+        "copias": 4,
+        "stagger_s": 0.1,
+        "escala_max": 1.85
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "slam",
+      "pulse",
+      "glow"
+    ],
+    "gsap": "// el = palavra; items = 4 cópias atrás dela (outline ou cor mais fraca)\ntl.fromTo(el, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: \"power3.out\" }, t);\ntl.fromTo(items, { scale: 1, opacity: 0.6 }, { scale: (i) => 1.25 + i * 0.2, opacity: 0, duration: 0.7, ease: \"power2.out\", stagger: 0.1 }, t + 0.1);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "text-explode",
+    "nome": "text explode",
+    "nome_pt": "texto explodindo",
+    "aliases": [
+      "explodir letras",
+      "letras voando",
+      "estourar o texto",
+      "explosão de texto"
+    ],
+    "familia": "texto",
+    "descricao": "As letras voam para fora a partir do centro, girando e sumindo, como se a palavra estourasse.",
+    "como_funciona": "Cada letra recebe x proporcional à distância do centro, y e rotação de listas fixas por índice e opacity até 0, tudo em 0,6 s com power3.out.",
+    "quando_usar": "Saída de impacto de uma palavra, \"boom\", fim de ideia, transição tipográfica.",
+    "evitar": "Na entrada (use text-implode) ou em frases inteiras: fica confuso.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.out",
+      "parametros": {
+        "espalhamento_x_px": 160,
+        "y_px": [
+          -520,
+          380,
+          -260,
+          610,
+          -440,
+          300
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "flash",
+      "shake",
+      "text-implode"
+    ],
+    "gsap": "// letras voam para fora a partir do centro; vetores fixos por índice\nconst n = items.length, YS = [-520, 380, -260, 610, -440, 300], RS = [-140, 95, 200, -80, 160, -210];\ntl.fromTo(items, { x: 0, y: 0, rotation: 0, opacity: 1 }, {\n  x: (i) => (i - (n - 1) / 2) * 160, y: (i) => YS[i % YS.length], rotation: (i) => RS[i % RS.length],\n  opacity: 0, duration: 0.6, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "text-implode",
+    "nome": "text implode",
+    "nome_pt": "texto se montando",
+    "aliases": [
+      "letras se juntando",
+      "montar a palavra",
+      "assemble",
+      "implodir"
+    ],
+    "familia": "texto",
+    "descricao": "Letras espalhadas, grandes e borradas, voam de vários pontos e se encaixam formando a palavra.",
+    "como_funciona": "Cada letra parte de x, y, rotação e scale 2,2 vindos de listas fixas, com blur de 12 px, e vai até a posição final com expo.out; stagger a partir das bordas.",
+    "quando_usar": "Revelar nome de marca ou conceito que \"junta as peças\", aberturas.",
+    "evitar": "Palavras longas (a nuvem fica caótica) ou repetição em todas as cenas.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "expo.out",
+      "parametros": {
+        "escala_inicial": 2.2,
+        "blur_px": 12,
+        "stagger": "0,02 a partir das bordas"
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "scale",
+      "opacity",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "text-explode",
+      "glow",
+      "punch-zoom"
+    ],
+    "gsap": "// letras vêm de posições espalhadas (valores fixos) e se montam\nconst n = items.length, XO = [120, -90, 60, -140, 80, -50], YS = [480, -560, 330, -410, 620, -290], RS = [120, -160, 90, -200, 140, -110];\ntl.fromTo(items, {\n  x: (i) => (i - (n - 1) / 2) * -180 + XO[i % XO.length], y: (i) => YS[i % YS.length], rotation: (i) => RS[i % RS.length],\n  scale: 2.2, opacity: 0, filter: \"blur(12px)\" },\n  { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, filter: \"blur(0px)\", duration: 0.8, ease: \"expo.out\", stagger: { each: 0.02, from: \"edges\" } }, t);",
+    "receita_hyperframes": "depth-scatter-assemble",
+    "origem": "expansao"
+  },
+  {
+    "id": "text-mask-fill",
+    "nome": "text fill",
+    "nome_pt": "preenchimento por máscara",
+    "aliases": [
+      "encher o texto",
+      "texto enchendo",
+      "fill de baixo para cima",
+      "text mask fill"
+    ],
+    "familia": "texto",
+    "descricao": "O texto começa só no contorno e vai sendo preenchido de cor, como um copo enchendo.",
+    "como_funciona": "Duas camadas iguais: embaixo o texto vazado (text-stroke), em cima a cópia preenchida (el) recortada por clip-path inset que vai de 100% a 0% no topo. A direção muda trocando o lado do inset.",
+    "quando_usar": "Progresso, metas, \"carregando\", produtos ligados a líquido ou energia.",
+    "evitar": "Fundos que não contrastam com o contorno: a fase inicial fica invisível.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "direcao": "baixo → cima (ou esquerda → direita)"
+      }
+    },
+    "propriedades": [
+      "clip-path"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "dados",
+      "motivacional"
+    ],
+    "combina_com": [
+      "outline-to-fill",
+      "count-up",
+      "glow"
+    ],
+    "gsap": "// el = cópia preenchida sobre o texto em contorno; enche de baixo para cima\ntl.fromTo(el, { clipPath: \"inset(100% 0% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 0%)\", duration: 1.0, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "text-on-path",
+    "nome": "text on path",
+    "nome_pt": "texto andando no caminho",
+    "aliases": [
+      "texto em curva",
+      "texto seguindo linha",
+      "text path",
+      "texto no traçado"
+    ],
+    "familia": "texto",
+    "descricao": "A frase corre ao longo de uma curva, como se andasse em cima de um trilho.",
+    "como_funciona": "O texto fica num <textPath> preso a um path SVG; o atributo startOffset vai de 100% a 0% (ou o contrário) e o texto desliza acompanhando a forma.",
+    "quando_usar": "Rotas, linhas do tempo, textos em volta de um objeto ou logo, temas de movimento.",
+    "evitar": "Curvas fechadas demais (as letras se sobrepõem) e frases longas que não cabem no path.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "power1.inOut",
+      "parametros": {
+        "offset_de": "100%",
+        "offset_ate": "0%"
+      }
+    },
+    "propriedades": [
+      "attr:startOffset"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "draw-on",
+      "marquee-type",
+      "fade-in"
+    ],
+    "gsap": "// el = <textPath href=\"#curva\"> dentro de <text>; anima o atributo startOffset\ntl.fromTo(el, { attr: { startOffset: \"100%\" } }, { attr: { startOffset: \"0%\" }, duration: 2.0, ease: \"power1.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "text-shine",
+    "nome": "text shine",
+    "nome_pt": "brilho atravessando o texto",
+    "aliases": [
+      "reflexo de luz",
+      "gradient sweep",
+      "brilho metálico",
+      "shine"
+    ],
+    "familia": "texto",
+    "descricao": "Um reflexo de luz atravessa as letras uma vez, como em metal ou vidro, sem o texto se mexer.",
+    "como_funciona": "O texto usa background-clip: text com um gradiente 200% de largura; a posição do fundo, via CSS var --shine, vai de 200% a -100% com power2.inOut, levando a faixa clara de um lado ao outro.",
+    "quando_usar": "Logos, preços, \"premium\", títulos de produto, finais de vídeo.",
+    "evitar": "Repetir o brilho sem pausa ou usar em texto fino (o reflexo some).",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "largura_gradiente": "200%",
+        "passadas": 1
+      }
+    },
+    "propriedades": [
+      "--shine"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "glow",
+      "mirror-text",
+      "letter-cascade"
+    ],
+    "gsap": "// el: background-clip:text; background-position: var(--shine) 50% (CSS var inevitável)\ntl.fromTo(el, { \"--shine\": \"200%\" }, { \"--shine\": \"-100%\", duration: 1.0, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "gradient-text-sweep",
+    "origem": "expansao"
+  },
+  {
+    "id": "text-wave",
+    "nome": "text wave",
+    "nome_pt": "onda no texto",
+    "aliases": [
+      "ola nas letras",
+      "onda",
+      "wave",
+      "letras pulando em onda"
+    ],
+    "familia": "texto",
+    "descricao": "Uma onda atravessa a palavra uma vez: cada letra sobe e volta, em sequência.",
+    "como_funciona": "Texto já na tela; cada letra faz keyframes y [0, -40, 0] em 0,5 s com sine.inOut e stagger de 0,04 s, então o pico corre da esquerda para a direita e tudo termina parado.",
+    "quando_usar": "Ênfase lúdica numa palavra que já está na tela, chamada para ação, nome de marca.",
+    "evitar": "Repetir a onda sem parar: para movimento contínuo use wavy-baseline.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "sine.inOut",
+      "parametros": {
+        "altura_px": 40,
+        "stagger_s": 0.04
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "pulse",
+      "glow",
+      "wavy-baseline"
+    ],
+    "gsap": "// onda única: cada letra sobe e volta, com atraso por índice\ntl.fromTo(items, { y: 0 }, { keyframes: { y: [0, -40, 0] }, duration: 0.5, ease: \"sine.inOut\", stagger: 0.04 }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "title-card",
+    "nome": "title card reveal",
+    "nome_pt": "cartela de título com faixa",
+    "aliases": [
+      "cartela",
+      "faixa revelando título",
+      "bar reveal",
+      "título de capítulo"
+    ],
+    "familia": "texto",
+    "descricao": "Uma faixa de cor cresce cobrindo o espaço do título, recolhe para o outro lado e deixa o título no lugar; o subtítulo vem em seguida.",
+    "como_funciona": "A faixa (el) cresce de scaleX 0 a 1 a partir da esquerda com power3.in; o título (a) fica escondido desde o início e liga no pico, e a faixa recolhe para a direita com clip-path em power3.out; o subtítulo (b) sobe com fade.",
+    "quando_usar": "Aberturas de capítulo, nomes de episódio, separadores de seção.",
+    "evitar": "Faixa da mesma cor do fundo (a revelação some) ou repetir em toda cena.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power3.inOut",
+      "parametros": {
+        "faixa": "cor de acento",
+        "subtitulo_atraso_s": 0.5
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "wipe",
+      "tracking-expand",
+      "lower-third"
+    ],
+    "gsap": "// el = faixa de acento; a = título; b = subtítulo\ntl.fromTo(el, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.35, ease: \"power3.in\" }, t);\ntl.fromTo(a, { opacity: 0 }, { opacity: 1, duration: 0.01, ease: \"none\" }, t + 0.35); // escondido desde o início, liga no pico\n// a faixa recolhe para a direita com clip-path (trocar transformOrigin no meio da timeline não é seek-safe)\ntl.fromTo(el, { clipPath: \"inset(0% 0% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 100%)\", duration: 0.35, ease: \"power3.out\", immediateRender: false }, t + 0.35);\ntl.fromTo(b, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: \"power3.out\" }, t + 0.5);",
+    "receita_hyperframes": "css-cover",
+    "origem": "expansao"
+  },
+  {
+    "id": "tracking-expand",
+    "nome": "tracking expand",
+    "nome_pt": "espaçamento abrindo",
+    "aliases": [
+      "letter spacing",
+      "tracking",
+      "abrir as letras",
+      "tracking in"
+    ],
+    "familia": "texto",
+    "descricao": "As letras se afastam devagar a partir do centro, dando ar de título de cinema; ou se fecham até o espaçamento normal.",
+    "como_funciona": "Em vez de tweenar letter-spacing (que recalcula layout), cada letra desloca em x proporcional à distância do centro: (i - (n-1)/2) × k px. Para \"tracking in\", inverta o fromTo.",
+    "quando_usar": "Títulos de abertura, trailers, cartelas de capítulo, frases de efeito seguradas na tela.",
+    "evitar": "Palavras longas em tela vertical: o texto aberto pode passar da largura de 1080 px.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power2.out",
+      "parametros": {
+        "px_por_letra": 14,
+        "direcao": "abrir | fechar"
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "fade-in",
+      "blur-in",
+      "push-in"
+    ],
+    "gsap": "// abre o espaçamento sem mexer em letter-spacing: cada letra desloca a partir do centro\nconst n = items.length, k = 14; // px extras por letra\ntl.fromTo(items, { x: 0 }, { x: (i) => (i - (n - 1) / 2) * k, duration: 1.2, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "type-correct",
+    "nome": "type and correct",
+    "nome_pt": "digita, erra e corrige",
+    "aliases": [
+      "digitar e apagar",
+      "backspace",
+      "erro de digitação",
+      "texto sendo corrigido"
+    ],
+    "familia": "texto",
+    "descricao": "O texto é digitado, comete um erro, apaga com backspace e reescreve certo, como uma pessoa real digitando.",
+    "como_funciona": "Uma lista fixa de estados (instante, texto) define digitação, erro, apagar e correção; um proxy em ease none escolhe a cada update o último estado cujo instante já passou e escreve no textContent.",
+    "quando_usar": "Prompts de IA, \"o que eu queria dizer era...\", humor, demonstração de app.",
+    "evitar": "Repetir o truque em todas as cenas; erros longos demais antes da correção.",
+    "padrao": {
+      "duracao_s": 1.4,
+      "ease": "none",
+      "parametros": {
+        "estados": "lista (instante_s, texto)"
+      }
+    },
+    "propriedades": [
+      "textContent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "produto",
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "typewriter",
+      "chat-bubble-typing",
+      "strike-through"
+    ],
+    "gsap": "// estados de texto em instantes fixos: digita, erra, apaga, corrige\nconst STATES = [[0, \"\"], [0.1, \"Edite\"], [0.3, \"Edite víd\"], [0.5, \"Edite vídoe\"], [0.9, \"Edite víd\"], [1.05, \"Edite vídeo\"], [1.25, \"Edite vídeos com IA\"]], p = { v: 0 };\ntl.fromTo(p, { v: 0 }, { v: 1, duration: 1.4, ease: \"none\", onUpdate: () => {\n  const s = tl.time() - t;\n  let txt = \"\";\n  for (const [k, v] of STATES) if (s >= k) txt = v;\n  el.textContent = txt;\n} }, t);",
+    "receita_hyperframes": "discrete-text-sequence",
+    "origem": "expansao"
+  },
+  {
+    "id": "underline-draw",
+    "nome": "underline draw",
+    "nome_pt": "sublinhado desenhado",
+    "aliases": [
+      "sublinhar",
+      "traço embaixo",
+      "underline",
+      "sublinhado à mão"
+    ],
+    "familia": "texto",
+    "descricao": "Um traço feito à mão se desenha embaixo da palavra, da esquerda para a direita.",
+    "como_funciona": "Um path SVG levemente curvo fica sob a palavra; strokeDasharray e strokeDashoffset começam no comprimento do path e o offset vai a 0 com power2.out.",
+    "quando_usar": "Destacar uma palavra com cara de anotação, em tom de conversa ou aula.",
+    "evitar": "Linha perfeitamente reta: perde o charme manual e vira só uma borda.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.out",
+      "parametros": {
+        "espessura_px": 8,
+        "curvatura": "leve, ponta subindo no fim"
+      }
+    },
+    "propriedades": [
+      "strokeDashoffset"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "opiniao",
+      "tecnico"
+    ],
+    "combina_com": [
+      "circle-word",
+      "highlight",
+      "word-reveal"
+    ],
+    "gsap": "// el = <path> do sublinhado feito à mão, embaixo da palavra\nconst L = el.getTotalLength();\ntl.fromTo(el, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.5, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "vertical-ticker",
+    "nome": "vertical ticker",
+    "nome_pt": "lista subindo item a item",
+    "aliases": [
+      "ticker vertical",
+      "lista rolando",
+      "menu passando",
+      "scroll de itens"
+    ],
+    "familia": "texto",
+    "descricao": "Uma coluna de itens sobe um degrau por vez; o item no centro fica aceso e os outros apagados.",
+    "como_funciona": "A coluna (el) dentro de uma máscara sobe -i × altura da linha a cada passo (0,3 s em power3.inOut, com pausa de 0,6 s); a opacidade passa de 0,3 para 1 no item que chega ao centro.",
+    "quando_usar": "Listas de recursos, etapas, nomes, \"tudo o que você vai aprender\".",
+    "evitar": "Mais de 8 itens (fica longo) ou rolagem contínua sem pausa (para isso, marquee-type).",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power3.inOut",
+      "parametros": {
+        "altura_linha_px": 140,
+        "pausa_s": 0.6,
+        "opacidade_inativos": 0.3
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "rotating-words",
+      "highlight",
+      "stagger"
+    ],
+    "gsap": "// el = coluna dentro de máscara; items = linhas; sobe um item por vez\nconst rowH = 140, hold = 0.6, move = 0.3;\ntl.set(el, { y: 0 }, t);\ntl.set(items, { opacity: 0.3 }, t);\ntl.set(items[0], { opacity: 1 }, t);\nfor (let i = 1; i < items.length; i++) {\n  const ti = t + i * (hold + move) - move;\n  tl.to(el, { y: -i * rowH, duration: move, ease: \"power3.inOut\" }, ti);\n  tl.to(items[i - 1], { opacity: 0.3, duration: move }, ti);\n  tl.to(items[i], { opacity: 1, duration: move }, ti);\n}",
+    "receita_hyperframes": "vertical-spring-ticker",
+    "origem": "expansao"
+  },
+  {
+    "id": "wavy-baseline",
+    "nome": "wavy baseline",
+    "nome_pt": "linha de base ondulada",
+    "aliases": [
+      "texto ondulando",
+      "letras boiando",
+      "wavy text",
+      "texto balançando"
+    ],
+    "familia": "texto",
+    "descricao": "As letras ficam ondulando suavemente em fase deslocada, como texto boiando na água, durante toda a cena.",
+    "como_funciona": "Cada letra oscila em y entre +12 e -12 px com sine.inOut, yoyo e repeat finito por letra (dentro do stagger) calculado pela duração da cena; o stagger de 0,06 s defasa as letras e desenha a onda.",
+    "quando_usar": "Cenas paradas com uma frase, temas de mar, sonho, calma, música.",
+    "evitar": "Em texto que precisa ser lido rápido; amplitude acima de 20 px atrapalha a leitura.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "sine.inOut",
+      "parametros": {
+        "amplitude_px": 12,
+        "meio_periodo_s": 0.6,
+        "stagger_s": 0.06,
+        "duracao_cena_s": 4
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "float",
+      "fade-in",
+      "grain"
+    ],
+    "gsap": "// loop finito: letras oscilando em fase deslocada durante a cena\n// repeat dentro do stagger (por letra); no nível de cima ele repetiria a onda inteira e passaria da cena\nconst sceneDur = 4, half = 0.6, each = 0.06;\nconst reps = Math.max(0, Math.floor((sceneDur - each * (items.length - 1)) / half) - 1);\ntl.fromTo(items, { y: 12 }, { y: -12, duration: half, ease: \"sine.inOut\", stagger: { each, repeat: reps, yoyo: true } }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "weight-morph",
+    "nome": "weight morph",
+    "nome_pt": "peso da fonte mudando",
+    "aliases": [
+      "fonte variável",
+      "engordar a fonte",
+      "variable font",
+      "negrito animado"
+    ],
+    "familia": "texto",
+    "descricao": "A palavra fica mais grossa (ou mais fina) de forma contínua, sem trocar de fonte.",
+    "como_funciona": "Com uma fonte variável, o CSS usa font-variation-settings: \"wght\" var(--wght) e o GSAP anima a CSS var --wght de 200 a 900. Por letra, com stagger, o peso corre como onda.",
+    "quando_usar": "Dar peso a uma palavra no momento em que é dita, transições entre leve e forte, títulos tipográficos.",
+    "evitar": "Fontes que não são variáveis (o eixo não existe e nada acontece); mudar o peso também muda a largura e pode empurrar vizinhos.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "wght_de": 200,
+        "wght_ate": 900,
+        "stagger_por_letra_s": 0.04
+      }
+    },
+    "propriedades": [
+      "--wght"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "kinetic-stack",
+      "pulse",
+      "tracking-expand"
+    ],
+    "gsap": "// fonte variável: CSS font-variation-settings: \"wght\" var(--wght) (CSS var inevitável aqui)\ntl.fromTo(el, { \"--wght\": 200 }, { \"--wght\": 900, duration: 0.6, ease: \"power2.inOut\" }, t);\n// variação por letra em onda: tl.fromTo(items, { \"--wght\": 200 }, { \"--wght\": 900, duration: 0.4, ease: \"power2.inOut\", stagger: 0.04 }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "word-zoom-through",
+    "nome": "word zoom",
+    "nome_pt": "zoom através da palavra",
+    "aliases": [
+      "entrar na letra",
+      "zoom no texto",
+      "atravessar a palavra",
+      "text zoom through"
+    ],
+    "familia": "texto",
+    "descricao": "A câmera avança para dentro de uma palavra gigante até o miolo de uma letra tomar a tela e virar a próxima cena.",
+    "como_funciona": "A palavra escala de 1 a 14 com power3.in, com transformOrigin calibrado no vão de uma letra (o \"O\", o \"A\"); perto do fim, a cena B surge de scale 0,7 → 1 por dentro desse vão.",
+    "quando_usar": "Aberturas, passagem de título para conteúdo, ganchos com palavra-tema.",
+    "evitar": "Origem fora do vão da letra (a tela fica coberta de cor sólida) ou fontes finas demais.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.in",
+      "parametros": {
+        "escala_final": 14,
+        "origem": "vão da letra, via data-origin"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "punch-zoom",
+      "stencil-cut",
+      "flash"
+    ],
+    "gsap": "// el = palavra grande; data-origin = ponto no vão de uma letra (ex.: \"38% 52%\"); b = próxima cena\nconst org = el.dataset.origin || \"50% 50%\";\ntl.fromTo(el, { scale: 1, transformOrigin: org }, { scale: 14, duration: 0.8, ease: \"power3.in\" }, t);\ntl.fromTo(b, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: \"power3.out\" }, t + 0.55);",
+    "receita_hyperframes": "coordinate-target-zoom",
+    "origem": "expansao"
+  }
+]

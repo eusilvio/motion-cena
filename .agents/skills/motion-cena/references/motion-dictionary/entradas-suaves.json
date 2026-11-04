@@ -1,0 +1,878 @@
+[
+  {
+    "id": "blur-in",
+    "nome": "blur in",
+    "nome_pt": "do desfocado ao nítido",
+    "aliases": [
+      "desfocar entrando",
+      "entrar desfocado",
+      "foco entrando",
+      "blur"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento aparece desfocado e ganha nitidez até ficar limpo, como uma lente acertando o foco.",
+    "como_funciona": "Anima filter blur de 24 px até 0 junto com opacity 0 a 1, com power2.out.",
+    "quando_usar": "Títulos de abertura, frases de efeito e produtos em cena cinematográfica.",
+    "evitar": "Em muitas camadas ao mesmo tempo: o render fica lento. Use em 1 ou 2 elementos por vez.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.out",
+      "parametros": {
+        "blur_px": 24
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "fade-in",
+      "zoom-in",
+      "focus-hunt"
+    ],
+    "gsap": "tl.fromTo(el, { filter: \"blur(24px)\", opacity: 0 }, { filter: \"blur(0px)\", opacity: 1, duration: 0.5, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "ease-in-out",
+    "nome": "ease in-out",
+    "nome_pt": "começa devagar, acelera e freia",
+    "aliases": [
+      "ease in out",
+      "suavizado",
+      "movimento suave",
+      "sine in out"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "Ritmo de um movimento de A para B: sai devagar, ganha velocidade no meio e freia antes de parar.",
+    "como_funciona": "Não é um efeito de propriedade, é o ease: power2.inOut ou sine.inOut aplicado a um deslocamento de algo que já está na tela.",
+    "quando_usar": "Reposicionar elementos que já estão na tela, mover câmera, trocar layout.",
+    "evitar": "Em entradas (use ease out) e saídas (use ease in). Nunca linear, exceto em contadores e drift.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "alternativa": "sine.inOut",
+        "distancia_px": 600
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "tecnico",
+      "explicativo",
+      "dados",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "overshoot",
+      "slide-in"
+    ],
+    "gsap": "// ease in-out: mover algo que já está na tela (A para B)\ntl.fromTo(el, { x: 0 }, { x: 600, duration: 1.0, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "fade-in",
+    "nome": "fade in",
+    "nome_pt": "aparecer gradualmente",
+    "aliases": [
+      "aparecer",
+      "surgir",
+      "fade",
+      "esmaecer para dentro"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento surge aos poucos, do transparente ao opaco, sem sair do lugar.",
+    "como_funciona": "Anima só opacity de 0 a 1; o ease out faz a maior parte da mudança acontecer no começo.",
+    "quando_usar": "Textos de apoio, legendas, fundos e qualquer coisa que deve aparecer sem roubar a cena.",
+    "evitar": "Como única entrada do vídeo inteiro: fica sem energia. Em elementos de destaque, prefira algo com movimento.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power2.out",
+      "parametros": {}
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "tecnico",
+      "explicativo",
+      "dados",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "slide-in",
+      "blur-in",
+      "stagger"
+    ],
+    "gsap": "tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "slide-in",
+    "nome": "slide in",
+    "nome_pt": "entrada deslizando",
+    "aliases": [
+      "deslizar",
+      "slide up",
+      "entrar de lado",
+      "slide da esquerda",
+      "slide de baixo"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento entra deslizando de fora do lugar até a posição final, enquanto aparece.",
+    "como_funciona": "Anima x (ou y) de 80-120 px até 0 junto com opacity 0 a 1; o ease out faz ele frear ao chegar. Troque x por y para slide up/down.",
+    "quando_usar": "Títulos, listas e cards que precisam entrar com direção, mas sem chamar atenção demais.",
+    "evitar": "Em tudo ao mesmo tempo: vira ruído. Distâncias grandes demais parecem lentas.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.out",
+      "parametros": {
+        "distancia_px": 120,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "stagger",
+      "fade-in",
+      "blur-in"
+    ],
+    "gsap": "// slide in da esquerda; troque x por y para slide up\ntl.fromTo(el, { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": "nudge-curve",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "center-out-stagger",
+    "nome": "center-out stagger",
+    "nome_pt": "cascata do centro para fora",
+    "aliases": [
+      "stagger do centro",
+      "do meio para as pontas",
+      "from center",
+      "abrir do meio"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "Os itens de uma fila aparecem em sequência começando pelo do meio e indo para as pontas.",
+    "como_funciona": "Mesmo fromTo do stagger, mas com stagger: { each, from: \"center\" }; o GSAP calcula a ordem pela distância ao centro.",
+    "quando_usar": "Fileiras de ícones, logos de clientes, letras de um título simétrico.",
+    "evitar": "Em listas que têm ordem de leitura (passo 1, 2, 3): a ordem do centro confunde.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.out",
+      "parametros": {
+        "stagger_s": 0.06,
+        "from": "center"
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "burst-in",
+      "pop-in",
+      "grid-stagger"
+    ],
+    "gsap": "tl.fromTo(items, { y: 30, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: \"power3.out\", stagger: { each: 0.06, from: \"center\" } }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "clip-reveal",
+    "nome": "clip reveal",
+    "nome_pt": "revelação por recorte",
+    "aliases": [
+      "wipe in",
+      "revelar com máscara",
+      "reveal lateral",
+      "abrir da esquerda"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento é revelado por uma borda que varre de um lado ao outro, como se uma máscara fosse sendo puxada.",
+    "como_funciona": "Anima clip-path inset de (0 100% 0 0) para (0 0 0 0); o elemento não se move, só a área visível cresce. Mude o lado do inset para outras direções.",
+    "quando_usar": "Imagens, prints, faixas de cor e títulos grandes que pedem um ar editorial.",
+    "evitar": "Em elementos com sombra ou glow: o recorte corta a sombra. Não confunda com mask reveal, que é transição de cena.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.inOut",
+      "parametros": {
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "slide-in",
+      "curtain-in",
+      "grow-from-line"
+    ],
+    "gsap": "tl.fromTo(el, { clipPath: \"inset(0% 100% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 0%)\", duration: 0.6, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "css-cover",
+    "origem": "expansao"
+  },
+  {
+    "id": "curtain-in",
+    "nome": "curtain in",
+    "nome_pt": "abertura em cortina",
+    "aliases": [
+      "cortina",
+      "abrir do centro",
+      "split reveal",
+      "revelar do meio"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento se abre do centro para as duas bordas, como uma cortina se abrindo.",
+    "como_funciona": "Anima clip-path inset de (0 50% 0 50%) para (0 0 0 0): as duas laterais se afastam ao mesmo tempo. Na vertical use (50% 0 50% 0).",
+    "quando_usar": "Revelar uma imagem central, um logo ou um número grande com simetria.",
+    "evitar": "Em elementos estreitos: a abertura fica curta demais para ser percebida.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.inOut",
+      "parametros": {
+        "eixo": "horizontal ou vertical"
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "clip-reveal",
+      "scale-up",
+      "letterbox-in"
+    ],
+    "gsap": "tl.fromTo(el, { clipPath: \"inset(0% 50% 0% 50%)\" }, { clipPath: \"inset(0% 0% 0% 0%)\", duration: 0.6, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "css-radial",
+    "origem": "expansao"
+  },
+  {
+    "id": "fade-from-color",
+    "nome": "fade from color",
+    "nome_pt": "surgir de uma cor",
+    "aliases": [
+      "fade from white",
+      "fade from black",
+      "surgir do branco",
+      "estourado para normal",
+      "burn in"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento aparece estourado de luz (ou escuro) e a cor volta ao normal enquanto ele ganha forma.",
+    "como_funciona": "Anima filter brightness de 3 (ou 0 para preto) e saturate 0 até brightness 1 e saturate 1, junto com opacity.",
+    "quando_usar": "Fotos, memórias, aberturas de história e momentos de revelação emocional.",
+    "evitar": "Em texto fino sobre fundo claro: no início ele some no branco. Não use como transição de cena (isso é flash).",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.out",
+      "parametros": {
+        "brilho_inicial": 3,
+        "variante_preto": "brightness(0)"
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "blur-in",
+      "letterbox-in",
+      "burn-out"
+    ],
+    "gsap": "tl.fromTo(el, { filter: \"brightness(3) saturate(0)\", opacity: 0 }, { filter: \"brightness(1) saturate(1)\", opacity: 1, duration: 0.7, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "css-light",
+    "origem": "expansao"
+  },
+  {
+    "id": "feather-in",
+    "nome": "feather reveal",
+    "nome_pt": "revelação com borda suave",
+    "aliases": [
+      "degradê revelando",
+      "fade lateral",
+      "gradient wipe",
+      "revelar com esfumado"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento vai aparecendo de um lado ao outro com uma borda esfumada, como luz entrando pela janela.",
+    "como_funciona": "O CSS usa mask-image: linear-gradient(90deg, #000 var(--p), transparent calc(var(--p) + 20%)); o GSAP anima a CSS var --p de -20% a 100%.",
+    "quando_usar": "Paisagens, fotos de produto, textos grandes e aberturas com clima.",
+    "evitar": "Em navegadores sem suporte a mask-image com var. Borda dura demais (menos de 10%) vira um clip reveal comum.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power2.inOut",
+      "parametros": {
+        "borda_pct": 20,
+        "angulo_graus": 90
+      }
+    },
+    "propriedades": [
+      "--p (CSS var)"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "fade-in",
+      "clip-reveal"
+    ],
+    "gsap": "// CSS: mask-image: linear-gradient(90deg, #000 var(--p), transparent calc(var(--p) + 20%))\ntl.fromTo(el, { \"--p\": \"-20%\" }, { \"--p\": \"100%\", duration: 0.9, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "gradient-text-sweep",
+    "origem": "expansao"
+  },
+  {
+    "id": "focus-hunt",
+    "nome": "focus pull in",
+    "nome_pt": "foco buscando",
+    "aliases": [
+      "focus pull",
+      "foco caçando",
+      "rack focus de entrada",
+      "autofoco"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento entra desfocado, fica nítido, perde um pouco o foco e acerta de vez, como uma câmera caçando o foco.",
+    "como_funciona": "Keyframes de filter blur: 18, 0, 5, 0 px com opacity subindo no primeiro trecho. A pequena recaída é o que diferencia do blur in.",
+    "quando_usar": "Abertura com cara de câmera real, produto em vitrine, vídeos de bastidor.",
+    "evitar": "Mais de uma vez por vídeo: perde a graça e parece defeito de gravação.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.out",
+      "parametros": {
+        "blur_px": [
+          18,
+          0,
+          5,
+          0
+        ]
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "blur-in",
+      "zoom-in"
+    ],
+    "gsap": "tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: \"power2.out\" }, t);\ntl.fromTo(el, { filter: \"blur(18px)\" }, { keyframes: { filter: [\"blur(18px)\", \"blur(0px)\", \"blur(5px)\", \"blur(0px)\"] }, duration: 0.8, ease: \"none\" }, t);",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "ghost-in",
+    "nome": "ghost in",
+    "nome_pt": "aparecer em duas etapas",
+    "aliases": [
+      "fantasma",
+      "aparição",
+      "surgir translúcido",
+      "meio transparente e depois sólido"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento aparece translúcido, fica um instante como fantasma e só então se solidifica.",
+    "como_funciona": "Dois tweens de opacity: 0 a 0.35 com leve y, uma pausa curta, depois 0.35 a 1. A pausa no meio é o efeito.",
+    "quando_usar": "Revelar uma ideia que está se formando, respostas, perguntas retóricas, suspense leve.",
+    "evitar": "Pausa longa demais: parece que travou. Em CTA, que precisa ser lido de primeira.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power2.out",
+      "parametros": {
+        "opacidade_intermediaria": 0.35,
+        "pausa_s": 0.2
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "blur-in",
+      "materialize"
+    ],
+    "gsap": "tl.fromTo(el, { opacity: 0, y: 12 }, { opacity: 0.35, y: 0, duration: 0.35, ease: \"power2.out\" }, t);\ntl.to(el, { opacity: 1, duration: 0.35, ease: \"power2.inOut\" }, t + 0.55);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "grid-stagger",
+    "nome": "grid stagger",
+    "nome_pt": "cascata em grade",
+    "aliases": [
+      "stagger em grade",
+      "diagonal",
+      "mosaico entrando",
+      "grid reveal"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "Os itens de uma grade aparecem numa onda diagonal que parte de um canto e atravessa a grade.",
+    "como_funciona": "stagger: { grid: [linhas, colunas], from: \"start\", amount } usa a distância de cada célula ao canto para ordenar.",
+    "quando_usar": "Galerias, mosaicos de fotos, grades de recursos ou de ícones.",
+    "evitar": "Grade com poucos itens (menos de 6): não se percebe a diagonal. amount acima de 0.8 s fica lento.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "power3.out",
+      "parametros": {
+        "grid": [
+          4,
+          3
+        ],
+        "amount_s": 0.6,
+        "from": [
+          "start",
+          "end",
+          "center",
+          "edges"
+        ]
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "dados",
+      "explicativo"
+    ],
+    "combina_com": [
+      "center-out-stagger",
+      "pop-in",
+      "scatter-out"
+    ],
+    "gsap": "tl.fromTo(items, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: \"power3.out\", stagger: { grid: [4, 3], from: \"start\", amount: 0.6 } }, t);",
+    "receita_hyperframes": "css-grid",
+    "origem": "expansao"
+  },
+  {
+    "id": "grow-from-line",
+    "nome": "grow from line",
+    "nome_pt": "crescer a partir de uma linha",
+    "aliases": [
+      "nascer de uma linha",
+      "linha que vira bloco",
+      "line expand",
+      "abrir de uma linha"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "Primeiro aparece uma linha fina que se estica; depois ela se abre na altura e vira o bloco inteiro.",
+    "como_funciona": "Duas etapas no mesmo elemento: scaleX 0 a 1 com scaleY fino (0.02), depois scaleY até 1. A origem fica no centro.",
+    "quando_usar": "Painéis, caixas de texto, molduras e cards de informação com cara técnica.",
+    "evitar": "Em elementos com texto dentro sem contraescala: o texto fica esmagado na primeira etapa (esconda o texto até o fim).",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.inOut",
+      "parametros": {
+        "espessura_inicial": 0.02,
+        "etapa_linha_s": 0.35,
+        "etapa_abrir_s": 0.35
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "fade-in",
+      "clip-reveal",
+      "collapse"
+    ],
+    "gsap": "tl.fromTo(el, { scaleX: 0, scaleY: 0.02, transformOrigin: \"50% 50%\" }, { scaleX: 1, duration: 0.35, ease: \"power3.inOut\" }, t);\ntl.to(el, { scaleY: 1, duration: 0.35, ease: \"power3.inOut\" }, t + 0.35);",
+    "receita_hyperframes": "anchored-layout-expand",
+    "origem": "expansao"
+  },
+  {
+    "id": "letterbox-in",
+    "nome": "letterbox in",
+    "nome_pt": "faixas de cinema entrando",
+    "aliases": [
+      "letterbox",
+      "barras de cinema",
+      "modo cinema",
+      "tarjas pretas"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "A imagem abre de uma fresta horizontal até o enquadramento de cinema, deixando faixas escuras em cima e embaixo.",
+    "como_funciona": "Anima clip-path inset da cena de (50% 0 50% 0) até (14% 0 14% 0) e para ali; o estado final mantém as barras.",
+    "quando_usar": "Abrir uma história, um depoimento ou uma cena dramática com cara de filme.",
+    "evitar": "Em vídeo vertical com texto perto das bordas: as barras cortam o conteúdo. Não use em toda cena.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.inOut",
+      "parametros": {
+        "barra_pct": 14
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "blur-in",
+      "fade-from-color",
+      "curtain-in"
+    ],
+    "gsap": "tl.fromTo(scene, { clipPath: \"inset(50% 0% 50% 0%)\" }, { clipPath: \"inset(14% 0% 14% 0%)\", duration: 0.8, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "materialize",
+    "nome": "materialize",
+    "nome_pt": "materializar",
+    "aliases": [
+      "teletransporte",
+      "surgir piscando",
+      "materializar",
+      "holograma aparecendo"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento pisca algumas vezes, como um holograma ligando, e se fixa na tela.",
+    "como_funciona": "Keyframes de opacity em degraus fixos (0, 0.6, 0.1, 0.8, 0.3, 1), um a cada 0.05 s com easeEach steps(1), partindo de opacity 0 desde o início, com blur e brilho caindo num tween paralelo.",
+    "quando_usar": "Temas de tecnologia, IA, ficção, interfaces futuristas e revelações de recurso.",
+    "evitar": "Em vídeos calmos ou com público sensível a flashes. Use 1 vez por cena no máximo.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "none",
+      "parametros": {
+        "passos_opacity": [
+          0,
+          0.6,
+          0.1,
+          0.8,
+          0.3,
+          1
+        ],
+        "passo_s": 0.05
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "ghost-in",
+      "blur-in",
+      "dissolve-out"
+    ],
+    "gsap": "// opacity em degraus fixos (determinística), um a cada 0.05 s; escondido desde o início\ntl.fromTo(el, { opacity: 0 }, { keyframes: { opacity: [0, 0.6, 0.1, 0.8, 0.3, 1], easeEach: \"steps(1)\" }, duration: 0.25, ease: \"none\" }, t);\ntl.fromTo(el, { filter: \"blur(6px) brightness(1.8)\" }, { filter: \"blur(0px) brightness(1)\", duration: 0.4, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "chromatic-glitch",
+    "origem": "expansao"
+  },
+  {
+    "id": "random-stagger",
+    "nome": "random stagger",
+    "nome_pt": "cascata em ordem embaralhada",
+    "aliases": [
+      "stagger aleatório",
+      "aparecer embaralhado",
+      "random order",
+      "pipocar"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "Os itens aparecem um a um numa ordem que parece aleatória, mas é sempre a mesma em todo render.",
+    "como_funciona": "Uma lista fixa de índices embaralhados (escrita no código) define o atraso de cada item; nada de Math.random, então é seek-safe.",
+    "quando_usar": "Estrelas, pontos de um mapa, nuvem de palavras, logos de parceiros.",
+    "evitar": "Usar Math.random ou stagger from: \"random\" sem seed: quebra o render. Em listas com ordem lógica.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power2.out",
+      "parametros": {
+        "passo_s": 0.05,
+        "ordem": [
+          3,
+          0,
+          5,
+          1,
+          7,
+          2,
+          6,
+          4
+        ]
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "dados",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pop-in",
+      "grid-stagger"
+    ],
+    "gsap": "const order = [3, 0, 5, 1, 7, 2, 6, 4]; // ordem fixa (determinística)\nitems.forEach((it, i) => tl.fromTo(it, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: \"power2.out\" }, t + order[i % order.length] * 0.05 + Math.floor(i / order.length) * 0.4));",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "tilt-in",
+    "nome": "tilt in",
+    "nome_pt": "entrada inclinada",
+    "aliases": [
+      "inclinar entrando",
+      "entrar torto e endireitar",
+      "tilt",
+      "rotacionar leve"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento entra levemente inclinado e subindo, e se endireita ao chegar no lugar.",
+    "como_funciona": "Anima rotation de -8° a 0 e y de 40 a 0 com opacity, transformOrigin no canto inferior esquerdo.",
+    "quando_usar": "Cards, prints de tela, figurinhas e post-its que pedem um ar descontraído.",
+    "evitar": "Ângulos grandes (acima de 15°): vira rotate in. Em texto corrido atrapalha a leitura.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.out",
+      "parametros": {
+        "angulo_graus": -8,
+        "distancia_px": 40
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "opiniao",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "stagger",
+      "slide-in"
+    ],
+    "gsap": "tl.fromTo(el, { rotation: -8, y: 40, opacity: 0, transformOrigin: \"0% 100%\" }, { rotation: 0, y: 0, opacity: 1, duration: 0.5, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "unfold",
+    "nome": "unfold",
+    "nome_pt": "desdobrar",
+    "aliases": [
+      "desdobrar",
+      "abrir como papel",
+      "fold in",
+      "dobrar para baixo"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento se desdobra a partir da borda de cima, como um papel dobrado que abre na sua direção.",
+    "como_funciona": "Com perspectiva no pai, anima rotationX de -90 a 0 com transformOrigin no topo, junto com opacity.",
+    "quando_usar": "Cards de lista, balões de informação, menus e notas que \"abrem\" na tela.",
+    "evitar": "Sem perspective no pai o giro vira um achatamento sem profundidade. Evite em textos longos.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.out",
+      "parametros": {
+        "perspectiva_px": 1200,
+        "origem": "topo"
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "stagger",
+      "domino",
+      "fold-up"
+    ],
+    "gsap": "tl.set(el, { transformPerspective: 1200, transformOrigin: \"50% 0%\" }, t);\ntl.fromTo(el, { rotationX: -90, opacity: 0 }, { rotationX: 0, opacity: 1, duration: 0.6, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": "anchored-layout-expand",
+    "origem": "expansao"
+  },
+  {
+    "id": "wave-stagger",
+    "nome": "wave stagger",
+    "nome_pt": "cascata em onda",
+    "aliases": [
+      "onda",
+      "efeito ola",
+      "wave",
+      "subir em onda"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "Os itens sobem em sequência e cada um passa um pouco do ponto, formando uma onda que corre pela fila.",
+    "como_funciona": "Stagger curto com back.out leve em y; o atraso pequeno (0.04 s) faz vários itens estarem no ar ao mesmo tempo, o que desenha a onda.",
+    "quando_usar": "Letras de palavra curta, barras de um equalizador, fileira de avatares.",
+    "evitar": "Atraso grande: vira stagger comum. Em listas de texto longo fica infantil.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "back.out(1.6)",
+      "parametros": {
+        "stagger_s": 0.04,
+        "distancia_px": 50
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "stagger",
+      "center-out-stagger"
+    ],
+    "gsap": "tl.fromTo(items, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: \"back.out(1.6)\", stagger: 0.04 }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "zoom-in",
+    "nome": "zoom in",
+    "nome_pt": "aproximar aparecendo",
+    "aliases": [
+      "zoom de entrada",
+      "crescer suave",
+      "scale in",
+      "fade scale"
+    ],
+    "familia": "entradas-suaves",
+    "descricao": "O elemento aparece um pouco menor e cresce até o tamanho final enquanto ganha opacidade, sem quique.",
+    "como_funciona": "Anima scale de 0.85 a 1 junto com opacity 0 a 1 com power2.out. Diferente do scale up (parte de 0) e do pop in (tem overshoot).",
+    "quando_usar": "Cards, imagens de produto e blocos de texto que devem entrar com presença calma.",
+    "evitar": "Partir de escala muito baixa: aí vira scale up. Não use em texto pequeno, a mudança some.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.out",
+      "parametros": {
+        "escala_inicial": 0.85
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "blur-in",
+      "stagger",
+      "fade-in"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: \"power2.out\", transformOrigin: \"50% 50%\" }, t);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  }
+]
