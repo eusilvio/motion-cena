@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: tools/check.sh (Linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          # os scripts declaram as dependências no próprio arquivo (PEP 723)
+          cache-dependency-glob: |
+            .agents/skills/motion-cena/scripts/*.py
+            tools/check.sh
+            tests/fixtures/dictionary/run_dictionary.py
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Instala o FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ffmpeg fonts-dejavu-core
+
+      # Chromium do Playwright: roda os 388 efeitos do dicionário num navegador de verdade
+      # (sem ele, tests/test_dictionary_runtime.py é pulado)
+      - name: Instala o Chromium do Playwright
+        run: uv run -q --no-project --with playwright==1.58.0 playwright install --with-deps chromium
+
+      # o mesmo comando que roda na sua máquina
+      - name: tools/check.sh
+        run: ./tools/check.sh
+
+  windows-setup:
+    name: setup.ps1 (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: PowerShell 7 (pwsh) cria os arquivos locais
+        if: hashFiles('setup.ps1') != ''
+        shell: pwsh
+        run: |
+          function Assert-Setup {
+            foreach ($p in '.env.local', 'creatives/registro.md', '.claude/skills/motion-cena/SKILL.md') {
+              if (-not (Test-Path -LiteralPath $p)) { throw "setup.ps1 não criou $p" }
+            }
+          }
+          pwsh -NoProfile -NonInteractive -File setup.ps1
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          Assert-Setup
+          # de novo: não pode falhar nem sobrescrever o .env.local
+          Add-Content -LiteralPath .env.local -Value 'MARCADOR_CI=1'
+          pwsh -NoProfile -NonInteractive -File setup.ps1
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          Assert-Setup
+          if (-not (Select-String -LiteralPath .env.local -SimpleMatch 'MARCADOR_CI=1' -Quiet)) { throw 'setup.ps1 sobrescreveu o .env.local' }
+
+      # Windows PowerShell 5.1 numa cópia nova (apagar .claude/skills com Remove-Item -Recurse
+      # no 5.1 pode seguir as junctions e apagar as skills de verdade)
+      - uses: actions/checkout@v5
+        if: hashFiles('setup.ps1') != ''
+        with:
+          path: fresh
+
+      - name: Windows PowerShell 5.1 cria os arquivos locais do zero
+        if: hashFiles('fresh/setup.ps1') != ''
+        shell: powershell
+        working-directory: fresh
+        run: |
+          powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File setup.ps1
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          foreach ($p in '.env.local', 'creatives/registro.md', '.claude/skills/motion-cena/SKILL.md') {
+            if (-not (Test-Path -LiteralPath $p)) { throw "setup.ps1 não criou $p" }
+          }

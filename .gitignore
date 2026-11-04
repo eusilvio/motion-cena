@@ -2,6 +2,8 @@
 .hyperframes/
 node_modules/
 __pycache__/
+.ruff_cache/
+.pytest_cache/
 .venv/
 *.hf-transaction-*/
 
@@ -44,6 +46,9 @@ training/*
 .agents/skills/motion-cena/references/styles/*
 !.agents/skills/motion-cena/references/styles/README.md
 !.agents/skills/motion-cena/references/styles/_template.md
+# receitas da comunidade: gramática do próprio autor ou gênero genérico, nunca a quebra
+# do vídeo de alguém (regra em references/styles/README.md e CONTRIBUTING.md)
+!.agents/skills/motion-cena/references/styles/community/
 
 # prints de referência para carrossel
 .agents/skills/motion-cena/assets/carousel-refs/
