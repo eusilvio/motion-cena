@@ -211,7 +211,10 @@ def validate(effects: list[dict], dict_dir: Path = DICT_DIR) -> list[str]:
             if other not in ids:
                 errors.append(f"{e['id']}: combina_com aponta para {other}, que não existe")
     corpus = "".join(p.read_text(encoding="utf-8", errors="ignore")
-                     for p in HF_SKILLS.rglob("*.md") if "motion-cena" not in p.parts)
+                     for p in HF_SKILLS.rglob("*.md")
+                     # only the skill folder right under .agents/skills/ counts: the repo itself
+                     # is often cloned into a folder named motion-cena (CI does)
+                     if p.relative_to(HF_SKILLS).parts[0] != SKILL.name)
     for e in effects:
         r = e.get("receita_hyperframes")
         if r and not hf_recipe_exists(r, corpus):
