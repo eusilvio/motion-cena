@@ -1,0 +1,2135 @@
+[
+  {
+    "id": "blinds",
+    "nome": "blinds",
+    "nome_pt": "persianas",
+    "aliases": [
+      "persiana",
+      "venetian blinds",
+      "faixas fechando",
+      "vertical blinds"
+    ],
+    "familia": "transicoes",
+    "descricao": "Faixas fecham sobre a cena A como uma persiana e se abrem já mostrando a cena B.",
+    "como_funciona": "N faixas full-width crescem em scaleY com stagger de 0,04 s, a troca acontece com tudo fechado e as faixas recolhem para a borda de baixo (scaleY 1 a 0 com yPercent 0 a 100), sem trocar a origem.",
+    "quando_usar": "Transição gráfica com cara de design, listas, mudança de seção.",
+    "evitar": "Faixas demais em vídeo calmo ficam agitadas: calmo 4, médio 6-8, alta energia 12-16.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.in / power3.out",
+      "parametros": {
+        "faixas": 6,
+        "stagger_s": 0.04,
+        "orientacoes": [
+          "horizontal",
+          "vertical"
+        ]
+      }
+    },
+    "propriedades": [
+      "scaleY",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "dados"
+    ],
+    "combina_com": [
+      "slice",
+      "staggered-blocks",
+      "stagger"
+    ],
+    "gsap": "const strips = items; // faixas full-width\ntl.fromTo(strips, { scaleY: 0, transformOrigin: \"50% 0%\" }, { scaleY: 1, duration: 0.25, ease: \"power3.in\", stagger: 0.04 }, t);\ntl.set(a, { opacity: 0 }, t + 0.45); tl.set(b, { opacity: 1 }, t + 0.45);\ntl.fromTo(strips, { scaleY: 1, yPercent: 0 }, { scaleY: 0, yPercent: 100, duration: 0.25, ease: \"power3.out\", stagger: 0.04, immediateRender: false }, t + 0.45); // recolhe para baixo sem trocar a origem (seek-safe)",
+    "receita_hyperframes": "css-cover",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "flash",
+    "nome": "flash",
+    "nome_pt": "clarão que esconde o corte",
+    "aliases": [
+      "clarão",
+      "flash branco",
+      "estouro de luz",
+      "piscada"
+    ],
+    "familia": "transicoes",
+    "descricao": "Um clarão branco (ou na cor de destaque) estoura e, enquanto a tela está clara, a cena troca.",
+    "como_funciona": "Overlay sobe de opacity 0 para 1 em 0,08 s, A e B trocam com tl.set no pico e o overlay desce em 0,25 s.",
+    "quando_usar": "Antes/depois, revelação, batida forte da música, corte que precisa de energia.",
+    "evitar": "Flash em sequência é desconfortável (e pode ser problema para fotossensíveis). Reserve para picos.",
+    "padrao": {
+      "duracao_s": 0.33,
+      "ease": "power2.in / power2.out",
+      "parametros": {
+        "subida_s": 0.08,
+        "descida_s": 0.25,
+        "cor": "branco ou acento"
+      }
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "camera-shake",
+      "slam",
+      "overexposure"
+    ],
+    "gsap": "const flashEl = scene.querySelector(\".flash\");\ntl.fromTo(flashEl, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: \"power2.in\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.08); tl.set(b, { opacity: 1 }, t + 0.08);\ntl.to(flashEl, { opacity: 0, duration: 0.25, ease: \"power2.out\" }, t + 0.08);",
+    "receita_hyperframes": "css-light",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "glitch",
+    "nome": "glitch",
+    "nome_pt": "falha digital entre cenas",
+    "aliases": [
+      "glitch transition",
+      "bug de tela",
+      "falha",
+      "rgb split na troca"
+    ],
+    "familia": "transicoes",
+    "descricao": "Cópias vermelha e azul da cena saltam fora do lugar por um instante e, no meio da falha, a cena troca.",
+    "como_funciona": "Cópias R/B deslocadas em saltos fixos a cada 0,05 s (tl.set), troca de A para B em 0,15 s e encaixe limpo no último salto (offset 0).",
+    "quando_usar": "Tech, IA, erro, mudança brusca de assunto. Máximo de uma por vídeo.",
+    "evitar": "Glitch em toda troca vira ruído. Offsets com Math.random quebram o render.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "steps (saltos a cada 0,05 s)",
+      "parametros": {
+        "offsets_px": [
+          18,
+          -26,
+          12,
+          -8,
+          22,
+          0
+        ],
+        "intervalo_s": 0.05
+      }
+    },
+    "propriedades": [
+      "x",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "tecnico",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "scramble",
+      "rewind",
+      "flash"
+    ],
+    "gsap": "const red = scene.querySelector(\".glitch-r\"), blue = scene.querySelector(\".glitch-b\");\nconst offs = [18, -26, 12, -8, 22, 0];\noffs.forEach((o, k) => {\n  tl.set(red, { x: o, opacity: o ? 0.8 : 0 }, t + k * 0.05);\n  tl.set(blue, { x: -o, opacity: o ? 0.8 : 0 }, t + k * 0.05);\n});\ntl.set(a, { opacity: 0 }, t + 0.15); tl.set(b, { opacity: 1 }, t + 0.15);",
+    "receita_hyperframes": "chromatic-glitch",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "iris",
+    "nome": "iris",
+    "nome_pt": "abertura em círculo",
+    "aliases": [
+      "íris",
+      "circle iris",
+      "círculo abrindo",
+      "bolha revelando"
+    ],
+    "familia": "transicoes",
+    "descricao": "Um círculo nasce num ponto e se abre até revelar toda a cena nova.",
+    "como_funciona": "O clip-path de B vai de circle(0% at x y) para circle(75% at x y) com power3.inOut; o centro fica no objeto que importa.",
+    "quando_usar": "Ligar um objeto à próxima cena, foco num detalhe, estética retrô de cinema.",
+    "evitar": "Centro aleatório perde o sentido. Raio final abaixo de 75% deixa cantos sem cobrir no vertical.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.inOut",
+      "parametros": {
+        "centro": "objeto em foco",
+        "raio_final_pct": 75
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "mask-reveal",
+      "shape-reveal",
+      "punch-zoom"
+    ],
+    "gsap": "tl.fromTo(b, { clipPath: \"circle(0% at 50% 50%)\" }, { clipPath: \"circle(75% at 50% 50%)\", duration: 0.6, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "css-radial",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "mask-reveal",
+    "nome": "mask reveal",
+    "nome_pt": "revelação por máscara",
+    "aliases": [
+      "máscara",
+      "revelar com máscara",
+      "abrir do centro",
+      "reveal"
+    ],
+    "familia": "transicoes",
+    "descricao": "Uma máscara se abre e revela a próxima cena por cima da anterior.",
+    "como_funciona": "Anima o clip-path de B de inset(50% 0 50% 0) para inset(0) com power3.inOut: uma faixa horizontal abre do centro para cima e para baixo. Variantes: lateral (inset(0 100% 0 0) → inset(0)).",
+    "quando_usar": "Transição cinematográfica e limpa entre blocos de conteúdo, abertura de capítulo.",
+    "evitar": "Ease linear tira a elegância. Em vídeo curto, não alternar com 3 outras transições.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.inOut",
+      "parametros": {
+        "forma": "faixa do centro",
+        "variantes": [
+          "faixa do centro",
+          "lateral",
+          "vertical"
+        ]
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "iris",
+      "line-reveal",
+      "push-in"
+    ],
+    "gsap": "tl.fromTo(b, { clipPath: \"inset(50% 0% 50% 0%)\" }, { clipPath: \"inset(0% 0% 0% 0%)\", duration: 0.6, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "css-radial",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "match-cut",
+    "nome": "match cut",
+    "nome_pt": "corte por correspondência",
+    "aliases": [
+      "corte casado",
+      "objeto vira outro",
+      "transição por objeto",
+      "match"
+    ],
+    "familia": "transicoes",
+    "descricao": "Um objeto da cena A se transforma no objeto da cena B no mesmo lugar, ligando as duas cenas.",
+    "como_funciona": "O objeto de A move e escala (x, y, scale, borderRadius) até a posição e forma do objeto de B em 0,5 s com power3.inOut; no fim troca para a cena B.",
+    "quando_usar": "Antes/depois com o mesmo objeto, ideia que vira produto, continuidade visual entre cenas.",
+    "evitar": "Sem objeto em comum, prefira flash. Forma muito diferente não 'casa'.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.inOut",
+      "parametros": {
+        "delta": "posição e escala do objeto de B"
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "borderRadius"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "punch-zoom",
+      "morph",
+      "portal-zoom"
+    ],
+    "gsap": "const dx = 0, dy = -420, k = 1.6, r = \"24px\"; // posição/forma do objeto de B\ntl.to(el, { x: dx, y: dy, scale: k, borderRadius: r, duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.set(el, { opacity: 0 }, t + 0.5); tl.set(b, { opacity: 1 }, t + 0.5);",
+    "receita_hyperframes": "card-morph-anchor",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "punch-zoom",
+    "nome": "punch zoom",
+    "nome_pt": "zoom de soco",
+    "aliases": [
+      "soco de zoom",
+      "zoom de impacto",
+      "punch in",
+      "zoom que assenta"
+    ],
+    "familia": "transicoes",
+    "descricao": "Um zoom rápido dá um soco no alvo e assenta um pouco abaixo, marcando o momento.",
+    "como_funciona": "Escala o alvo de 1 para 1,35 em 0,25 s com power4.out e depois assenta em 1,2 em 0,4 s. Como transição, a câmera dá o soco no objeto que vira a próxima cena.",
+    "quando_usar": "Final com produto/logo, palavra-chave, número de impacto, ligação entre cenas com objeto em comum.",
+    "evitar": "Em toda frase vira tique. Origem fora do alvo faz o objeto escapar do quadro.",
+    "padrao": {
+      "duracao_s": 0.25,
+      "ease": "power4.out",
+      "parametros": {
+        "escala_pico": 1.35,
+        "escala_final": 1.2,
+        "assenta_s": 0.4
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "match-cut",
+      "pop-in",
+      "count-up"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 1 }, { scale: 1.35, duration: 0.25, ease: \"power4.out\", transformOrigin: \"50% 50%\" }, t);\ntl.to(el, { scale: 1.2, duration: 0.4, ease: \"power2.out\" }, t + 0.25);",
+    "receita_hyperframes": "coordinate-target-zoom",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "push",
+    "nome": "push",
+    "nome_pt": "empurrar a cena",
+    "aliases": [
+      "empurrar",
+      "push slide",
+      "slide de cena",
+      "vertical push"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena nova entra e empurra a antiga para fora do quadro, as duas se movendo juntas.",
+    "como_funciona": "A anda de 0 para -W e B de +W para 0 no mesmo tempo, com power3.inOut.",
+    "quando_usar": "Sequência linear: passo 1, passo 2; lista de dicas; carrossel.",
+    "evitar": "Misturar direções no mesmo vídeo desorienta. Para algo mais energético use whip pan.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.inOut",
+      "parametros": {
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "whip-pan",
+      "swipe",
+      "stagger"
+    ],
+    "gsap": "const W = 1080;\ntl.fromTo(a, { x: 0 }, { x: -W, duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.fromTo(b, { x: W }, { x: 0, duration: 0.5, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "css-push",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "wipe",
+    "nome": "wipe",
+    "nome_pt": "cortina de cor",
+    "aliases": [
+      "cortina",
+      "varrida",
+      "limpar a tela",
+      "faixa passando"
+    ],
+    "familia": "transicoes",
+    "descricao": "Uma faixa na cor de destaque varre a tela e, atrás dela, a cena nova substitui a antiga.",
+    "como_funciona": "O clip-path de B vai de inset(0 100% 0 0) para inset(0) e uma faixa de acento anda em x com a mesma duração e ease, ficando colada na borda da máscara.",
+    "quando_usar": "Transição energética que reforça a identidade visual (cor da marca).",
+    "evitar": "Faixa e máscara com eases diferentes descolam. Muitas cores de faixa no mesmo vídeo confundem.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.inOut",
+      "parametros": {
+        "cor_faixa": "acento",
+        "largura_faixa_px": 80,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "clipPath",
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "produto",
+      "explicativo",
+      "opiniao"
+    ],
+    "combina_com": [
+      "staggered-blocks",
+      "push",
+      "slide-in"
+    ],
+    "gsap": "const W = 1080, bar = scene.querySelector(\".wipe-bar\"); // left: -barW/2 no CSS\ntl.fromTo(b, { clipPath: \"inset(0% 100% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 0%)\", duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.fromTo(bar, { x: 0 }, { x: W, duration: 0.5, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "css-cover",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "zoom-through",
+    "nome": "zoom through",
+    "nome_pt": "zoom que atravessa",
+    "aliases": [
+      "atravessar a cena",
+      "zoom para dentro",
+      "zoom transition",
+      "passar através"
+    ],
+    "familia": "transicoes",
+    "descricao": "A câmera avança e atravessa a cena A, aterrissando na cena B.",
+    "como_funciona": "A cresce para 4× e some com power3.in; B começa em 0,6× transparente e chega a 1× com power3.out, sobreposta 0,15 s antes de A terminar.",
+    "quando_usar": "Aprofundar um assunto ('entrando no detalhe'), sequência de dicas em ritmo alto.",
+    "evitar": "Encadear várias seguidas dá enjoo. Use no máximo uma família de transição dominante.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.in / power3.out",
+      "parametros": {
+        "fase_a_s": 0.4,
+        "fase_b_s": 0.4,
+        "escala_saida": 4,
+        "escala_entrada": 0.6
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "crash-zoom",
+      "portal-zoom",
+      "blur-through"
+    ],
+    "gsap": "tl.fromTo(a, { scale: 1, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.4, ease: \"power3.in\" }, t);\ntl.fromTo(b, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: \"power3.out\" }, t + 0.25);",
+    "receita_hyperframes": "css-scale",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "blur-through",
+    "nome": "blur through",
+    "nome_pt": "transição por desfoque",
+    "aliases": [
+      "blur transition",
+      "desfocar e focar",
+      "zoom blur",
+      "focus pull de cena",
+      "transição borrada"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga se desfaz num borrão abstrato e a nova sai do mesmo borrão até ficar nítida.",
+    "como_funciona": "A vai para blur 30 px e escala 1,08 com power1.in e some; B começa em blur 30 px e escala 0,95 e resolve para nítido com power2.out, com uma sobreposição curta no pico do borrão.",
+    "quando_usar": "Sonho, lembrança, mudança de humor, transição elegante entre falas.",
+    "evitar": "Blur pesa o render em cenas cheias; use só na troca. Em ritmo rápido prefira whip pan.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power1.in / power2.out",
+      "parametros": {
+        "blur_px": 30,
+        "escala_saida": 1.08,
+        "escala_entrada": 0.95
+      }
+    },
+    "propriedades": [
+      "filter",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "rack-focus",
+      "cross-dissolve",
+      "blur-in"
+    ],
+    "gsap": "tl.fromTo(a, { filter: \"blur(0px)\", scale: 1, opacity: 1 }, { filter: \"blur(30px)\", scale: 1.08, opacity: 0, duration: 0.5, ease: \"power1.in\" }, t);\ntl.fromTo(b, { filter: \"blur(30px)\", scale: 0.95, opacity: 0 }, { filter: \"blur(0px)\", scale: 1, opacity: 1, duration: 0.5, ease: \"power2.out\" }, t + 0.4);",
+    "receita_hyperframes": "css-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "clock-wipe",
+    "nome": "clock wipe",
+    "nome_pt": "varredura de relógio",
+    "aliases": [
+      "radial wipe",
+      "ponteiro de relógio",
+      "wipe circular",
+      "varredura radial"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena nova aparece varrendo em círculo a partir do centro, como o ponteiro de um relógio.",
+    "como_funciona": "Clip-path em polígono de 9 pontos centrado em 50% 50%, avançando quadrante a quadrante em 4 tweens lineares de 0,12 s; no fim o clip é removido.",
+    "quando_usar": "Passagem de tempo, contagem, prazo, 'enquanto isso', estética de cronômetro.",
+    "evitar": "Animar o polígono em um tween só deforma a borda. Ease forte em cada quadrante dá engasgos.",
+    "padrao": {
+      "duracao_s": 0.48,
+      "ease": "none",
+      "parametros": {
+        "por_quadrante_s": 0.12,
+        "centro": "50% 50%"
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "dados",
+      "historia"
+    ],
+    "combina_com": [
+      "count-up",
+      "iris",
+      "dip-to-black"
+    ],
+    "gsap": "const d = 0.12; // por quadrante\ntl.set(b, { opacity: 1, clipPath: \"polygon(50% 50%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%)\" }, t);\ntl.to(b, { clipPath: \"polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 50%, 100% 50%, 100% 50%, 100% 50%, 100% 50%)\", duration: d, ease: \"none\" }, t);\ntl.to(b, { clipPath: \"polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 50% 100%, 50% 100%, 50% 100%)\", duration: d, ease: \"none\" }, t + d);\ntl.to(b, { clipPath: \"polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 50%, 0% 50%)\", duration: d, ease: \"none\" }, t + d * 2);\ntl.to(b, { clipPath: \"polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 50%, 0% 0%)\", duration: d, ease: \"none\" }, t + d * 3);\ntl.set(b, { clipPath: \"none\" }, t + d * 4 + 0.02); tl.set(a, { opacity: 0 }, t + d * 4 + 0.02);",
+    "receita_hyperframes": "css-mechanical",
+    "origem": "expansao"
+  },
+  {
+    "id": "cover",
+    "nome": "cover",
+    "nome_pt": "cena nova cobre a antiga",
+    "aliases": [
+      "slide over",
+      "cobrir",
+      "slide de cena por cima",
+      "deslizar por cima"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena nova desliza por cima da antiga, que fica parada e escurece um pouco por baixo.",
+    "como_funciona": "B anda de +W para 0 com power3.inOut sobre A; A não se move, só cai para brightness 0,7 no mesmo tempo, dando a sensação de camada empilhada. Diferente do push, A não sai do lugar.",
+    "quando_usar": "Passos de um processo, empilhar informações, 'e tem mais'.",
+    "evitar": "Sem o escurecer de A, B parece colado. Direções misturadas no mesmo vídeo desorientam.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.inOut",
+      "parametros": {
+        "brilho_a": 0.7,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "uncover",
+      "push",
+      "stagger"
+    ],
+    "gsap": "const W = 1080; // B acima de A no CSS\ntl.fromTo(b, { x: W, opacity: 1 }, { x: 0, opacity: 1, duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.fromTo(a, { filter: \"brightness(1)\" }, { filter: \"brightness(0.7)\", duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.set(a, { opacity: 0, filter: \"brightness(1)\" }, t + 0.5);",
+    "receita_hyperframes": "css-push",
+    "origem": "expansao"
+  },
+  {
+    "id": "cross-dissolve",
+    "nome": "cross dissolve",
+    "nome_pt": "fusão",
+    "aliases": [
+      "fusão",
+      "crossfade",
+      "dissolver",
+      "fade entre cenas",
+      "mix"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena nova aparece por cima da antiga até substituí-la, sem movimento.",
+    "como_funciona": "B sobe de opacity 0 para 1 em 0,5 s com power2.inOut por cima de A; só depois A é escondida com tl.set, para não haver um meio-termo escuro.",
+    "quando_usar": "Passagem de tempo, tom calmo, emoção, depoimento, transição padrão quando nada mais se justifica.",
+    "evitar": "Fazer A e B caírem juntos (os dois em 50%) escurece o meio. Em vídeo acelerado parece lento.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.inOut",
+      "parametros": {}
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "push-in",
+      "camera-drift",
+      "morph-cut"
+    ],
+    "gsap": "tl.fromTo(b, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: \"power2.inOut\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.5);",
+    "receita_hyperframes": "css-dissolve",
+    "origem": "expansao"
+  },
+  {
+    "id": "cube-rotate",
+    "nome": "cube rotate",
+    "nome_pt": "giro de cubo 3D",
+    "aliases": [
+      "cubo",
+      "cube transition",
+      "girar o cubo",
+      "rotação de cubo",
+      "stories cube"
+    ],
+    "familia": "transicoes",
+    "descricao": "As duas cenas parecem faces de um cubo que gira: A sai virando pela borda e B entra pela face vizinha.",
+    "como_funciona": "A gira de 0 a -90° em rotationY com origem na borda direita enquanto anda para -W; B vem de +W com 90° e origem na borda esquerda, os dois com power2.inOut. Escurecer a face que se afasta dá volume.",
+    "quando_usar": "Sequência de stories, comparação entre dois lados, lista de opções, conteúdo de app.",
+    "evitar": "Em cenas com muito texto pequeno, a deformação atrapalha a leitura no meio do giro.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "perspectiva_px": 1400,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "x",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "flip-3d",
+      "push",
+      "swipe"
+    ],
+    "gsap": "const W = 1080;\ntl.set([a, b], { transformPerspective: 1400 }, t);\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(a, { x: 0, rotationY: 0, transformOrigin: \"100% 50%\", filter: \"brightness(1)\" },\n  { x: -W, rotationY: -90, filter: \"brightness(0.5)\", duration: 0.6, ease: \"power2.inOut\" }, t);\ntl.fromTo(b, { x: W, rotationY: 90, transformOrigin: \"0% 50%\", filter: \"brightness(0.5)\" },\n  { x: 0, rotationY: 0, filter: \"brightness(1)\", duration: 0.6, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "css-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "diagonal-split",
+    "nome": "diagonal split",
+    "nome_pt": "recolhe na diagonal",
+    "aliases": [
+      "diagonal wipe",
+      "corte diagonal",
+      "triângulo recolhendo",
+      "wipe diagonal"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga é recortada por uma diagonal e se recolhe num triângulo no canto, revelando a nova por trás.",
+    "como_funciona": "Com A acima de B, o clip-path de A vai de polígono cheio para um triângulo pequeno no canto superior direito com power3.inOut; a borda inclinada dá a direção.",
+    "quando_usar": "Transição dinâmica com cara de esporte, games, promoções, 'virada'.",
+    "evitar": "Diagonal rasa (quase horizontal) vira um wipe comum. Repetir no mesmo canto toda vez fica previsível.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.inOut",
+      "parametros": {
+        "canto": [
+          "superior direito",
+          "inferior esquerdo"
+        ]
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "wipe",
+      "staggered-blocks",
+      "slam"
+    ],
+    "gsap": "tl.set(b, { opacity: 1 }, t); // A acima de B no CSS\ntl.fromTo(a, { clipPath: \"polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)\" },\n  { clipPath: \"polygon(60% 0%, 100% 0%, 100% 40%, 60% 0%)\", duration: 0.5, ease: \"power3.inOut\" }, t);\ntl.set(a, { opacity: 0, clipPath: \"none\" }, t + 0.5);",
+    "receita_hyperframes": "css-radial",
+    "origem": "expansao"
+  },
+  {
+    "id": "dip-to-black",
+    "nome": "dip to black",
+    "nome_pt": "mergulho no preto (ou branco)",
+    "aliases": [
+      "dip to white",
+      "fade to black",
+      "escurecer e voltar",
+      "fade de cor",
+      "color dip"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena escurece até uma tela de cor sólida, segura um instante e a próxima cena clareia a partir dela.",
+    "como_funciona": "A vai para opacity 0 em 0,25 s com power2.in revelando o fundo sólido (preto, branco ou cor da marca), segura 0,1 s e B sobe em 0,3 s com power2.out.",
+    "quando_usar": "Fim de capítulo, mudança de tempo ou lugar, antes de um número importante, encerramento.",
+    "evitar": "Confundir com flash: dip é pausa, flash é impacto. Hold longo demais parece que o vídeo acabou.",
+    "padrao": {
+      "duracao_s": 0.65,
+      "ease": "power2.in / power2.out",
+      "parametros": {
+        "cor": "#000000",
+        "hold_s": 0.1,
+        "cores_comuns": [
+          "preto",
+          "branco",
+          "acento"
+        ]
+      }
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "cross-dissolve",
+      "fade-in",
+      "line-reveal"
+    ],
+    "gsap": "tl.fromTo(a, { opacity: 1 }, { opacity: 0, duration: 0.25, ease: \"power2.in\" }, t);\n// fundo do palco na cor do dip aparece entre as duas\ntl.fromTo(b, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: \"power2.out\" }, t + 0.35);",
+    "receita_hyperframes": "css-dissolve",
+    "origem": "expansao"
+  },
+  {
+    "id": "feed-scroll",
+    "nome": "scroll transition",
+    "nome_pt": "rolagem de feed",
+    "aliases": [
+      "scroll",
+      "rolar o feed",
+      "scroll transition",
+      "passar para o próximo vídeo",
+      "rolagem do TikTok"
+    ],
+    "familia": "transicoes",
+    "descricao": "As cenas estão empilhadas como num feed e a tela rola com um peteleco para a próxima, passando um pouco e voltando como elástico.",
+    "como_funciona": "A e B ficam numa coluna (.track); a coluna anda de y 0 até -H passando 60 px e voltando, via keyframes com power4.out, e um blur de 6 px no pico do peteleco.",
+    "quando_usar": "Conteúdo sobre redes sociais, 'próximo', paródia de feed, listas rápidas em vídeo vertical.",
+    "evitar": "Rolagem sem o elástico parece push vertical. Muitas seguidas cansam.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power4.out",
+      "parametros": {
+        "overshoot_px": 60,
+        "blur_pico_px": 6
+      }
+    },
+    "propriedades": [
+      "y",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "swipe",
+      "tilt",
+      "stagger"
+    ],
+    "gsap": "const H = 1920, track = scene.querySelector(\".track\"); // A em cima, B embaixo\ntl.fromTo(track, { y: 0 }, { keyframes: { y: [0, -H - 60, -H] }, duration: 0.6, ease: \"power4.out\" }, t);\ntl.fromTo(track, { filter: \"blur(0px)\" }, { keyframes: { filter: [\"blur(0px)\", \"blur(6px)\", \"blur(0px)\"] }, duration: 0.35, ease: \"none\" }, t);",
+    "receita_hyperframes": "css-push",
+    "origem": "expansao"
+  },
+  {
+    "id": "film-burn-transition",
+    "nome": "film burn",
+    "nome_pt": "queima de filme",
+    "aliases": [
+      "film burn transition",
+      "película queimando",
+      "burn",
+      "queimar o filme"
+    ],
+    "familia": "transicoes",
+    "descricao": "A película parece queimar a partir de uma borda, com manchas âmbar, laranja e vermelhas tomando a tela antes do corte.",
+    "como_funciona": "Três gradientes radiais grandes (âmbar, laranja, vermelho) entram em sequência a partir de uma borda com stagger de 0,05 s, a troca acontece com tudo saturado e eles saem um após o outro.",
+    "quando_usar": "Fim de ato, flashback, estética analógica, clipes de música.",
+    "evitar": "Mais forte que light leak: não use em conteúdo leve e calmo. Cores frias quebram o efeito.",
+    "padrao": {
+      "duracao_s": 0.85,
+      "ease": "power1.in / power2.out",
+      "parametros": {
+        "cores": [
+          "âmbar",
+          "laranja",
+          "vermelho"
+        ],
+        "borda": [
+          "direita",
+          "esquerda"
+        ],
+        "stagger_s": 0.05
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "x"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "light-leak-transition",
+      "grain",
+      "dip-to-black"
+    ],
+    "gsap": "const burns = [scene.querySelector(\".burn-a\"), scene.querySelector(\".burn-b\"), scene.querySelector(\".burn-c\")];\nconst dx = [-300, -500, -200];\nburns.forEach((el2, i) => tl.fromTo(el2, { opacity: 0, x: 0 }, { opacity: 1, x: dx[i], duration: 0.4, ease: \"power1.in\" }, t + i * 0.05));\ntl.set(a, { opacity: 0 }, t + 0.35); tl.set(b, { opacity: 1 }, t + 0.35);\nburns.forEach((el2, i) => tl.to(el2, { opacity: 0, duration: 0.3, ease: \"power2.out\" }, t + 0.45 + i * 0.05));",
+    "receita_hyperframes": "css-light",
+    "origem": "expansao"
+  },
+  {
+    "id": "flip-3d",
+    "nome": "flip 3D",
+    "nome_pt": "virar como carta",
+    "aliases": [
+      "flip",
+      "virar o card",
+      "card flip",
+      "virar a carta",
+      "girar 180"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena vira 180° no próprio eixo como uma carta, e o verso é a cena nova.",
+    "como_funciona": "A e B com backface-visibility hidden; A gira de 0 a 180° e B de -180° a 0 em rotationY, os dois no mesmo tempo com power2.inOut. Diferente do cubo, o eixo é o centro da tela.",
+    "quando_usar": "Pergunta e resposta, mito e verdade, frente e verso, revelar o preço.",
+    "evitar": "Sem backface hidden aparece o espelho da cena. Em sequência longa parece apresentação de slides.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.inOut",
+      "parametros": {
+        "eixo": [
+          "Y (lateral)",
+          "X (vertical)"
+        ],
+        "perspectiva_px": 1200
+      }
+    },
+    "propriedades": [
+      "rotationY"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "cube-rotate",
+      "pop-in",
+      "text-swap"
+    ],
+    "gsap": "// CSS: backface-visibility: hidden; transform-style: preserve-3d; palco com perspective: 1200px\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(a, { rotationY: 0 }, { rotationY: 180, duration: 0.6, ease: \"power2.inOut\" }, t);\ntl.fromTo(b, { rotationY: -180 }, { rotationY: 0, duration: 0.6, ease: \"power2.inOut\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.6);",
+    "receita_hyperframes": "css-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "gravity-drop",
+    "nome": "gravity drop",
+    "nome_pt": "cena cai",
+    "aliases": [
+      "cair",
+      "derrubar a cena",
+      "drop",
+      "cena despencando"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga despenca para fora da tela com uma leve rotação, como um quadro caindo da parede, e a nova estava atrás.",
+    "como_funciona": "Com A acima de B, A cai em y até 2200 px com rotação de 4° em power3.in (acelera como gravidade); B, atrás, já está visível.",
+    "quando_usar": "Humor, 'caiu por terra', derrubar um mito, mudar o assunto de forma descontraída.",
+    "evitar": "Ease out tira o peso da queda. Usar no meio de uma explicação séria quebra o tom.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.in",
+      "parametros": {
+        "queda_px": 2200,
+        "rotacao_graus": 4
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "historia"
+    ],
+    "combina_com": [
+      "uncover",
+      "camera-shake",
+      "bounce"
+    ],
+    "gsap": "tl.set(b, { opacity: 1 }, t); // A acima de B no CSS\ntl.fromTo(a, { y: 0, rotation: 0 }, { y: 2200, rotation: 4, duration: 0.5, ease: \"power3.in\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.5);",
+    "receita_hyperframes": "css-other",
+    "origem": "expansao"
+  },
+  {
+    "id": "grid-tiles",
+    "nome": "grid tiles",
+    "nome_pt": "mosaico de quadrados",
+    "aliases": [
+      "grid dissolve",
+      "quadradinhos",
+      "mosaico",
+      "tiles",
+      "azulejos"
+    ],
+    "familia": "transicoes",
+    "descricao": "Uma grade de quadrados coloridos cobre a tela em onda a partir do centro, a cena troca e os quadrados somem na mesma onda.",
+    "como_funciona": "Células em grade 4×7 (270 px) escalam de 0 a 1 com stagger em grid a partir do centro, alternando 5 cores da paleta; troca com 100% coberto e as células voltam a 0 na mesma ordem.",
+    "quando_usar": "Conteúdo de dados, tecnologia, colorido, infantil, troca de tópico com cara de design.",
+    "evitar": "Grade monocromática parece tela travando. Células pequenas demais pesam o render.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.inOut",
+      "parametros": {
+        "grade": [
+          4,
+          7
+        ],
+        "stagger_s": 0.025,
+        "origem": "centro",
+        "cores": 5
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "tecnico",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "pixelate-transition",
+      "stagger",
+      "bar-grow"
+    ],
+    "gsap": "const cells = items; // 28 células, cor da paleta alternada no CSS (nth-child 5n)\nconst st = { each: 0.025, grid: [7, 4], from: \"center\" };\ntl.fromTo(cells, { scale: 0 }, { scale: 1, duration: 0.25, ease: \"power2.inOut\", stagger: st }, t);\ntl.set(a, { opacity: 0 }, t + 0.4); tl.set(b, { opacity: 1 }, t + 0.4);\ntl.fromTo(cells, { scale: 1 }, { scale: 0, duration: 0.25, ease: \"power2.inOut\", stagger: st, immediateRender: false }, t + 0.4);",
+    "receita_hyperframes": "css-grid",
+    "origem": "expansao"
+  },
+  {
+    "id": "ink-reveal",
+    "nome": "ink reveal",
+    "nome_pt": "revelação de tinta",
+    "aliases": [
+      "liquid reveal",
+      "mancha de tinta",
+      "tinta espalhando",
+      "ink transition",
+      "gota revelando"
+    ],
+    "familia": "transicoes",
+    "descricao": "Manchas de tinta se espalham de forma orgânica e, por dentro delas, aparece a cena nova.",
+    "como_funciona": "B usa uma máscara SVG com vários círculos cujo raio (attr r) cresce com stagger; um filtro feTurbulence + feDisplacementMap na máscara deixa a borda irregular como tinta escorrendo.",
+    "quando_usar": "Arte, criatividade, educação infantil, marca artesanal, abertura de vídeo.",
+    "evitar": "Sem a distorção na borda vira bolhas geométricas. Manchas demais ficam confusas.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power2.in",
+      "parametros": {
+        "manchas": 5,
+        "stagger_s": 0.06,
+        "raio_final_px": 900,
+        "distorcao": 40
+      }
+    },
+    "propriedades": [
+      "attr:r"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "shape-reveal",
+      "iris",
+      "draw-on"
+    ],
+    "gsap": "// B com mask: url(#ink-mask); a máscara tem <circle> brancos e filtro de turbulência\nconst blobs = scene.querySelectorAll(\"#ink-mask circle\");\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(blobs, { attr: { r: 0 } }, { attr: { r: 900 }, duration: 0.9, ease: \"power2.in\", stagger: 0.06 }, t);\ntl.set(a, { opacity: 0 }, t + 1.2);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "invisible-cut",
+    "nome": "invisible cut",
+    "nome_pt": "corte escondido por objeto",
+    "aliases": [
+      "corte invisível",
+      "passar na frente",
+      "wipe com objeto",
+      "pass-by",
+      "corte escondido"
+    ],
+    "familia": "transicoes",
+    "descricao": "Algo grande passa na frente da câmera e cobre a tela por um instante; quando sai, a cena já é outra.",
+    "como_funciona": "Um obstáculo em primeiro plano (pessoa, poste, mão, forma escura) mais largo que o quadro atravessa em x com blur 10 px; as duas cenas fazem um pan curto no mesmo sentido e a troca acontece no frame em que ele cobre tudo.",
+    "quando_usar": "Ligar lugares ou tempos diferentes como plano contínuo, viagens, transições de vlog.",
+    "evitar": "Se o obstáculo não cobre 100% do quadro no frame da troca, o corte aparece.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.inOut",
+      "parametros": {
+        "largura_obstaculo_px": 1600,
+        "blur_px": 10,
+        "pan_px": 150,
+        "direcoes": [
+          "esquerda",
+          "direita"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "whip-pan",
+      "reveal-pan",
+      "match-cut"
+    ],
+    "gsap": "const W = 1080, occ = scene.querySelector(\".occluder\"); // largura 1600px, acima das cenas\ntl.set(occ, { filter: \"blur(10px)\" }, t);\ntl.fromTo(occ, { x: W * 1.1 }, { x: -1600 - W * 0.1, duration: 0.5, ease: \"power2.inOut\" }, t);\ntl.fromTo(a, { x: 0 }, { x: -150, duration: 0.25, ease: \"power2.in\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.25); tl.set(b, { opacity: 1 }, t + 0.25);\ntl.fromTo(b, { x: 150 }, { x: 0, duration: 0.25, ease: \"power2.out\" }, t + 0.25);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "j-cut",
+    "nome": "J-cut",
+    "nome_pt": "som (ou texto) da próxima cena chega antes",
+    "aliases": [
+      "L-cut",
+      "J-cut",
+      "áudio antecipado",
+      "split edit",
+      "legenda chega antes"
+    ],
+    "familia": "transicoes",
+    "descricao": "O som ou a legenda da próxima cena começa antes do corte de imagem (J-cut); no L-cut, o da cena anterior continua depois do corte.",
+    "como_funciona": "No vídeo, o elemento-ponte (legenda, lower third, trecho de fala) de B entra por cima de A 0,6 s antes da troca; o corte de imagem é seco (tl.set). No L-cut, o elemento de A permanece e sai 0,6 s depois.",
+    "quando_usar": "Entrevista, documentário, narração que puxa a próxima imagem, conversas.",
+    "evitar": "Antecipação longa demais confunde quem está falando. Sem narração ou texto-ponte não há o que antecipar.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.out",
+      "parametros": {
+        "antecipacao_s": 0.6,
+        "modo": [
+          "J (B chega antes)",
+          "L (A continua depois)"
+        ]
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "word-reveal",
+      "morph-cut",
+      "cross-dissolve"
+    ],
+    "gsap": "const lead = 0.6; // el = legenda/lower third de B, numa camada acima das cenas\ntl.fromTo(el, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: \"power2.out\" }, t);\ntl.set(a, { opacity: 0 }, t + lead); tl.set(b, { opacity: 1 }, t + lead);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "jump-cut",
+    "nome": "jump cut",
+    "nome_pt": "corte com pulo de enquadramento",
+    "aliases": [
+      "jump cut",
+      "punch-in de corte",
+      "corte de Reels",
+      "alternar zoom no corte",
+      "corte seco com zoom"
+    ],
+    "familia": "transicoes",
+    "descricao": "Corte seco entre dois trechos da mesma fala alternando o enquadramento (normal e mais fechado), assumindo o corte como ritmo.",
+    "como_funciona": "No instante do corte, tl.set esconde A e mostra B já com escala 1,15 e origem no rosto (50% 35%); no corte seguinte volta para 1. Sem tween: o pulo é o efeito.",
+    "quando_usar": "Talking head, opinião, tutorial falado, qualquer vídeo de fala no formato Reels/Shorts.",
+    "evitar": "Sempre a mesma escala nos dois lados não esconde o salto. Alternar a cada 1 s cansa; use nas frases importantes.",
+    "padrao": {
+      "duracao_s": 0,
+      "ease": "none",
+      "parametros": {
+        "escala_fechada": 1.15,
+        "origem": "50% 35%"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "morph-cut",
+      "snap-zoom",
+      "word-reveal"
+    ],
+    "gsap": "tl.set(a, { opacity: 0 }, t);\ntl.set(b, { opacity: 1, scale: 1.15, transformOrigin: \"50% 35%\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "light-leak-transition",
+    "nome": "light leak",
+    "nome_pt": "vazamento de luz na troca",
+    "aliases": [
+      "light leak transition",
+      "vazamento de luz",
+      "luz de filme",
+      "luz quente passando"
+    ],
+    "familia": "transicoes",
+    "descricao": "Uma luz quente de filme vaza pela tela, satura tudo de laranja e, no auge, a cena muda.",
+    "como_funciona": "Uma camada de tom quente sobe de opacity e 2 ou 3 gradientes radiais maiores que o quadro (2400 px ou mais) atravessam em x com sine.inOut; troca no pico de brilho e as luzes recuam.",
+    "quando_usar": "Vlog, viagem, nostalgia, memória, lifestyle, encerramento afetivo.",
+    "evitar": "Forma da luz visível (círculo com borda) entrega a montagem. Não confundir com a textura de light leak contínua (família estilização).",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "sine.inOut",
+      "parametros": {
+        "cor": "âmbar/laranja",
+        "tamanho_luz_px": 2400,
+        "pico_s": 0.45
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "film-burn-transition",
+      "grain",
+      "cross-dissolve"
+    ],
+    "gsap": "const warm = scene.querySelector(\".leak-warm\"), l1 = scene.querySelector(\".leak-1\"), l2 = scene.querySelector(\".leak-2\");\ntl.fromTo(warm, { opacity: 0 }, { opacity: 0.6, duration: 0.45, ease: \"power1.in\" }, t);\ntl.fromTo(l1, { opacity: 0, x: -600 }, { opacity: 0.9, x: 300, duration: 0.6, ease: \"sine.inOut\" }, t + 0.05);\ntl.fromTo(l2, { opacity: 0, x: 600 }, { opacity: 0.8, x: 200, duration: 0.6, ease: \"sine.inOut\" }, t + 0.1);\ntl.set(a, { opacity: 0 }, t + 0.45); tl.set(b, { opacity: 1 }, t + 0.45);\ntl.to([warm, l1, l2], { opacity: 0, duration: 0.35, ease: \"power2.out\" }, t + 0.7);",
+    "receita_hyperframes": "css-light",
+    "origem": "expansao"
+  },
+  {
+    "id": "luma-fade",
+    "nome": "luma fade",
+    "nome_pt": "dissolve por gradiente (luma)",
+    "aliases": [
+      "gradient wipe",
+      "luma wipe",
+      "soft wipe",
+      "dissolve gradiente",
+      "fade suave em direção"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena nova aparece seguindo um gradiente de brilho, com borda suave, como se a luz dela fosse tomando a tela aos poucos.",
+    "como_funciona": "B tem mask-image em gradiente controlado por uma CSS var (--p); tweenar --p de 0 a 120 empurra a borda suave pela tela. Para luma real, troque o gradiente por uma imagem de matte em tons de cinza.",
+    "quando_usar": "Transição elegante e orgânica: natureza, emoção, marcas premium.",
+    "evitar": "Borda dura demais vira wipe comum. Gradiente muito longo vira cross dissolve.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.inOut",
+      "parametros": {
+        "suavidade_borda_pct": 20,
+        "direcoes": [
+          "cima",
+          "baixo",
+          "radial"
+        ],
+        "matte": "gradiente ou imagem cinza"
+      }
+    },
+    "propriedades": [
+      "--p (mask-image)"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "cross-dissolve",
+      "light-leak-transition",
+      "push-in"
+    ],
+    "gsap": "// CSS em B: mask-image: linear-gradient(to bottom, #000 calc(var(--p) * 1% - 20%), transparent calc(var(--p) * 1%));\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(b, { \"--p\": 0 }, { \"--p\": 120, duration: 0.8, ease: \"power2.inOut\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.8);",
+    "receita_hyperframes": "css-dissolve",
+    "origem": "expansao"
+  },
+  {
+    "id": "morph-cut",
+    "nome": "morph cut",
+    "nome_pt": "corte suavizado de fala",
+    "aliases": [
+      "corte invisível de fala",
+      "esconder jump cut",
+      "suavizar corte",
+      "morph"
+    ],
+    "familia": "transicoes",
+    "descricao": "Disfarça o pulo entre dois trechos quase iguais da mesma fala, para o corte não parecer um salto.",
+    "como_funciona": "B entra por cima de A com crossfade curto de 0,25 s e começa levemente deslocado (scale 1,02, x 6 px), assentando em 0 no mesmo tempo; o micro-movimento esconde a diferença de posição da cabeça.",
+    "quando_usar": "Talking head com cortes de respiração ou erro, depoimento, podcast em vídeo.",
+    "evitar": "Entre planos muito diferentes vira um crossfade feio com fantasma. Para cortes assumidos, use jump cut.",
+    "padrao": {
+      "duracao_s": 0.25,
+      "ease": "sine.inOut",
+      "parametros": {
+        "deslocamento_px": 6,
+        "escala": 1.02
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "scale",
+      "x"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "historia",
+      "tecnico"
+    ],
+    "combina_com": [
+      "jump-cut",
+      "cross-dissolve",
+      "word-reveal"
+    ],
+    "gsap": "tl.fromTo(b, { opacity: 0, scale: 1.02, x: 6 }, { opacity: 1, scale: 1, x: 0, duration: 0.25, ease: \"sine.inOut\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.25);",
+    "receita_hyperframes": "css-dissolve",
+    "origem": "expansao"
+  },
+  {
+    "id": "overexposure",
+    "nome": "overexposure",
+    "nome_pt": "estourar a luz",
+    "aliases": [
+      "superexposição",
+      "estourar o branco",
+      "overexposure burn",
+      "queimar no branco",
+      "luz estourada"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena vai ficando cada vez mais clara até estourar no branco total, e a próxima surge quando o branco recua.",
+    "como_funciona": "Brightness de A sobe em duas etapas (1,5 e 3) com um zoom leve de 1,06, um overlay branco completa o estouro, a troca acontece no branco e o overlay desce em 0,35 s. Mais lento e progressivo que o flash.",
+    "quando_usar": "Revelação, final inspiracional, 'iluminação', despertar, lembrança.",
+    "evitar": "Rápido demais vira flash. Em vídeo que já é muito claro, o estouro não aparece.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power1.in / power2.out",
+      "parametros": {
+        "brilho_max": 3,
+        "zoom": 1.06,
+        "descida_s": 0.35
+      }
+    },
+    "propriedades": [
+      "filter",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "flash",
+      "light-leak-transition",
+      "push-in"
+    ],
+    "gsap": "const white = scene.querySelector(\".flash\");\ntl.fromTo(a, { filter: \"brightness(1)\", scale: 1 }, { keyframes: { filter: [\"brightness(1)\", \"brightness(1.5)\", \"brightness(3)\"], scale: [1, 1.03, 1.06] }, duration: 0.4, ease: \"power1.in\" }, t);\ntl.fromTo(white, { opacity: 0 }, { keyframes: { opacity: [0, 0.5, 1] }, duration: 0.4, ease: \"power2.in\" }, t + 0.15);\ntl.set(a, { opacity: 0, filter: \"brightness(1)\", scale: 1 }, t + 0.55); tl.set(b, { opacity: 1 }, t + 0.55);\ntl.to(white, { opacity: 0, duration: 0.35, ease: \"power2.out\" }, t + 0.55);",
+    "receita_hyperframes": "css-light",
+    "origem": "expansao"
+  },
+  {
+    "id": "page-turn",
+    "nome": "page turn",
+    "nome_pt": "virar a página",
+    "aliases": [
+      "page peel",
+      "folhear",
+      "virar página",
+      "página de livro"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga vira como a página de um livro, presa numa borda, mostrando a próxima por baixo.",
+    "como_funciona": "Com perspectiva, A gira em rotationY de 0 a -110° com transformOrigin na borda esquerda e escurece (brightness 0,5) enquanto vira; B, por baixo, sai de brightness 0,6 para 1.",
+    "quando_usar": "Histórias, capítulos, diários, conteúdo educativo, receitas, 'próxima página'.",
+    "evitar": "Em vídeo de tecnologia fica datado. Sem a sombra não convence.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.inOut",
+      "parametros": {
+        "angulo_graus": -110,
+        "borda": [
+          "esquerda",
+          "superior"
+        ],
+        "perspectiva_px": 1600
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "motivacional"
+    ],
+    "combina_com": [
+      "line-reveal",
+      "typewriter",
+      "dip-to-black"
+    ],
+    "gsap": "tl.set(a, { transformPerspective: 1600, transformOrigin: \"0% 50%\" }, t); // A acima de B\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(a, { rotationY: 0, filter: \"brightness(1)\" }, { rotationY: -110, filter: \"brightness(0.5)\", duration: 0.7, ease: \"power2.inOut\" }, t);\ntl.fromTo(b, { filter: \"brightness(0.6)\" }, { filter: \"brightness(1)\", duration: 0.7, ease: \"power2.inOut\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.7);",
+    "receita_hyperframes": "css-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "pixelate-transition",
+    "nome": "pixelate",
+    "nome_pt": "transição pixelada",
+    "aliases": [
+      "pixelar",
+      "mosaico de pixels",
+      "8 bits",
+      "pixel transition",
+      "censura de pixel"
+    ],
+    "familia": "transicoes",
+    "descricao": "A imagem vai se quebrando em pixels cada vez maiores, troca de cena no pico e volta a ficar nítida.",
+    "como_funciona": "Um filtro SVG de pixelização (feFlood + feComposite + feTile + feMorphology) é aplicado às duas cenas; o tamanho do bloco sobe e desce em degraus fixos com tl.set (1, 8, 16, 32, 48 px), com a troca no maior bloco.",
+    "quando_usar": "Games, retrô, tecnologia, humor, revelar algo 'censurado'.",
+    "evitar": "Degraus demais deixam lento; poucos parecem bug. Filtro SVG em vídeo 1080×1920 inteiro pesa: use só na troca.",
+    "padrao": {
+      "duracao_s": 0.36,
+      "ease": "steps",
+      "parametros": {
+        "blocos_px": [
+          1,
+          8,
+          16,
+          32,
+          48,
+          32,
+          16,
+          8,
+          1
+        ],
+        "intervalo_s": 0.04
+      }
+    },
+    "propriedades": [
+      "filter",
+      "attr"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "glitch",
+      "grid-tiles",
+      "scramble"
+    ],
+    "gsap": "const flood = scene.querySelector(\"#px feFlood\"), tile = scene.querySelector(\"#px feComposite\"), morph = scene.querySelector(\"#px feMorphology\");\nconst steps = [1, 8, 16, 32, 48, 32, 16, 8, 1];\ntl.set([a, b], { filter: \"url(#px)\" }, t);\nsteps.forEach((s, k) => {\n  const at = t + k * 0.04;\n  tl.set(flood, { attr: { x: s / 2, y: s / 2 } }, at);\n  tl.set(tile, { attr: { width: s, height: s } }, at);\n  tl.set(morph, { attr: { radius: s / 2 } }, at);\n});\ntl.set(a, { opacity: 0 }, t + 0.16); tl.set(b, { opacity: 1 }, t + 0.16);\ntl.set([a, b], { filter: \"none\" }, t + steps.length * 0.04);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "portal-zoom",
+    "nome": "portal zoom",
+    "nome_pt": "zoom para dentro de uma tela",
+    "aliases": [
+      "zoom na tela do celular",
+      "entrar na janela",
+      "portal",
+      "zoom into screen",
+      "entrar na tela"
+    ],
+    "familia": "transicoes",
+    "descricao": "A câmera entra dentro de uma janela da cena (tela de celular, porta, moldura) e a cena nova é o que estava lá dentro.",
+    "como_funciona": "A cena B aparece pequena dentro da janela de A; A escala até a janela ocupar o quadro, com transformOrigin no centro da janela e translação até o centro da tela (power3.in); no fim troca para B em tamanho real.",
+    "quando_usar": "Mockup de celular que vira o app, notebook que vira o site, quadro na parede que vira cena.",
+    "evitar": "Se B dentro da janela não for igual ao primeiro frame de B, o corte final pula. Janela muito pequena exige escala alta e perde nitidez.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.in",
+      "parametros": {
+        "janela_px": {
+          "x": 540,
+          "y": 1100,
+          "largura": 420
+        },
+        "escala": "1080 / largura da janela"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "x",
+      "y"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "zoom-through",
+      "match-cut",
+      "zoom-to-target"
+    ],
+    "gsap": "const wx = 540, wy = 1100, ww = 420, k = 1080 / ww; // centro e largura da janela em A\ntl.fromTo(a, { scale: 1, x: 0, y: 0, transformOrigin: `${wx}px ${wy}px` },\n  { scale: k, x: 540 - wx, y: 960 - wy, duration: 0.7, ease: \"power3.in\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.7); tl.set(b, { opacity: 1 }, t + 0.7);",
+    "receita_hyperframes": "coordinate-target-zoom",
+    "origem": "expansao"
+  },
+  {
+    "id": "ripple-dissolve",
+    "nome": "ripple dissolve",
+    "nome_pt": "tremida em ondas",
+    "aliases": [
+      "ripple",
+      "ondulação",
+      "gelatina",
+      "tremer e trocar",
+      "wobble"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena vibra como gelatina, cada vez mais desfocada, troca no auge da vibração e a nova vai parando de tremer.",
+    "como_funciona": "Keyframes fixos de x (±30 px) e escala (0,97 a 1,03) em A com blur crescendo até 8 px; troca no pico; B faz a mesma oscilação ao contrário, decrescendo até parar.",
+    "quando_usar": "Sonho, memória, efeito cômico, transição com cara de 'mexeu a cabeça'.",
+    "evitar": "Oscilação demais dá enjoo. Em cena com muito texto fica ilegível.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "none",
+      "parametros": {
+        "amplitude_px": 30,
+        "escala": [
+          0.97,
+          1.03
+        ],
+        "blur_max_px": 8
+      }
+    },
+    "propriedades": [
+      "x",
+      "scale",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "warp",
+      "blur-through",
+      "wiggle"
+    ],
+    "gsap": "tl.fromTo(a, { x: 0, scale: 1, filter: \"blur(0px)\" }, {\n  keyframes: { x: [0, 30, -25, 20, -15], scale: [1, 1.02, 0.98, 1.03, 0.97], filter: [\"blur(0px)\", \"blur(2px)\", \"blur(4px)\", \"blur(6px)\", \"blur(8px)\"] },\n  duration: 0.25, ease: \"none\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.25); tl.set(b, { opacity: 1 }, t + 0.25);\ntl.fromTo(b, { x: -15, scale: 0.97, filter: \"blur(8px)\" }, {\n  keyframes: { x: [-15, 12, -8, 4, 0], scale: [0.97, 1.02, 0.99, 1.01, 1], filter: [\"blur(8px)\", \"blur(5px)\", \"blur(3px)\", \"blur(1px)\", \"blur(0px)\"] },\n  duration: 0.25, ease: \"none\" }, t + 0.25);",
+    "receita_hyperframes": "css-distortion",
+    "origem": "expansao"
+  },
+  {
+    "id": "shape-reveal",
+    "nome": "shape reveal",
+    "nome_pt": "revelação pela forma do logo",
+    "aliases": [
+      "logo reveal",
+      "logo como máscara",
+      "revelar pelo logo",
+      "zoom no logo",
+      "máscara de forma"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena nova aparece dentro da forma do logo (ou de um ícone), que cresce até ocupar a tela inteira.",
+    "como_funciona": "B tem mask-image com o SVG do logo e mask-size controlado por uma CSS var (--m): primeiro cresce até 40% e segura para o logo ser lido, depois explode para 3000% com power3.in até sumir a borda.",
+    "quando_usar": "Abertura ou fechamento de marca, vinheta, troca de capítulo com identidade visual.",
+    "evitar": "Logo com detalhes finos some quando pequeno. Sem a pausa no meio ninguém percebe a forma.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power3.out / power3.in",
+      "parametros": {
+        "tamanho_leitura_pct": 40,
+        "hold_s": 0.2,
+        "tamanho_final_pct": 3000
+      }
+    },
+    "propriedades": [
+      "--m (mask-size)"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "iris",
+      "ink-reveal",
+      "punch-zoom"
+    ],
+    "gsap": "// CSS em B: mask-image: url(logo.svg); mask-repeat: no-repeat; mask-position: center; mask-size: var(--m);\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(b, { \"--m\": \"0%\" }, { \"--m\": \"40%\", duration: 0.35, ease: \"power3.out\" }, t);\ntl.to(b, { \"--m\": \"3000%\", duration: 0.55, ease: \"power3.in\" }, t + 0.55);\ntl.set(a, { opacity: 0 }, t + 1.1);",
+    "receita_hyperframes": "css-radial",
+    "origem": "expansao"
+  },
+  {
+    "id": "shutter",
+    "nome": "shutter",
+    "nome_pt": "obturador",
+    "aliases": [
+      "obturador",
+      "fechar e abrir",
+      "portas que fecham",
+      "persiana dupla"
+    ],
+    "familia": "transicoes",
+    "descricao": "Dois painéis fecham do topo e da base, se encontram no meio, a cena troca e eles abrem de novo.",
+    "como_funciona": "Painel de cima vai de y -960 a 0 e o de baixo de 960 a 0 em 0,25 s com power3.in; troca com tudo fechado e os painéis voltam com power3.out 0,05 s depois.",
+    "quando_usar": "Transição mecânica, câmera fotográfica, 'clique', mudança de seção com ritmo.",
+    "evitar": "Painéis sem cor de marca ou textura parecem tela preta. Diferente do split, aqui algo fecha antes de abrir.",
+    "padrao": {
+      "duracao_s": 0.55,
+      "ease": "power3.in / power3.out",
+      "parametros": {
+        "painel_px": 960,
+        "hold_s": 0.05
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "split",
+      "blinds",
+      "flash"
+    ],
+    "gsap": "const panelTop = scene.querySelector(\".shutter-top\"), panelBot = scene.querySelector(\".shutter-bot\");\ntl.fromTo(panelTop, { y: -960 }, { y: 0, duration: 0.25, ease: \"power3.in\" }, t);\ntl.fromTo(panelBot, { y: 960 }, { y: 0, duration: 0.25, ease: \"power3.in\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.25); tl.set(b, { opacity: 1 }, t + 0.25);\ntl.to(panelTop, { y: -960, duration: 0.25, ease: \"power3.out\" }, t + 0.3);\ntl.to(panelBot, { y: 960, duration: 0.25, ease: \"power3.out\" }, t + 0.3);",
+    "receita_hyperframes": "css-mechanical",
+    "origem": "expansao"
+  },
+  {
+    "id": "slice",
+    "nome": "slice",
+    "nome_pt": "fatiar a cena",
+    "aliases": [
+      "fatias",
+      "cortar em tiras",
+      "slice transition",
+      "tiras deslizando"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga é fatiada em tiras horizontais que escorregam alternadamente para a esquerda e para a direita, revelando a nova por trás.",
+    "como_funciona": "Seis cópias de A, cada uma recortada numa faixa por clip-path, substituem A; as faixas pares vão para -W e as ímpares para +W com power3.in e defasagem de 0,03 s. Diferente das persianas, nada cobre a cena: é a própria imagem que se parte.",
+    "quando_usar": "Ação, esporte, games, cortes com batida, revelação dramática.",
+    "evitar": "Faixas demais viram ruído. Em vídeo calmo é agressivo.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.in",
+      "parametros": {
+        "fatias": 6,
+        "defasagem_s": 0.03,
+        "orientacoes": [
+          "horizontal",
+          "vertical"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "clipPath"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "blinds",
+      "glitch",
+      "camera-shake"
+    ],
+    "gsap": "const W = 1080, slices = items; // 6 cópias de A, cada uma com clip-path de uma faixa\ntl.set(a, { opacity: 0 }, t); tl.set(b, { opacity: 1 }, t);\nslices.forEach((s, i) =>\n  tl.fromTo(s, { x: 0, opacity: 1 }, { x: (i % 2 ? 1 : -1) * W, opacity: 1, duration: 0.45, ease: \"power3.in\" }, t + i * 0.03));",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "spin",
+    "nome": "spin transition",
+    "nome_pt": "transição girando",
+    "aliases": [
+      "giro",
+      "spin",
+      "rodar a tela",
+      "rotação de transição",
+      "roll transition"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga gira e encolhe borrando, e a nova entra girando no mesmo sentido até parar no lugar.",
+    "como_funciona": "A gira de 0 a 90° com escala 0,6 e blur 12 px em power3.in; B vem de -90°, escala 1,4 e blur 12 px para 0, 1 e nítido em power3.out, com troca no pico da rotação.",
+    "quando_usar": "Edição energética de lifestyle, viagem, música, 'virou o jogo'.",
+    "evitar": "Em conteúdo sério ou técnico parece exagero. Duas seguidas enjoam.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.in / power3.out",
+      "parametros": {
+        "rotacao_graus": 90,
+        "blur_px": 12,
+        "sentido": [
+          "horário",
+          "anti-horário"
+        ]
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "scale",
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "historia",
+      "produto"
+    ],
+    "combina_com": [
+      "whip-pan",
+      "dutch-angle",
+      "camera-shake"
+    ],
+    "gsap": "tl.fromTo(a, { rotation: 0, scale: 1, filter: \"blur(0px)\", opacity: 1 }, { rotation: 90, scale: 0.6, filter: \"blur(12px)\", opacity: 0, duration: 0.25, ease: \"power3.in\" }, t);\ntl.fromTo(b, { rotation: -90, scale: 1.4, filter: \"blur(12px)\", opacity: 0 }, { rotation: 0, scale: 1, filter: \"blur(0px)\", opacity: 1, duration: 0.25, ease: \"power3.out\" }, t + 0.25);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "split",
+    "nome": "split",
+    "nome_pt": "abre ao meio",
+    "aliases": [
+      "abrir ao meio",
+      "barn door",
+      "porta de celeiro",
+      "cortina abrindo",
+      "rachar a tela"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga racha ao meio e as duas metades se afastam para lados opostos, revelando a nova por trás.",
+    "como_funciona": "Duas cópias de A, cada uma recortada numa metade por clip-path, ficam por cima; A original some e as metades andam em xPercent -100 e +100 (ou yPercent, no corte horizontal) com power3.inOut.",
+    "quando_usar": "Grande revelação, lançamento, 'abrindo as portas', separar dois lados de uma ideia.",
+    "evitar": "Conteúdo importante bem no centro fica rasgado. Use corte horizontal no vertical quando o conteúdo é largo.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.inOut",
+      "parametros": {
+        "eixo": [
+          "vertical (esq/dir)",
+          "horizontal (cima/baixo)"
+        ]
+      }
+    },
+    "propriedades": [
+      "xPercent",
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "historia"
+    ],
+    "combina_com": [
+      "shutter",
+      "flash",
+      "pop-in"
+    ],
+    "gsap": "const halfL = scene.querySelector(\".split-l\"), halfR = scene.querySelector(\".split-r\"); // cópias de A\ntl.set(halfL, { clipPath: \"inset(0% 50% 0% 0%)\", opacity: 1 }, t);\ntl.set(halfR, { clipPath: \"inset(0% 0% 0% 50%)\", opacity: 1 }, t);\ntl.set(a, { opacity: 0 }, t); tl.set(b, { opacity: 1 }, t);\ntl.fromTo(halfL, { xPercent: 0 }, { xPercent: -100, duration: 0.6, ease: \"power3.inOut\" }, t);\ntl.fromTo(halfR, { xPercent: 0 }, { xPercent: 100, duration: 0.6, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "squeeze",
+    "nome": "squeeze",
+    "nome_pt": "espremer",
+    "aliases": [
+      "espremer",
+      "sanfona",
+      "accordion",
+      "comprimir a cena"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga é espremida contra uma borda até sumir, enquanto a nova se expande a partir da borda oposta.",
+    "como_funciona": "A encolhe em scaleX de 1 a 0 com origem na esquerda; B cresce de 0 a 1 com origem na direita, 0,1 s depois, os dois com power3.inOut.",
+    "quando_usar": "Comparação, troca de lado, lista de itens com cara de interface.",
+    "evitar": "Conteúdo com texto vira uma faixa ilegível no meio. Não confundir com stretch (estica no eixo do movimento).",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.inOut",
+      "parametros": {
+        "eixo": [
+          "horizontal",
+          "vertical"
+        ]
+      }
+    },
+    "propriedades": [
+      "scaleX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "push",
+      "cube-rotate",
+      "stagger"
+    ],
+    "gsap": "tl.fromTo(a, { scaleX: 1, transformOrigin: \"0% 50%\" }, { scaleX: 0, duration: 0.4, ease: \"power3.inOut\" }, t);\ntl.fromTo(b, { scaleX: 0, transformOrigin: \"100% 50%\", opacity: 1 }, { scaleX: 1, opacity: 1, duration: 0.4, ease: \"power3.inOut\" }, t + 0.1);\ntl.set(a, { opacity: 0 }, t + 0.5);",
+    "receita_hyperframes": "css-push",
+    "origem": "expansao"
+  },
+  {
+    "id": "staggered-blocks",
+    "nome": "staggered blocks",
+    "nome_pt": "blocos de cor em cascata",
+    "aliases": [
+      "color blocks",
+      "blocos de cor",
+      "camadas de cor passando",
+      "wipe em camadas",
+      "slide de blocos"
+    ],
+    "familia": "transicoes",
+    "descricao": "Duas ou três telas cheias de cores diferentes atravessam a tela em cascata e, atrás da última, a cena já é outra.",
+    "como_funciona": "Blocos do tamanho do quadro andam de x -W a 0 com stagger de 0,06 s em power3.inOut, a troca acontece com tudo coberto e os blocos seguem de 0 a +W na mesma ordem.",
+    "quando_usar": "Vinheta de marca, troca de seção com paleta forte, conteúdo jovem e colorido.",
+    "evitar": "Faixas finas no lugar de blocos de tela cheia não escondem o corte. Cores fora da paleta poluem.",
+    "padrao": {
+      "duracao_s": 0.55,
+      "ease": "power3.inOut",
+      "parametros": {
+        "blocos": 3,
+        "stagger_s": 0.06,
+        "cores": "paleta da marca",
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "wipe",
+      "blinds",
+      "pop-in"
+    ],
+    "gsap": "const W = 1080, blocks = items; // 2-5 divs 1080x1920, cores da paleta\ntl.fromTo(blocks, { x: -W }, { x: 0, duration: 0.25, ease: \"power3.inOut\", stagger: 0.06 }, t);\ntl.set(a, { opacity: 0 }, t + 0.25 + 0.06 * (blocks.length - 1));\ntl.set(b, { opacity: 1 }, t + 0.25 + 0.06 * (blocks.length - 1));\ntl.fromTo(blocks, { x: 0 }, { x: W, duration: 0.25, ease: \"power3.inOut\", stagger: 0.06, immediateRender: false }, t + 0.3 + 0.06 * (blocks.length - 1));",
+    "receita_hyperframes": "css-cover",
+    "origem": "expansao"
+  },
+  {
+    "id": "stretch",
+    "nome": "stretch transition",
+    "nome_pt": "esticar e soltar",
+    "aliases": [
+      "stretch",
+      "esticar a cena",
+      "elástico",
+      "estica e volta"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga se estica e dispara para cima, e a nova chega esticada de baixo e volta ao formato normal com um tranco.",
+    "como_funciona": "A anda em y para -60% da altura enquanto scaleY vai de 1 a 2,4 e some (power3.in); B vem de +60% com scaleY 2,4 e assenta em 1 com power3.out, como borracha sendo solta.",
+    "quando_usar": "Edição de tendência, música, humor, ritmo rápido de Reels.",
+    "evitar": "Em texto pequeno distorce a leitura. Em vídeo calmo é exagerado.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "power3.in / power3.out",
+      "parametros": {
+        "escala_y": 2.4,
+        "deslocamento_pct": 60,
+        "direcoes": [
+          "cima",
+          "baixo",
+          "lados"
+        ]
+      }
+    },
+    "propriedades": [
+      "y",
+      "scaleY",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "squash-stretch",
+      "whip-pan",
+      "slam"
+    ],
+    "gsap": "const H = 1920;\ntl.fromTo(a, { y: 0, scaleY: 1, opacity: 1 }, { y: -H * 0.6, scaleY: 2.4, opacity: 0, duration: 0.2, ease: \"power3.in\" }, t);\ntl.fromTo(b, { y: H * 0.6, scaleY: 2.4, opacity: 0 }, { y: 0, scaleY: 1, opacity: 1, duration: 0.3, ease: \"power3.out\" }, t + 0.15);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "swipe",
+    "nome": "swipe",
+    "nome_pt": "deslizar de app",
+    "aliases": [
+      "swipe UI",
+      "arrastar de app",
+      "navegação iOS",
+      "deslizar como no celular",
+      "próxima tela"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena nova entra deslizando como uma tela de app no celular, e a antiga recua um pouco para trás e escurece.",
+    "como_funciona": "B anda de +W para 0 com expo.out (rápido e com freio longo, como o dedo soltando); A anda só -30% da largura e cai para brightness 0,6, imitando a navegação do iOS. Diferente do push, as duas não andam juntas.",
+    "quando_usar": "Demonstração de app, tutorial de celular, conteúdo que imita interface, stories.",
+    "evitar": "Ease simétrico tira o realismo de gesto. Em conteúdo que não é de interface parece deslocado.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "expo.out",
+      "parametros": {
+        "recuo_a_pct": 30,
+        "brilho_a": 0.6,
+        "direcoes": [
+          "esquerda",
+          "direita"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "cover",
+      "feed-scroll",
+      "push"
+    ],
+    "gsap": "const W = 1080;\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(b, { x: W }, { x: 0, duration: 0.45, ease: \"expo.out\" }, t);\ntl.fromTo(a, { x: 0, filter: \"brightness(1)\" }, { x: -W * 0.3, filter: \"brightness(0.6)\", duration: 0.45, ease: \"expo.out\" }, t);\ntl.set(a, { opacity: 0, x: 0, filter: \"brightness(1)\" }, t + 0.45);",
+    "receita_hyperframes": "css-push",
+    "origem": "expansao"
+  },
+  {
+    "id": "theme-swap",
+    "nome": "theme swap",
+    "nome_pt": "troca de tema com âncora fixa",
+    "aliases": [
+      "anchor transition",
+      "troca de tema",
+      "elemento fixo e fundo muda",
+      "theme crossfade",
+      "dark mode switch"
+    ],
+    "familia": "transicoes",
+    "descricao": "Tudo ao redor muda (fundo, cores, tipografia, estilo) enquanto um elemento-âncora fica exatamente parado no mesmo lugar.",
+    "como_funciona": "As 'peles' da cena são camadas empilhadas com os mesmos elementos em estilos diferentes; a nova pele sobe de opacity 0 para 1 em 0,3 s, e a âncora (logo, produto, rosto) fica numa camada acima, sem tween de posição.",
+    "quando_usar": "Modo claro/escuro, antes/depois de rebranding, o mesmo produto em contextos diferentes, versões.",
+    "evitar": "Se a âncora mexer um pixel, o efeito vira crossfade comum. Para o objeto mudar de lugar, use match cut.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power2.inOut",
+      "parametros": {
+        "peles": 2,
+        "ancora": "camada acima, parada"
+      }
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "match-cut",
+      "cross-dissolve",
+      "pulse"
+    ],
+    "gsap": "// b = próxima pele; el = âncora (camada acima das peles, sem tween de posição)\ntl.fromTo(b, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: \"power2.inOut\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.3);\ntl.set(el, { x: 0, y: 0, scale: 1 }, t); // âncora travada: não se move",
+    "receita_hyperframes": "theme-crossfade-morph",
+    "origem": "expansao"
+  },
+  {
+    "id": "uncover",
+    "nome": "uncover",
+    "nome_pt": "cena antiga sai e descobre a nova",
+    "aliases": [
+      "descobrir",
+      "slide out",
+      "tirar a cena de cima",
+      "revelar por baixo"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga desliza para fora como uma folha sendo puxada e revela a nova, que já estava parada por baixo.",
+    "como_funciona": "A (acima no empilhamento) anda de 0 para -W com power3.in; B, por baixo, sai de brightness 0,7 para 1 no mesmo tempo. Oposto do cover: quem se move é a cena que sai.",
+    "quando_usar": "Revelar resultado, 'por trás disso', tirar o véu de uma resposta.",
+    "evitar": "Usar cover e uncover alternados no mesmo trecho fica confuso. Ease out em A parece hesitação.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.in",
+      "parametros": {
+        "brilho_b_inicial": 0.7,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "cover",
+      "gravity-drop",
+      "fade-in"
+    ],
+    "gsap": "const W = 1080; // A acima de B no CSS\ntl.set(b, { opacity: 1 }, t);\ntl.fromTo(a, { x: 0 }, { x: -W, duration: 0.5, ease: \"power3.in\" }, t);\ntl.fromTo(b, { filter: \"brightness(0.7)\" }, { filter: \"brightness(1)\", duration: 0.5, ease: \"power3.in\" }, t);\ntl.set(a, { opacity: 0, x: 0 }, t + 0.5);",
+    "receita_hyperframes": "css-push",
+    "origem": "expansao"
+  },
+  {
+    "id": "warp",
+    "nome": "warp",
+    "nome_pt": "distorção líquida",
+    "aliases": [
+      "warp transition",
+      "distorcer",
+      "efeito líquido",
+      "calor distorcendo",
+      "turbulência"
+    ],
+    "familia": "transicoes",
+    "descricao": "A imagem se deforma como vista através de água ou calor, derrete até ficar irreconhecível e se reconstrói já como a próxima cena.",
+    "como_funciona": "Um filtro SVG feTurbulence + feDisplacementMap é aplicado às duas cenas; o attr scale do displacement sobe de 0 a 120 com power2.in, a troca acontece no pico e o scale desce a 0 com power2.out.",
+    "quando_usar": "Viagem no tempo, sonho, 'a realidade mudou', tecnologia futurista, música.",
+    "evitar": "Filtro SVG em tela cheia é pesado: só na troca. Escala muito alta vira ruído sem forma.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.in / power2.out",
+      "parametros": {
+        "escala_max": 120,
+        "base_frequency": 0.012
+      }
+    },
+    "propriedades": [
+      "attr:scale",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "historia",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "ripple-dissolve",
+      "glitch",
+      "blur-through"
+    ],
+    "gsap": "const disp = scene.querySelector(\"#warp feDisplacementMap\");\ntl.set([a, b], { filter: \"url(#warp)\" }, t);\ntl.fromTo(disp, { attr: { scale: 0 } }, { attr: { scale: 120 }, duration: 0.3, ease: \"power2.in\" }, t);\ntl.set(a, { opacity: 0 }, t + 0.3); tl.set(b, { opacity: 1 }, t + 0.3);\ntl.to(disp, { attr: { scale: 0 }, duration: 0.3, ease: \"power2.out\" }, t + 0.3);\ntl.set([a, b], { filter: \"none\" }, t + 0.62);",
+    "receita_hyperframes": "css-distortion",
+    "origem": "expansao"
+  },
+  {
+    "id": "zoom-out-reveal",
+    "nome": "zoom out",
+    "nome_pt": "cena antiga encolhe e some",
+    "aliases": [
+      "card away",
+      "encolher a cena",
+      "zoom out de transição",
+      "afastar e revelar"
+    ],
+    "familia": "transicoes",
+    "descricao": "A cena antiga encolhe rápido em direção ao centro e some, revelando a nova que já estava por trás.",
+    "como_funciona": "Com A por cima, A escala de 1 para 0,3 e some com power3.in; B, atrás, assenta de 1,08 para 1 com power3.out. É o oposto do zoom through: em vez de atravessar, a cena antiga se afasta.",
+    "quando_usar": "Fechar um assunto e abrir outro, voltar para o 'quadro geral', sair de um print.",
+    "evitar": "Junto com zoom through no mesmo vídeo confunde a direção espacial.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.in",
+      "parametros": {
+        "escala_final_a": 0.3,
+        "escala_inicial_b": 1.08
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "pull-out",
+      "zoom-through",
+      "stagger"
+    ],
+    "gsap": "tl.set(b, { opacity: 1 }, t); // A acima de B no CSS\ntl.fromTo(a, { scale: 1, opacity: 1, transformOrigin: \"50% 50%\" }, { scale: 0.3, opacity: 0, duration: 0.4, ease: \"power3.in\" }, t);\ntl.fromTo(b, { scale: 1.08 }, { scale: 1, duration: 0.5, ease: \"power3.out\" }, t + 0.1);",
+    "receita_hyperframes": "css-scale",
+    "origem": "expansao"
+  }
+]

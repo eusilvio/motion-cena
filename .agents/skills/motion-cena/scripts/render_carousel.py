@@ -29,12 +29,13 @@ PRESETS_FILE = Path(__file__).resolve().parent.parent / "assets" / "platforms.js
 
 def hyperframes_cmd(comp: Path) -> list[str]:
     """Use the version pinned in the composition's package.json, so renders stay reproducible."""
+    npx = shutil.which("npx") or "npx"  # on Windows it is npx.cmd, which subprocess does not find by bare name
     pkg = comp / "package.json"
     if pkg.exists():
         m = re.search(r"hyperframes@([\w.\-]+)", pkg.read_text(encoding="utf-8"))
         if m:
-            return ["npx", "--yes", f"hyperframes@{m.group(1)}"]
-    return ["npx", "--yes", "hyperframes"]
+            return [npx, "--yes", f"hyperframes@{m.group(1)}"]
+    return [npx, "--yes", "hyperframes"]
 
 
 def contact_sheet(pngs: list[Path], dest: Path, cols: int = 5, thumb_w: int = 360) -> None:

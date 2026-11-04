@@ -1,0 +1,106 @@
+[
+  {
+    "id": "canario-random",
+    "familia": "entradas-suaves",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.fromTo(el, { x: () => Math.random() * 200, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4 }, t);",
+    "esperado": "não determinístico"
+  },
+  {
+    "id": "canario-contador-acumulado",
+    "familia": "texto",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.6 },
+    "gsap": "const p = { v: 0 }; let n = 0;\ntl.fromTo(p, { v: 0 }, { v: 1, duration: 0.6, ease: \"none\", onUpdate: () => { n++; el.textContent = String(n); } }, t);",
+    "esperado": "não determinístico"
+  },
+  {
+    "id": "canario-propriedade-invalida",
+    "familia": "enfase",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.fromTo(el, { scale: 1, brilho: 0 }, { scale: 1.2, brilho: 1, duration: 0.4 }, t);",
+    "esperado": "Invalid property"
+  },
+  {
+    "id": "canario-alvo-inexistente",
+    "familia": "enfase",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.fromTo(scene.querySelector(\".nao-existe\"), { scale: 1 }, { scale: 1.2, duration: 0.4 }, t);\ntl.fromTo(el, { scale: 1 }, { scale: 1.2, duration: 0.4 }, t);",
+    "esperado": "not found"
+  },
+  {
+    "id": "canario-plugin-errado",
+    "familia": "formas-svg",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "const L = el.getTotalLength();\ntl.fromTo(el, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.4 }, t);",
+    "esperado": "exceção ao montar"
+  },
+  {
+    "id": "canario-entrada-some",
+    "familia": "entradas-suaves",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.4 }, t);",
+    "esperado": "entrada termina invisível"
+  },
+  {
+    "id": "canario-entrada-fora",
+    "familia": "entradas-impacto",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.fromTo(el, { x: 0 }, { x: 1600, duration: 0.4 }, t);",
+    "esperado": "entrada termina invisível ou fora do quadro"
+  },
+  {
+    "id": "canario-saida-fica",
+    "familia": "saidas",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.fromTo(el, { x: 0 }, { x: 40, duration: 0.4, immediateRender: false }, t);",
+    "esperado": "saída não termina escondida"
+  },
+  {
+    "id": "canario-transicao-sem-b",
+    "familia": "transicoes",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.5 },
+    "gsap": "tl.fromTo(a, { x: 0 }, { x: -1080, duration: 0.5 }, t);\ntl.fromTo(b, { opacity: 0 }, { opacity: 0.4, duration: 0.5 }, t);",
+    "esperado": "não termina com B"
+  },
+  {
+    "id": "canario-faixa-cobrindo",
+    "familia": "transicoes",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.5 },
+    "gsap": "tl.fromTo(items, { scaleY: 0 }, { scaleY: 1, duration: 0.25, stagger: 0.02 }, t);\ntl.set(a, { opacity: 0 }, t + 0.3);\ntl.set(b, { opacity: 1 }, t + 0.3);",
+    "esperado": "ainda cobre"
+  },
+  {
+    "id": "canario-parado",
+    "familia": "enfase",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.fromTo(el, { opacity: 1 }, { opacity: 1, duration: 0.4 }, t);",
+    "esperado": "nada muda"
+  },
+  {
+    "id": "canario-sem-duracao",
+    "familia": "enfase",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "tl.set(el, { opacity: 0.5 }, t);",
+    "esperado": "não passa de t"
+  },
+  {
+    "id": "canario-redeclara-parametro",
+    "familia": "enfase",
+    "origem": "expansao",
+    "padrao": { "duracao_s": 0.4 },
+    "gsap": "const el = scene;\ntl.fromTo(el, { scale: 1 }, { scale: 1.1, duration: 0.4 }, t);",
+    "esperado": "exceção ao montar"
+  }
+]

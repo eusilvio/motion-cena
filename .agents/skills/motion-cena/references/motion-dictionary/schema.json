@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Efeito do dicionário motion-cena",
+  "type": "object",
+  "required": [
+    "id",
+    "nome",
+    "nome_pt",
+    "aliases",
+    "familia",
+    "descricao",
+    "como_funciona",
+    "quando_usar",
+    "evitar",
+    "padrao",
+    "propriedades",
+    "intensidade",
+    "generos",
+    "combina_com",
+    "gsap",
+    "receita_hyperframes",
+    "origem"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "nome": {
+      "type": "string"
+    },
+    "nome_pt": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "familia": {
+      "enum": [
+        "entradas-suaves",
+        "entradas-impacto",
+        "saidas",
+        "texto",
+        "enfase",
+        "fisica",
+        "loops-ambiente",
+        "camera",
+        "transicoes",
+        "formas-svg",
+        "dados-infografico",
+        "interface-ui",
+        "estilizacao-textura",
+        "particulas",
+        "3d-perspectiva",
+        "mascaras-composicao"
+      ]
+    },
+    "descricao": {
+      "type": "string"
+    },
+    "como_funciona": {
+      "type": "string"
+    },
+    "quando_usar": {
+      "type": "string"
+    },
+    "evitar": {
+      "type": "string"
+    },
+    "padrao": {
+      "type": "object",
+      "required": [
+        "duracao_s",
+        "ease",
+        "parametros"
+      ],
+      "properties": {
+        "duracao_s": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "ease": {
+          "type": "string"
+        },
+        "parametros": {
+          "type": "object"
+        }
+      }
+    },
+    "propriedades": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "intensidade": {
+      "enum": [
+        "sutil",
+        "media",
+        "forte"
+      ]
+    },
+    "generos": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "historia",
+          "motivacional",
+          "tecnico",
+          "explicativo",
+          "dados",
+          "produto",
+          "opiniao"
+        ]
+      }
+    },
+    "combina_com": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "gsap": {
+      "type": "string"
+    },
+    "receita_hyperframes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "origem": {
+      "enum": [
+        "dicionario-atual",
+        "expansao"
+      ]
+    }
+  }
+}

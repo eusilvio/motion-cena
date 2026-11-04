@@ -60,6 +60,7 @@
         },
         "platform": {
           "enum": [
+            "vertical",
             "ig-reels",
             "ig-stories",
             "ig-feed",
@@ -78,6 +79,7 @@
           "type": "array",
           "items": {
             "enum": [
+              "vertical",
               "ig-reels",
               "ig-stories",
               "ig-feed",

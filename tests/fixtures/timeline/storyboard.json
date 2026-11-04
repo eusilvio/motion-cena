@@ -1,0 +1,87 @@
+{
+ "meta": {
+  "title": "Fixture sintética: café coado",
+  "platform": "vertical",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30
+ },
+ "scenes": [
+  {
+   "id": "s1",
+   "narration": "Às seis da manhã, a cafeteira já está ligada.",
+   "visual": "cozinha",
+   "motion": "push-in",
+   "anchors": [
+    {"id": "maquina", "phrase": "Cafeteira!", "effect": "pop in"},
+    {"id": "hora", "phrase": "manhã", "effect": "count-up"}
+   ],
+   "sfx": [
+    {"type": "riser", "at": "scene_start", "offset": -1.6},
+    {"type": "pop", "at": "anchor:maquina"},
+    {"type": "whoosh", "at": "scene_end", "gain_db": -12}
+   ]
+  },
+  {
+   "id": "s2",
+   "narration": "Café, água e tempo. Mais água, menos pressa.",
+   "visual": "chaleira",
+   "motion": "stagger",
+   "anchors": [
+    {"id": "agua", "phrase": "água", "effect": "highlight"},
+    {"id": "mais", "phrase": "Mais água", "effect": "pulse"},
+    {"id": "calma", "phrase": "menos pressa", "effect": "slam"}
+   ],
+   "sfx": [
+    {"type": "tick", "at": 0.5, "gain_db": -20},
+    {"type": "riser", "at": "anchor:calma", "offset": -1.6}
+   ]
+  },
+  {
+   "id": "s3",
+   "narration": "",
+   "duration": 1.2,
+   "visual": "pó caindo no filtro, sem voz",
+   "motion": "slow zoom",
+   "sfx": [
+    {"type": "impact", "at": "scene_start"}
+   ]
+  },
+  {
+   "id": "s4",
+   "narration": "Espere 12 minutos antes de servir.",
+   "visual": "relógio",
+   "motion": "draw-on",
+   "anchors": [
+    {"id": "tempo", "phrase": "12 minutos", "effect": "count-up"},
+    {"id": "nunca", "phrase": "água fervendo", "effect": "shake"}
+   ],
+   "sfx": [
+    {"type": "ding", "at": "anchor:nunca"},
+    {"type": "click", "at": "0.25"}
+   ]
+  },
+  {
+   "id": "s5",
+   "narration": "Bom café!",
+   "visual": "xícara",
+   "motion": "scale up",
+   "anchors": [
+    {"id": "final", "phrase": "café", "effect": "glow"}
+   ],
+   "sfx": [
+    {"type": "whoosh", "at": "scene_start", "offset": -0.2}
+   ]
+  },
+  {
+   "id": "s6",
+   "narration": "",
+   "duration": 1.5,
+   "visual": "cartela final",
+   "motion": "fade in",
+   "sfx": [
+    {"type": "ding", "at": "scene_end"}
+   ]
+  }
+ ]
+}

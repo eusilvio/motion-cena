@@ -1,0 +1,473 @@
+[
+  {
+    "id": "card-tilt",
+    "nome": "card tilt",
+    "nome_pt": "card inclinando",
+    "aliases": [
+      "tilt 3d",
+      "inclinar card",
+      "hover 3d",
+      "card balançando"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "Um card inclina em 3D para um lado e para o outro, como se alguém o movesse com o mouse, e volta ao plano.",
+    "como_funciona": "rotationX e rotationY seguem keyframes com sine.inOut (8°/-12°, -6°/10°, 0/0) com transformPerspective 1200; um brilho por cima pode acompanhar.",
+    "quando_usar": "Cartão de crédito, ingresso, card de produto, print de app.",
+    "evitar": "Ângulos acima de 15° (distorce texto) ou balançar sem parar a cena toda.",
+    "padrao": {
+      "duracao_s": 2.0,
+      "ease": "sine.inOut",
+      "parametros": {
+        "angulo_max_graus": 12,
+        "perspectiva_px": 1200
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "rotationY"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "float",
+      "liquid-glass",
+      "layered-depth"
+    ],
+    "gsap": "tl.fromTo(el, { rotationX: 0, rotationY: 0, transformPerspective: 1200 }, { keyframes: [\n  { rotationX: 8, rotationY: -12, duration: 0.6, ease: \"sine.inOut\" },\n  { rotationX: -6, rotationY: 10, duration: 0.8, ease: \"sine.inOut\" },\n  { rotationX: 0, rotationY: 0, duration: 0.6, ease: \"sine.inOut\" }] }, t);",
+    "receita_hyperframes": "split-tilt-cards",
+    "origem": "expansao"
+  },
+  {
+    "id": "coin-spin",
+    "nome": "coin spin",
+    "nome_pt": "moeda girando",
+    "aliases": [
+      "moeda",
+      "girar no eixo",
+      "turntable",
+      "spin 3d",
+      "cara ou coroa"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "O objeto gira várias voltas no próprio eixo vertical, como moeda ou produto em vitrine giratória, desacelerando até parar de frente.",
+    "como_funciona": "O grupo preserve-3d vai de rotationY 0 a 1080° com power3.out; frente e verso com backface-visibility: hidden trocam sozinhos a cada meia volta.",
+    "quando_usar": "Moeda, medalha, selo, logo, produto plano com frente e verso.",
+    "evitar": "Objeto sem verso (mostra o avesso espelhado) ou giro linear sem fim.",
+    "padrao": {
+      "duracao_s": 1.4,
+      "ease": "power3.out",
+      "parametros": {
+        "voltas": 3,
+        "perspectiva_px": 1000
+      }
+    },
+    "propriedades": [
+      "rotationY"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "dados",
+      "motivacional"
+    ],
+    "combina_com": [
+      "sparks",
+      "bloom",
+      "pop-in"
+    ],
+    "gsap": "// el = moeda (preserve-3d) com frente e verso (rotateY(180deg)), backface-visibility: hidden\ntl.fromTo(el, { rotationY: 0, transformPerspective: 1000 }, { rotationY: 1080, duration: 1.4, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "door-swing",
+    "nome": "rotate Y",
+    "nome_pt": "abrir como porta",
+    "aliases": [
+      "rotate y",
+      "porta abrindo",
+      "dobradiça",
+      "hinge",
+      "swing in"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "O elemento entra girando em torno de uma borda, como porta ou página abrindo na direção do espectador.",
+    "como_funciona": "transformOrigin numa borda (0% 50%) e rotationY de -95° a 0 com perspectiva 1400, junto com opacity; o ease out faz a porta assentar.",
+    "quando_usar": "Entrada de cards, menus, lista de itens (com stagger), revelar tela de app.",
+    "evitar": "Girar pelo centro (aí é flip). Ângulo grande em texto longo.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.out",
+      "parametros": {
+        "angulo_inicial_graus": -95,
+        "borda": "esquerda (ou direita/topo)",
+        "perspectiva_px": 1400
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "stagger",
+      "fold"
+    ],
+    "gsap": "tl.fromTo(el, { rotationY: -95, transformOrigin: \"0% 50%\", transformPerspective: 1400, opacity: 0 }, { rotationY: 0, opacity: 1, duration: 0.7, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "extrude",
+    "nome": "extrude",
+    "nome_pt": "texto com volume",
+    "aliases": [
+      "extrusão",
+      "texto 3d",
+      "letra com profundidade",
+      "sombra empilhada"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "O texto ganha volume: camadas atrás dele se afastam em diagonal e formam uma lateral sólida, como letra 3D.",
+    "como_funciona": "N cópias do texto atrás do original, em tons mais escuros, deslizam em x/y até (i+1)*4 px com stagger curto; o resultado é uma extrusão feita de camadas reais.",
+    "quando_usar": "Títulos grandes, números de impacto, estética retrô ou cartaz.",
+    "evitar": "Em texto pequeno ou com muitas camadas (acima de 12 pesa e borra).",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.out",
+      "parametros": {
+        "camadas": 8,
+        "passo_px": 4,
+        "direcao": "diagonal baixo-direita"
+      }
+    },
+    "propriedades": [
+      "x",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "slam",
+      "perspective-zoom"
+    ],
+    "gsap": "// items = cópias do texto atrás do original (mais distante por último), cor mais escura\ntl.fromTo(items, { x: 0, y: 0 }, { x: (i) => (i + 1) * 4, y: (i) => (i + 1) * 4, duration: 0.5, ease: \"power3.out\", stagger: 0.02 }, t);",
+    "receita_hyperframes": "3d-text-depth-layers",
+    "origem": "expansao"
+  },
+  {
+    "id": "fold",
+    "nome": "fold",
+    "nome_pt": "dobrar e desdobrar",
+    "aliases": [
+      "desdobrar",
+      "sanfona",
+      "origami",
+      "unfold",
+      "papel dobrando"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "O conteúdo se desdobra em painéis, como mapa ou folheto de papel abrindo.",
+    "como_funciona": "Cada painel gira de rotationX -90° a 0 a partir da borda de cima (transformOrigin 50% 0%), em stagger; para sanfona real, aninhe cada painel dentro do anterior.",
+    "quando_usar": "Listas em etapas, cardápio, mapa, passo a passo, abrir um convite.",
+    "evitar": "Painéis com altura diferente (a dobra fica falsa) ou stagger lento.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.out",
+      "parametros": {
+        "paineis": 4,
+        "stagger_s": 0.18,
+        "eixo": "X (dobra horizontal) ou Y"
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "door-swing",
+      "paper-texture"
+    ],
+    "gsap": "// items = painéis em sequência; cada um gira a partir da borda de cima\ntl.fromTo(items, { rotationX: -90, transformOrigin: \"50% 0%\", transformPerspective: 1200, opacity: 0 }, { rotationX: 0, opacity: 1, duration: 0.5, ease: \"power2.out\", stagger: 0.18 }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "isometric-rise",
+    "nome": "isometric rise",
+    "nome_pt": "blocos subindo em isométrico",
+    "aliases": [
+      "isométrico",
+      "iso",
+      "blocos subindo",
+      "cidade subindo"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "Numa vista isométrica, blocos sobem do chão um depois do outro, como prédios ou barras crescendo.",
+    "como_funciona": "O palco fica em rotateX(55deg) rotateZ(-45deg) no CSS; cada bloco sobe em z de -200 a 0 com opacity, em stagger a partir do centro da grade.",
+    "quando_usar": "Infográfico de comparação, \"construir\", mapa de bairros, ecossistema de produtos.",
+    "evitar": "Blocos demais (acima de ~30) ou texto dentro dos blocos (fica torto).",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "back.out(1.4)",
+      "parametros": {
+        "stagger_s": 0.06,
+        "altura_px": 200,
+        "vista": "rotateX 55° rotateZ -45°"
+      }
+    },
+    "propriedades": [
+      "z",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "layered-depth",
+      "bar-grow"
+    ],
+    "gsap": "// scene = palco isométrico (rotateX(55deg) rotateZ(-45deg), preserve-3d); items = blocos\ntl.fromTo(items, { z: -200, opacity: 0 }, { z: 0, opacity: 1, duration: 0.6, ease: \"back.out(1.4)\", stagger: { each: 0.06, from: \"center\" } }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "layered-depth",
+    "nome": "layered depth",
+    "nome_pt": "camadas em profundidade",
+    "aliases": [
+      "exploded view",
+      "vista explodida",
+      "camadas separando",
+      "depth layers"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "O grupo inclina em 3D e suas camadas se descolam umas das outras em profundidade, mostrando do que é feito.",
+    "como_funciona": "O grupo (preserve-3d) gira em rotationX e rotationZ para uma vista inclinada; depois cada camada ganha z proporcional ao índice (0, 120, 240 px).",
+    "quando_usar": "Explicar arquitetura, camadas de um app, ingredientes, \"por dentro do produto\".",
+    "evitar": "Camadas sem contraste entre si; separação grande que tira as camadas do quadro.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power3.inOut",
+      "parametros": {
+        "inclinacao_x_graus": 55,
+        "rotacao_z_graus": -25,
+        "separacao_px": 120
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "rotationZ",
+      "z"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "isometric-rise",
+      "card-tilt"
+    ],
+    "gsap": "// scene = grupo com transform-style: preserve-3d; items = camadas (fundo para frente)\ntl.fromTo(scene, { rotationX: 0, rotationZ: 0, transformPerspective: 1600 }, { rotationX: 55, rotationZ: -25, duration: 0.8, ease: \"power3.inOut\" }, t);\ntl.fromTo(items, { z: 0 }, { z: (i) => i * 120, duration: 0.8, ease: \"power3.inOut\" }, t + 0.2);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "page-curl",
+    "nome": "page curl",
+    "nome_pt": "virar a ponta da página",
+    "aliases": [
+      "dobra de página",
+      "orelha de página",
+      "virar página",
+      "peel corner"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "A ponta da página se dobra e mostra o que está por baixo, como canto de folha sendo virado.",
+    "como_funciona": "A página perde um triângulo no canto via clip-path polygon (5 pontos que se movem juntos); um segundo elemento, o verso dobrado com gradiente, usa um polygon triangular espelhado que cresce na mesma medida.",
+    "quando_usar": "Revelar a próxima informação, \"tem mais\", caderno, revista, cardápio.",
+    "evitar": "Dobra acima de ~50% (o truque plano aparece) ou em fundo sem nada por baixo.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power2.inOut",
+      "parametros": {
+        "dobra_pct": 35,
+        "canto": "inferior direito"
+      }
+    },
+    "propriedades": [
+      "clip-path"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "paper-texture",
+      "sticker-slap"
+    ],
+    "gsap": "// el = página; items[0] = verso dobrado (mesmo tamanho, gradiente claro + sombra), por cima\nconst flap = items[0], d = 35;\ntl.fromTo(el, { clipPath: \"polygon(0% 0%, 100% 0%, 100% 100%, 100% 100%, 0% 100%)\" }, { clipPath: `polygon(0% 0%, 100% 0%, 100% ${100 - d}%, ${100 - d}% 100%, 0% 100%)`, duration: 0.9, ease: \"power2.inOut\" }, t);\ntl.fromTo(flap, { clipPath: \"polygon(100% 100%, 100% 100%, 100% 100%)\" }, { clipPath: `polygon(100% ${100 - d}%, ${100 - d}% 100%, ${100 - d}% ${100 - d}%)`, duration: 0.9, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "perspective-zoom",
+    "nome": "perspective zoom",
+    "nome_pt": "vindo do fundo",
+    "aliases": [
+      "vir do fundo",
+      "fly in",
+      "z zoom",
+      "chegar da profundidade"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "O elemento vem do fundo da cena, inclinado, e endireita ao chegar na frente, com profundidade real.",
+    "como_funciona": "Anima z de -1600 a 0 com transformPerspective 1000, rotationX de 25° a 0 e um blur que some; o expo.out freia forte no fim.",
+    "quando_usar": "Título de abertura, logo, card principal, número herói.",
+    "evitar": "Confundir com scale up (sem perspectiva) ou zoom through (câmera passando). Muitos ao mesmo tempo.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "expo.out",
+      "parametros": {
+        "z_inicial_px": -1600,
+        "inclinacao_graus": 25,
+        "perspectiva_px": 1000,
+        "blur_px": 10
+      }
+    },
+    "propriedades": [
+      "z",
+      "rotationX",
+      "opacity",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "tecnico"
+    ],
+    "combina_com": [
+      "extrude",
+      "bloom"
+    ],
+    "gsap": "tl.fromTo(el, { z: -1600, rotationX: 25, transformPerspective: 1000, opacity: 0, filter: \"blur(10px)\" }, { z: 0, rotationX: 0, opacity: 1, filter: \"blur(0px)\", duration: 0.8, ease: \"expo.out\" }, t);",
+    "receita_hyperframes": "3d-camera-flight",
+    "origem": "expansao"
+  },
+  {
+    "id": "scatter-3d-assemble",
+    "nome": "scatter 3d",
+    "nome_pt": "montar a partir de pedaços em 3D",
+    "aliases": [
+      "assemble 3d",
+      "peças se juntando",
+      "explodir e montar",
+      "depth scatter"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "Pedaços (letras, fragmentos de logo) chegam de uma nuvem em profundidade, girando, e se encaixam numa composição plana.",
+    "como_funciona": "Cada peça parte de x, y, z e rotações sorteados por seed na montagem (z de -400 a -1600) e vai a zero com expo.out e stagger curto, dentro de um pai com perspectiva.",
+    "quando_usar": "Montagem de logo ou título, \"as peças se encaixaram\", abertura de marca.",
+    "evitar": "Confundir com magnetic particles (plano, partículas pequenas). Peças demais deixa lento.",
+    "padrao": {
+      "duracao_s": 1.1,
+      "ease": "expo.out",
+      "parametros": {
+        "z_px": [
+          -400,
+          -1600
+        ],
+        "rotacao_max_graus": 180,
+        "stagger_s": 0.03
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "z",
+      "rotationX",
+      "rotationY",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "tecnico"
+    ],
+    "combina_com": [
+      "magnetic-particles",
+      "bloom"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = letras ou fragmentos já no lugar final; pai com perspective: 1200px\nconst r = rng(21), p = items.map(() => ({ x: (r() - 0.5) * 1200, y: (r() - 0.5) * 1600, z: -400 - r() * 1200, rx: (r() - 0.5) * 360, ry: (r() - 0.5) * 360 }));\ntl.fromTo(items, { x: (i) => p[i].x, y: (i) => p[i].y, z: (i) => p[i].z, rotationX: (i) => p[i].rx, rotationY: (i) => p[i].ry, opacity: 0 }, { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, opacity: 1, duration: 1.1, ease: \"expo.out\", stagger: 0.03 }, t);",
+    "receita_hyperframes": "depth-scatter-assemble",
+    "origem": "expansao"
+  },
+  {
+    "id": "word-cube",
+    "nome": "cubo de palavras",
+    "nome_pt": "cubo girando",
+    "aliases": [
+      "cubo 3d",
+      "cube rotate",
+      "girar cubo",
+      "faces do cubo"
+    ],
+    "familia": "3d-perspectiva",
+    "descricao": "Um cubo com uma palavra ou imagem em cada face gira 90 graus por vez e apresenta a próxima face.",
+    "como_funciona": "As 4 faces ficam em rotateX(i*90deg) translateZ(metade da altura) dentro de um grupo preserve-3d; o grupo gira rotationX em degraus de -90° com back.inOut.",
+    "quando_usar": "Listar 3 ou 4 benefícios, alternar palavras de um título, \"é rápido, é barato, é fácil\".",
+    "evitar": "Confundir com text swap (plano) ou com transição cubo de cena inteira (D). Faces com texto longo.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "back.inOut(1.4)",
+      "parametros": {
+        "faces": 4,
+        "intervalo_s": 1.0,
+        "eixo": "X (ou Y para girar de lado)"
+      }
+    },
+    "propriedades": [
+      "rotationX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "text-swap",
+      "pulse"
+    ],
+    "gsap": "// el = cubo (preserve-3d) com 4 faces em rotateX(i*90deg) translateZ(100px)\ntl.set(el, { rotationX: 0, transformPerspective: 1200 }, t);\n[1, 2, 3].forEach((k) => tl.fromTo(el, { rotationX: -(k - 1) * 90 }, { rotationX: -k * 90, duration: 0.5, ease: \"back.inOut(1.4)\", immediateRender: false }, t + (k - 1) * 1.0));",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  }
+]

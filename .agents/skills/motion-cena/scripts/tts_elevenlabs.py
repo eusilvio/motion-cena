@@ -71,7 +71,7 @@ def tts(el: ElevenLabs, text: str, voice_id: str, model: str, lang: str, stabili
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "voice.mp3").write_bytes(base64.b64decode(res.audio_base_64))
     words = chars_to_words(res.alignment)
-    (out_dir / "words.json").write_text(json.dumps(words, ensure_ascii=False, indent=1))
+    (out_dir / "words.json").write_text(json.dumps(words, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"voice.mp3 + words.json ({len(words)} words, ~{words[-1]['end']:.1f}s) -> {out_dir}")
 
 

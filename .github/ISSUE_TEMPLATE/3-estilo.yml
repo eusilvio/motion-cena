@@ -1,0 +1,68 @@
+name: Receita de estilo
+description: Propor uma receita de estilo para references/styles/community/.
+title: "[estilo] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Pode escrever em português ou em inglês (English is welcome).
+
+        Uma receita da comunidade descreve uma gramática que você criou e usa, ou um gênero ou escola que não tem dono (grade tipográfica suíça, telejornal, tipografia cinética, colagem de fanzine). Nunca a quebra de um vídeo, série ou canal de outra pessoa: essa receita fica só na sua máquina. Regra completa e passo a passo no CONTRIBUTING.md (porta 2).
+
+  - type: input
+    id: name
+    attributes:
+      label: Nome
+      description: Kebab-case, dizendo a gramática.
+      placeholder: swiss-grid
+    validations:
+      required: true
+
+  - type: dropdown
+    id: origin
+    attributes:
+      label: Origem
+      options:
+        - Gramática minha (eu criei e uso nas minhas peças)
+        - Gênero ou escola sem dono
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: A ideia em uma linha
+      description: O mecanismo que segura quem assiste.
+    validations:
+      required: true
+
+  - type: textarea
+    id: structure
+    attributes:
+      label: Estrutura e tempos
+      description: Blocos com tempo e função (gancho, contexto, virada, fecho). Tempos escolhidos por você, não medidos na peça de alguém.
+    validations:
+      required: true
+
+  - type: textarea
+    id: components
+    attributes:
+      label: Linguagem visual e componentes
+      description: Paleta, tipografia, densidade, transições e os termos do motion-dictionary.md que o estilo usa.
+
+  - type: input
+    id: good_for
+    attributes:
+      label: Bom para
+      placeholder: explicativo e dados, Reels e LinkedIn
+
+  - type: checkboxes
+    id: rule
+    attributes:
+      label: Regra do repositório público
+      options:
+        - label: A receita não descreve um vídeo, série ou canal específico de outra pessoa.
+          required: true
+        - label: Não cito perfil, logo, personagem, bordão ou texto de uma peça de terceiros.
+          required: true

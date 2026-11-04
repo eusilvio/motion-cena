@@ -5,8 +5,9 @@
 """Flag AI-sounding copy (pt-BR) in narration, on-screen text, slides and captions.
 
 Usage:
-  uv run lint_copy.py <files...>      # .txt/.md as-is; .json -> narration/on_screen_text/visual-free text fields;
+  uv run lint_copy.py <files...>      # .txt as-is; .json -> narration/on_screen_text/visual-free text fields;
                                        # .html/.dc.html -> visible text (tags, styles and scripts stripped)
+                                       # .md -> prose only (code, URLs, HTML and table syntax stripped)
 Exit code 1 when an ERROR is found. Rules and rewrites: references/writing-style.md.
 """
 import html
@@ -67,8 +68,58 @@ PATTERNS = [
 EMOJI = re.compile("[\U0001F300-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF\U00002B50\U00002B06\U0000203C\U00002049]")
 
 
-def texts(path: Path) -> list[tuple[str, str]]:
-    """(location, text) pairs to check."""
+CODE, LINK = "‹código›", "‹link›"  # one-word stand-ins: keep the sentence length, match no rule
+FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})")
+TABLE_RULE = re.compile(r"\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?")
+
+
+def keep_lines(m: re.Match) -> str:
+    """Blank out a match but keep its line breaks, so reported line numbers stay right."""
+    return "\n" * m.group(0).count("\n") or " "
+
+
+def markdown(raw: str) -> list[tuple[str, str, bool]]:
+    """Prose of a Markdown doc. Fenced and inline code, URLs, images, HTML tags and comments are stripped;
+    table cells and headings are checked against the rules but stay out of the rhythm checks (not sentences)."""
+    lines, fence = [], None
+    for line in raw.splitlines():
+        m = FENCE.match(line)
+        if fence:
+            if m and m.group(1)[0] == fence[0] and len(m.group(1)) >= len(fence) and not line[m.end():].strip():
+                fence = None
+            lines.append("")
+        elif m:
+            fence = m.group(1)
+            lines.append("")
+        else:
+            lines.append(line)
+    text = "\n".join(lines)
+    text = re.sub(r"<!--.*?-->", keep_lines, text, flags=re.S)
+    text = re.sub(r"(`+)(?!`).*?(?<!`)\1(?!`)", CODE, text)
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", text)                    # images
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)                 # [text](url) -> text
+    text = re.sub(r"^ {0,3}\[[^\]]+\]:\s*\S.*$", "", text, flags=re.M)   # [ref]: url
+    text = re.sub(r"<(https?://|mailto:)[^>\s]*>", LINK, text)
+    text = re.sub(r"\b(https?://|www\.)[^\s<>|)\]]*", LINK, text)
+    text = html.unescape(re.sub(r"</?[A-Za-z][^>]*>", keep_lines, text))  # tags, even across lines
+    out = []
+    for n, line in enumerate(text.split("\n"), 1):
+        s = line.strip()
+        if not s or TABLE_RULE.fullmatch(s):
+            continue
+        if s.startswith("|"):
+            out += [(f"linha {n}", c.strip(), False) for c in re.split(r"(?<!\\)\|", s.strip("|")) if c.strip()]
+        elif s.startswith("#"):
+            out.append((f"linha {n}", s.lstrip("#").strip(), False))
+        else:  # list and quote markers ("2.", "-", ">") are not words, and "2." is not a sentence
+            s = re.sub(r"^(?:>\s*)*(?:(?:[-*+]|\d{1,9}[.)])\s+)?", "", s)
+            if s:
+                out.append((f"linha {n}", s, True))
+    return out
+
+
+def texts(path: Path) -> list[tuple[str, str, bool]]:
+    """(location, text, is_prose) to check; only prose goes into the rhythm checks."""
     raw = path.read_text(encoding="utf-8")
     if path.suffix == ".json":
         data = json.loads(raw)
@@ -76,22 +127,27 @@ def texts(path: Path) -> list[tuple[str, str]]:
         for i, s in enumerate(data.get("scenes", [])):
             for key in ("narration", "on_screen_text"):
                 if s.get(key):
-                    out.append((f"{s.get('id', i)}.{key}", s[key]))
+                    out.append((f"{s.get('id', i)}.{key}", s[key], True))
         return out
     if path.suffix in (".html", ".htm") or path.name.endswith(".dc.html"):
         body = re.sub(r"<(script|style|helmet|svg)\b.*?</\1>", " ", raw, flags=re.S | re.I)
         body = html.unescape(re.sub(r"<[^>]+>", "\n", body))
         lines = [l.strip() for l in body.splitlines() if l.strip()]
-        return [(f"texto {n}", l) for n, l in enumerate(lines, 1)]
-    return [(f"linha {n}", l) for n, l in enumerate(raw.splitlines(), 1) if l.strip()]
+        return [(f"texto {n}", l, True) for n, l in enumerate(lines, 1)]
+    if path.suffix.lower() in (".md", ".markdown"):
+        return markdown(raw)
+    return [(f"linha {n}", l, True) for n, l in enumerate(raw.splitlines(), 1) if l.strip()]
 
 
-SENT = re.compile(r"[^.!?]+[.!?]")
+# A sentence ends at . ! ? (plus closing quotes) followed by a space or the end of the text, so the
+# dots in "R$ 1.000", "2.5", "setup.sh" or a URL do not cut it in two.
+SENT = re.compile(r"\S.*?[.!?]+[\"'”’»)\]]*(?=\s|$)")
 
 
-def rhythm(path: Path, items: list[tuple[str, str]]) -> list[tuple[str, str, str]]:
+def rhythm(path: Path, items: list[tuple[str, str, bool]]) -> list[tuple[str, str, str]]:
     """Whole-text checks: staccato runs and flat cadence (humanizer §31, de-default eixo 2)."""
-    sents = [s.strip() for _, t in items for s in SENT.findall(unicodedata.normalize("NFC", t)) if s.strip()]
+    sents = [s.strip() for _, t, prose in items if prose
+             for s in SENT.findall(unicodedata.normalize("NFC", t)) if s.strip()]
     sizes = [len(s.split()) for s in sents]
     out = []
     for i in range(len(sizes) - 2):
@@ -105,6 +161,9 @@ def rhythm(path: Path, items: list[tuple[str, str]]) -> list[tuple[str, str, str
 
 
 def main() -> int:
+    for stream in (sys.stdout, sys.stderr):  # Windows consoles and pipes default to cp1252
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     if len(sys.argv) < 2:
         print(__doc__)
         return 2
@@ -118,7 +177,7 @@ def main() -> int:
         for level, msg, frag in rhythm(path, items):
             print(f"{path}:ritmo: {level}: {msg} → \"{frag}\"")
             warns += 1
-        for where, text in items:
+        for where, text, _ in items:
             norm = unicodedata.normalize("NFC", text)
             hits = []
             if EMOJI.search(norm):

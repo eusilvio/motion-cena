@@ -21,10 +21,10 @@ Rules: less is more, 1 SFX per important action; never cover keywords; all SFX c
 
 ## SFX sources
 
-1. **ElevenLabs Sound Effects** (`POST /v1/sound-generation`, `{"text": "short airy whoosh, cinematic, clean", "duration_seconds": 0.5}`), generates to order. Script: `scripts/tts_elevenlabs.py --sfx "<prompt>" --duration 0.5 --out audio/sfx/whoosh.mp3`.
+1. **ElevenLabs Sound Effects** (`POST /v1/sound-generation`, `{"text": "short airy whoosh, cinematic, clean", "duration_seconds": 0.5}`), generates to order. Script: `scripts/tts_elevenlabs.py --sfx "<prompt>" --duration 0.5 --out audio/sfx/whoosh.mp3`. Start from `assets/sfx-prompts.json`: prompts and durations that already worked (whoosh, rewind, key, error, vibrate, stamp, signature, paper, tape, printer, metal clink and slide, crunch, car fly-by, engine, crowd, rain), each with when to use it. Generated files stay in the project: ElevenLabs terms forbid publishing them as standalone files or as a sound library, so never copy them into the repository.
 2. **Higgsfield MCP** (audio), if connected.
 3. **Free libraries**: Pixabay Sound Effects, Freesound (check the CC0/CC-BY license and give attribution when required), Kenney (CC0, UI sounds).
-4. **Synthesized locally** (free, offline, always works): `uv run scripts/synth_sfx.py --out projects/<slug>/audio/sfx` generates whoosh, pop, tick, impact, riser, click, glitch.
+4. **Synthesized locally** (free, offline, always works): `uv run scripts/synth_sfx.py --out projects/<slug>/audio/sfx` generates whoosh, pop, tick, impact, riser, click, glitch, ding and beep (`--only beep,ding` for a subset).
 
 ## Music (optional)
 

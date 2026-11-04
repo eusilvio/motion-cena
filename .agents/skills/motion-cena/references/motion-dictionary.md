@@ -14,6 +14,19 @@ When you receive a request in this format, translate it term by term using the t
 
 In `storyboard.json`, the `motion` field uses the same terms: `"título: slide in 0.4s ease out · benefícios: stagger 0.15s · produto: punch zoom em 'agora'"`.
 
+## Expanded catalog (388 effects)
+
+This file holds the **44 curated effects**: each one rendered in a demo and validated. Beyond them, `references/motion-dictionary/` holds a catalog of **388 effects in 16 families** (the 44 included), each with pt-BR name, aliases, mechanism, when to use, what to avoid, defaults for vertical 1080x1920 at 30 fps, genres, pairings and a seek-safe GSAP snippet. Never read those JSON files whole; query them:
+
+```bash
+uv run scripts/motion_lookup.py "texto hacker"          # by term, pt-BR name or alias (accents and case ignored)
+uv run scripts/motion_lookup.py "cortina" --brief       # one line per match: aliases overlap, pick by context
+uv run scripts/motion_lookup.py --family transicoes     # browse a family (--families lists them)
+uv run scripts/motion_lookup.py --family enfase --genre dados --intensity sutil
+```
+
+Order of use: a term in the quick table below → use this file's recipe. Anything else → `motion_lookup.py`; take its `padrao` for omitted parameters and its `gsap` as the starting recipe, adapting targets to the composition. Catalog effects marked as not rendered compile and run in a browser, but nobody has looked at them in a real video yet: check the snapshot of that scene before moving on, and if one looks wrong, fix the scene and say which effect it was. Snippet scope: `tl` (the paused timeline), `t` (start), `el`, `items`, `a`, `b` (outgoing and incoming layer in transitions), `scene`, `gsap`; comments in each snippet say what DOM it expects. A few use free GSAP 3.13+ plugins (DrawSVG, MorphSVG, MotionPath, CustomEase, SplitText): load the plugin script next to `gsap.min.js` and `gsap.registerPlugin(...)` it. Readable list of all ids: `references/motion-dictionary/index.md`.
+
 ## Quick table
 
 | Family | Term | What it is | Default | HyperFrames recipe |
@@ -246,7 +259,7 @@ tl.to(flash, { opacity: 0, duration: 0.25, ease: "power2.out" }, t + 0.08);
 // blinds — N faixas full-width
 tl.fromTo(strips, { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: 0.25, ease: "power3.in", stagger: 0.04 }, t);
 tl.set(A, { opacity: 0 }, t + 0.45); tl.set(B, { opacity: 1 }, t + 0.45);
-tl.fromTo(strips, { scaleY: 1, transformOrigin: "50% 100%" }, { scaleY: 0, duration: 0.25, ease: "power3.out", stagger: 0.04, immediateRender: false }, t + 0.45);
+tl.fromTo(strips, { scaleY: 1, yPercent: 0 }, { scaleY: 0, yPercent: 100, duration: 0.25, ease: "power3.out", stagger: 0.04, immediateRender: false }, t + 0.45); // recolhe para baixo sem trocar a origem (seek-safe)
 // match cut — objeto de A move/escala até a posição do objeto de B, então troca
 tl.to(objA, { x: dx, y: dy, scale: k, borderRadius: r, duration: 0.5, ease: "power3.inOut" }, t);
 tl.set(objA, { opacity: 0 }, t + 0.5); tl.set(sceneB, { opacity: 1 }, t + 0.5);

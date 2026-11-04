@@ -33,7 +33,7 @@ async def synthesize(text: str, voice: str, rate: str, pitch: str, out_dir: Path
                     "start": round(start, 3),
                     "end": round(start + chunk["duration"] / TICKS_PER_SECOND, 3),
                 })
-    (out_dir / "words.json").write_text(json.dumps(words, ensure_ascii=False, indent=1))
+    (out_dir / "words.json").write_text(json.dumps(words, ensure_ascii=False, indent=1), encoding="utf-8")
     duration = words[-1]["end"] if words else 0
     print(f"voice.mp3 + words.json ({len(words)} words, ~{duration:.1f}s) -> {out_dir}")
 

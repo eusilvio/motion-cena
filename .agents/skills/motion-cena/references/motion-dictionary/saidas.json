@@ -1,0 +1,894 @@
+[
+  {
+    "id": "black-hole",
+    "nome": "black hole",
+    "nome_pt": "sugado por um buraco negro",
+    "aliases": [
+      "suck in",
+      "sugar",
+      "ser sugado",
+      "ralo",
+      "buraco negro"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento é sugado em espiral para um ponto, girando e encolhendo cada vez mais rápido.",
+    "como_funciona": "Anima x/y até o ponto de sucção, scale a 0 e rotation 540° com power4.in; o giro acelerando no fim é o que vende o efeito.",
+    "quando_usar": "\"Dinheiro indo embora\", tempo perdido, apagar várias coisas de uma vez, humor.",
+    "evitar": "Em vídeos sérios. Ponto de sucção fora do campo de visão tira o sentido.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power4.in",
+      "parametros": {
+        "destino_px": [
+          0,
+          200
+        ],
+        "rotacao_graus": 540
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "rotation"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "spin-in",
+      "shrink-out"
+    ],
+    "gsap": "tl.fromTo(el, { x: 0, y: 0, scale: 1, rotation: 0 }, { x: 0, y: 200, scale: 0, rotation: 540, duration: 0.6, ease: \"power4.in\", immediateRender: false }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "blur-out",
+    "nome": "blur out",
+    "nome_pt": "sair desfocando",
+    "aliases": [
+      "desfocar saindo",
+      "perder o foco",
+      "sumir desfocado",
+      "blur de saída"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento perde o foco e some ao mesmo tempo, como se a câmera tirasse o foco dele.",
+    "como_funciona": "Anima filter blur de 0 a 20 px com opacity 1 a 0 e power2.in.",
+    "quando_usar": "Fim de frases de efeito, troca de assunto, saída cinematográfica de produto.",
+    "evitar": "Muitas camadas desfocando juntas: render lento. Use em 1 ou 2 elementos.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power2.in",
+      "parametros": {
+        "blur_px": 20
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "blur-in",
+      "fade-out"
+    ],
+    "gsap": "tl.fromTo(el, { filter: \"blur(0px)\", opacity: 1 }, { filter: \"blur(20px)\", opacity: 0, duration: 0.4, ease: \"power2.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "depth-of-field-blur",
+    "origem": "expansao"
+  },
+  {
+    "id": "burn-out",
+    "nome": "burn out",
+    "nome_pt": "estourar em luz e sumir",
+    "aliases": [
+      "fade to white",
+      "fade to black",
+      "queimar para branco",
+      "estourar a luz"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento estoura de brilho, perde a cor e some no branco (ou escurece até o preto).",
+    "como_funciona": "Anima filter brightness de 1 a 3 e saturate de 1 a 0 com opacity 1 a 0 e power2.in. Para preto use brightness(0).",
+    "quando_usar": "Final de memória, fim de história, momento de epifania, saída de foto.",
+    "evitar": "Como transição de cena inteira (isso é flash). Em fundo claro o branco não se destaca.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power2.in",
+      "parametros": {
+        "brilho_final": 3,
+        "variante_preto": "brightness(0)"
+      }
+    },
+    "propriedades": [
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "fade-from-color",
+      "blur-out"
+    ],
+    "gsap": "tl.fromTo(el, { filter: \"brightness(1) saturate(1)\", opacity: 1 }, { filter: \"brightness(3) saturate(0)\", opacity: 0, duration: 0.5, ease: \"power2.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "css-light",
+    "origem": "expansao"
+  },
+  {
+    "id": "clip-out",
+    "nome": "clip out",
+    "nome_pt": "recolher por recorte",
+    "aliases": [
+      "wipe out",
+      "apagar com máscara",
+      "recortar saindo",
+      "fechar de lado"
+    ],
+    "familia": "saidas",
+    "descricao": "Uma borda varre o elemento e vai escondendo ele até não sobrar nada, sem ele se mover.",
+    "como_funciona": "Anima clip-path inset de (0 0 0 0) para (0 0 0 100%): a área visível encolhe para a direita. Mude o lado para outras direções.",
+    "quando_usar": "Saída editorial de imagens, faixas e títulos que entraram com clip reveal.",
+    "evitar": "Sair pelo mesmo lado de onde entrou: parece rebobinar. Saia continuando a direção da entrada.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "power3.inOut",
+      "parametros": {
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "clipPath"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "clip-reveal",
+      "slide-out"
+    ],
+    "gsap": "tl.fromTo(el, { clipPath: \"inset(0% 0% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 100%)\", duration: 0.45, ease: \"power3.inOut\", immediateRender: false }, t);",
+    "receita_hyperframes": "css-cover",
+    "origem": "expansao"
+  },
+  {
+    "id": "collapse",
+    "nome": "collapse",
+    "nome_pt": "colapsar numa linha",
+    "aliases": [
+      "fechar",
+      "achatar",
+      "colapsar",
+      "fechar em linha"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento se achata até virar uma linha fina e a linha encolhe até sumir.",
+    "como_funciona": "Duas etapas: scaleY de 1 a 0.02, depois scaleX de 1 a 0, ambas com power3.in e origem no centro. É o inverso do grow from line.",
+    "quando_usar": "Painéis, caixas de informação, telas de interface e cards técnicos.",
+    "evitar": "Em fotos de pessoas: o achatamento é estranho. Em texto sem esconder antes, as letras esmagam.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.in",
+      "parametros": {
+        "etapa_achatar_s": 0.25,
+        "etapa_linha_s": 0.25
+      }
+    },
+    "propriedades": [
+      "scaleY",
+      "scaleX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "grow-from-line",
+      "fade-out"
+    ],
+    "gsap": "tl.fromTo(el, { scaleY: 1, transformOrigin: \"50% 50%\" }, { scaleY: 0.02, duration: 0.25, ease: \"power3.in\", immediateRender: false }, t);\ntl.to(el, { scaleX: 0, duration: 0.25, ease: \"power3.in\" }, t + 0.25);",
+    "receita_hyperframes": "anchored-layout-expand",
+    "origem": "expansao"
+  },
+  {
+    "id": "dissolve-out",
+    "nome": "dissolve out",
+    "nome_pt": "dissolver",
+    "aliases": [
+      "dissolver",
+      "desintegrar",
+      "virar pó",
+      "evaporar"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento se dissolve em ruído: perde contraste, granula e evapora.",
+    "como_funciona": "Um filtro SVG feTurbulence + feDisplacementMap no elemento; o GSAP anima attr scale do feDisplacementMap de 0 a 120 junto com opacity 1 a 0.",
+    "quando_usar": "Fim de uma ideia, memória que se apaga, \"desaparecer da internet\".",
+    "evitar": "Muitos elementos com filtro SVG juntos pesam o render. Sem o filtro definido no SVG, vira um fade comum.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.in",
+      "parametros": {
+        "deslocamento_max": 120,
+        "filtro": "feTurbulence baseFrequency 0.02"
+      }
+    },
+    "propriedades": [
+      "attr:scale (SVG filter)",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "opiniao",
+      "tecnico"
+    ],
+    "combina_com": [
+      "materialize",
+      "fade-out"
+    ],
+    "gsap": "// disp = o <feDisplacementMap> do filtro aplicado ao el (filter: url(#dissolve))\nconst disp = el.ownerDocument.querySelector(\"#dissolve feDisplacementMap\");\ntl.fromTo(disp, { attr: { scale: 0 } }, { attr: { scale: 120 }, duration: 0.7, ease: \"power2.in\", immediateRender: false }, t);\ntl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.7, ease: \"power2.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "css-dissolve",
+    "origem": "expansao"
+  },
+  {
+    "id": "drop-out",
+    "nome": "drop out",
+    "nome_pt": "cair para fora",
+    "aliases": [
+      "cair",
+      "despencar",
+      "gravidade",
+      "cair da tela"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento perde o apoio e cai para fora da tela, girando um pouco, acelerado pela gravidade.",
+    "como_funciona": "Anima y de 0 a 2000 (sai do quadro de qualquer altura) com power2.in (aceleração de queda) e rotation de 0 a 18°; o pivô num canto reforça a ideia de soltar.",
+    "quando_usar": "Ideias descartadas, preços antigos, \"o jeito errado\", itens que saem de uma lista.",
+    "evitar": "Ease out: parece que alguém puxou e não que caiu. Em CTA ou marca.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.in",
+      "parametros": {
+        "distancia_px": 2000,
+        "rotacao_graus": 18
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "drop-in",
+      "shake"
+    ],
+    "gsap": "// transformOrigin nos valores de destino: no from de um tween com immediateRender: false ele se perde ao voltar a timeline\ntl.fromTo(el, { y: 0, rotation: 0 }, { y: 2000, rotation: 18, duration: 0.6, ease: \"power2.in\", transformOrigin: \"0% 0%\", immediateRender: false }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "fade-out",
+    "nome": "fade out",
+    "nome_pt": "sumir gradualmente",
+    "aliases": [
+      "sumir",
+      "desaparecer",
+      "apagar",
+      "esmaecer"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento perde opacidade até sumir, sem sair do lugar.",
+    "como_funciona": "Anima opacity de 1 a 0 com power2.in: começa devagar e some rápido no fim, que é o certo para saída.",
+    "quando_usar": "Limpar a tela entre ideias, tirar legendas e elementos de apoio.",
+    "evitar": "Ease out em saída (fica arrastado). Saída longa demais (acima de 0.4 s) atrasa a próxima ideia.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power2.in",
+      "parametros": {}
+    },
+    "propriedades": [
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "tecnico",
+      "explicativo",
+      "dados",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "fade-in",
+      "blur-out"
+    ],
+    "gsap": "tl.fromTo(el, { opacity: 1 }, { opacity: 0, duration: 0.3, ease: \"power2.in\", immediateRender: false }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "flip-out",
+    "nome": "flip out",
+    "nome_pt": "virar saindo (3D)",
+    "aliases": [
+      "virar e sumir",
+      "flip de saída",
+      "girar em 3D saindo",
+      "virar carta"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento gira em 3D até ficar de perfil e desaparece, como uma carta virada de costas.",
+    "como_funciona": "Com perspectiva, anima rotationY de 0 a -90 com power3.in e backface-visibility hidden; no perfil ele já não aparece.",
+    "quando_usar": "Trocar cards, revelar o outro lado de algo (combinado com flip in no seguinte).",
+    "evitar": "Sem perspectiva. Encadeado com flip in em ritmo diferente, quebra a ilusão de ser a mesma carta.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.in",
+      "parametros": {
+        "perspectiva_px": 1000,
+        "eixo": [
+          "Y",
+          "X"
+        ]
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "flip-in",
+      "peel-off"
+    ],
+    "gsap": "tl.set(el, { transformPerspective: 1000, backfaceVisibility: \"hidden\" }, t);\ntl.fromTo(el, { rotationY: 0, opacity: 1 }, { rotationY: -90, opacity: 0, duration: 0.4, ease: \"power3.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "css-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "fly-away",
+    "nome": "fly away",
+    "nome_pt": "voar para longe",
+    "aliases": [
+      "voar",
+      "ir embora voando",
+      "fly away",
+      "subir e sumir"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento sobe em diagonal para longe, encolhendo e girando, como um papel levado pelo vento.",
+    "como_funciona": "Anima x e y para cima e para o lado (300, -1100), scale a 0.5 e rotation -25° com power2.in, opacity caindo no fim.",
+    "quando_usar": "Despedidas, \"deixe isso para trás\", liberar a tela de forma leve.",
+    "evitar": "Em saídas que precisam ser rápidas e secas. Mais de um voando juntos parece bagunça.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.in",
+      "parametros": {
+        "destino_px": [
+          300,
+          -1100
+        ],
+        "rotacao_graus": -25,
+        "escala_final": 0.5
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "fade-out",
+      "drop-out"
+    ],
+    "gsap": "tl.fromTo(el, { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 }, { keyframes: { x: [0, 120, 300], y: [0, -400, -1100], scale: [1, 0.8, 0.5], rotation: [0, -10, -25], opacity: [1, 1, 0] }, duration: 0.7, ease: \"power2.in\", immediateRender: false }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "fold-up",
+    "nome": "fold up",
+    "nome_pt": "dobrar e guardar",
+    "aliases": [
+      "dobrar",
+      "fechar como papel",
+      "fold out",
+      "recolher dobrando"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento se dobra para trás a partir do topo, como um papel sendo fechado, e some.",
+    "como_funciona": "Com perspectiva, anima rotationX de 0 a 90 com transformOrigin no topo e power3.in, com opacity caindo no fim.",
+    "quando_usar": "Fechar cards de lista, balões de informação e menus que entraram com unfold.",
+    "evitar": "Sem perspectiva no pai. Em fotos grandes vira um movimento pesado.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.in",
+      "parametros": {
+        "perspectiva_px": 1200,
+        "origem": "topo"
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "unfold",
+      "collapse"
+    ],
+    "gsap": "tl.set(el, { transformPerspective: 1200, transformOrigin: \"50% 0%\" }, t);\ntl.fromTo(el, { rotationX: 0, opacity: 1 }, { rotationX: 90, opacity: 0, duration: 0.4, ease: \"power3.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "anchored-layout-expand",
+    "origem": "expansao"
+  },
+  {
+    "id": "peel-off",
+    "nome": "peel off",
+    "nome_pt": "descolar como adesivo",
+    "aliases": [
+      "descolar",
+      "arrancar adesivo",
+      "peel",
+      "virar a página"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento descola a partir de um canto, dobrando em 3D, como um adesivo sendo arrancado.",
+    "como_funciona": "Com perspectiva, anima rotationY a -110 e rotationX a 20 com transformOrigin na borda esquerda, power2.in, e some no fim.",
+    "quando_usar": "Adesivos, post-its, etiquetas, páginas de um caderno digital.",
+    "evitar": "Sem perspectiva o efeito vira achatamento. Em elementos centrais grandes parece porta abrindo.",
+    "padrao": {
+      "duracao_s": 0.55,
+      "ease": "power2.in",
+      "parametros": {
+        "perspectiva_px": 1200,
+        "angulo_graus": -110
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "historia"
+    ],
+    "combina_com": [
+      "flip-out",
+      "unfold"
+    ],
+    "gsap": "tl.set(el, { transformPerspective: 1200, transformOrigin: \"0% 50%\" }, t);\ntl.fromTo(el, { rotationY: 0, rotationX: 0, opacity: 1 }, { rotationY: -110, rotationX: 20, opacity: 0, duration: 0.55, ease: \"power2.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "css-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "pop-out",
+    "nome": "pop out",
+    "nome_pt": "estourar para fora",
+    "aliases": [
+      "pop de saída",
+      "estourar",
+      "bolha estourando",
+      "pipocar saindo"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento infla um pouco, como uma bolha, e então some num estalo.",
+    "como_funciona": "Dois passos: scale 1 a 1.12 em 0.1 s (power2.out), depois scale a 0 e opacity a 0 em 0.18 s (power3.in). A inflada antes é a antecipação.",
+    "quando_usar": "Notificações, bolhas, ícones de reação e elementos lúdicos que saem com graça.",
+    "evitar": "Em blocos grandes ou sérios. Inflar demais (acima de 1.2) parece engasgo.",
+    "padrao": {
+      "duracao_s": 0.28,
+      "ease": "power3.in",
+      "parametros": {
+        "escala_pico": 1.12
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "pop-in",
+      "shrink-out"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 1 }, { scale: 1.12, duration: 0.1, ease: \"power2.out\", immediateRender: false }, t);\ntl.to(el, { scale: 0, opacity: 0, duration: 0.18, ease: \"power3.in\" }, t + 0.1);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "scatter-out",
+    "nome": "scatter out",
+    "nome_pt": "espalhar e sumir",
+    "aliases": [
+      "explodir",
+      "espalhar",
+      "desmontar",
+      "estilhaçar"
+    ],
+    "familia": "saidas",
+    "descricao": "As partes de um elemento se espalham em todas as direções, girando, e somem.",
+    "como_funciona": "Cada peça vai a um deslocamento fixo derivado do índice (x, y, rotation) com power3.in e opacity a 0. Saída correspondente ao assemble.",
+    "quando_usar": "Logo desmontando, título que \"explode\", desfazer um conceito, fim de cena com impacto.",
+    "evitar": "Peças pequenas demais ou muitas (acima de 40) pesam e viram poeira sem leitura. Nada de Math.random.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.in",
+      "parametros": {
+        "raio_px": 500,
+        "stagger_s": 0.01
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "assemble-in",
+      "shake"
+    ],
+    "gsap": "// destino determinístico por índice (seed fixa)\nconst off = (i, k) => Math.sin(i * 12.9898 + k * 78.233) * 500;\ntl.fromTo(items, { x: 0, y: 0, rotation: 0, opacity: 1 }, { x: (i) => off(i, 1), y: (i) => off(i, 2), rotation: (i) => off(i, 3) / 3, opacity: 0, duration: 0.6, ease: \"power3.in\", stagger: 0.01, immediateRender: false }, t);",
+    "receita_hyperframes": "depth-scatter-assemble",
+    "origem": "expansao"
+  },
+  {
+    "id": "shrink-out",
+    "nome": "shrink out",
+    "nome_pt": "encolher até sumir",
+    "aliases": [
+      "encolher",
+      "scale down",
+      "diminuir até sumir",
+      "scale out"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento encolhe até virar um ponto e desaparece.",
+    "como_funciona": "Anima scale de 1 a 0 com power3.in, com opacity caindo no fim. É a saída natural de quem entrou com scale up.",
+    "quando_usar": "Ícones, selos, bolhas e formas que saem para dar lugar a outra coisa.",
+    "evitar": "Em texto grande: as letras ficam ilegíveis antes de sumir. Ease out aqui parece frear sem motivo.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power3.in",
+      "parametros": {}
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "scale-up",
+      "pop-out"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 1, opacity: 1 }, { scale: 0, opacity: 0, duration: 0.35, ease: \"power3.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "scale-swap-transition",
+    "origem": "expansao"
+  },
+  {
+    "id": "slide-out",
+    "nome": "slide out",
+    "nome_pt": "sair deslizando",
+    "aliases": [
+      "deslizar para fora",
+      "sair de lado",
+      "slide down",
+      "empurrar para fora"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento desliza para fora do lugar enquanto some, ganhando velocidade ao sair.",
+    "como_funciona": "Anima x (ou y) de 0 a 120 px com opacity 1 a 0 e power3.in. Troque o sinal e o eixo para outras direções.",
+    "quando_usar": "Tirar títulos e cards abrindo espaço, de preferência na direção em que a próxima coisa vem.",
+    "evitar": "Sair para o lado oposto da entrada sem motivo: confunde a leitura espacial.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power3.in",
+      "parametros": {
+        "distancia_px": 120,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "slide-in",
+      "stagger-out"
+    ],
+    "gsap": "tl.fromTo(el, { x: 0, opacity: 1 }, { x: 120, opacity: 0, duration: 0.35, ease: \"power3.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "nudge-curve",
+    "origem": "expansao"
+  },
+  {
+    "id": "squeeze-out",
+    "nome": "squeeze out",
+    "nome_pt": "espremer até sumir",
+    "aliases": [
+      "espremer",
+      "apertar",
+      "squeeze",
+      "achatar dos lados"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento é espremido pelas laterais, fica fino e alto, e some como uma fita.",
+    "como_funciona": "Anima scaleX de 1 a 0 e scaleY de 1 a 1.25 juntos com power3.in, mantendo o volume aparente.",
+    "quando_usar": "Elementos lúdicos, ícones, botões e transições de uma ideia para outra.",
+    "evitar": "Em fotos e textos longos. Se o scaleY não crescer, vira só um collapse lateral.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power3.in",
+      "parametros": {
+        "scaleY_final": 1.25
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "stretch-in",
+      "jelly-in"
+    ],
+    "gsap": "tl.fromTo(el, { scaleX: 1, scaleY: 1, opacity: 1 }, { scaleX: 0, scaleY: 1.25, opacity: 0.6, duration: 0.35, ease: \"power3.in\", immediateRender: false }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "stagger-out",
+    "nome": "exit stagger",
+    "nome_pt": "saída em sequência reversa",
+    "aliases": [
+      "stagger de saída",
+      "sair um por um",
+      "saída em cascata",
+      "stagger reverso"
+    ],
+    "familia": "saidas",
+    "descricao": "Os itens saem um depois do outro, começando pelo último que entrou, como se a lista fosse recolhida.",
+    "como_funciona": "fromTo em items com stagger: { each, from: \"end\" }, power3.in, y para cima e opacity a 0. Atraso menor que o da entrada.",
+    "quando_usar": "Limpar listas, tópicos e grades antes da próxima cena.",
+    "evitar": "Saída mais lenta que a entrada: a cena se arrasta. Mantenha a cascata abaixo de 0.5 s.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power3.in",
+      "parametros": {
+        "stagger_s": 0.05,
+        "from": "end",
+        "distancia_px": 30
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto",
+      "dados"
+    ],
+    "combina_com": [
+      "stagger",
+      "slide-out"
+    ],
+    "gsap": "tl.fromTo(items, { y: 0, opacity: 1 }, { y: -30, opacity: 0, duration: 0.3, ease: \"power3.in\", stagger: { each: 0.05, from: \"end\" }, immediateRender: false }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "tuck-out",
+    "nome": "tuck out",
+    "nome_pt": "recolher para trás de uma borda",
+    "aliases": [
+      "recolher",
+      "esconder atrás",
+      "sair por baixo da máscara",
+      "guardar"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento desce e some atrás de uma borda invisível, como se entrasse por uma fresta.",
+    "como_funciona": "O pai tem overflow: hidden; o elemento anima yPercent de 0 a 110 com power3.in. Sem opacity: é a borda que esconde.",
+    "quando_usar": "Cards e blocos que entraram subindo de trás de uma máscara, rodapés, etiquetas.",
+    "evitar": "Sem overflow hidden no pai ele só desce pela tela. Para linhas de texto use a saída da família texto.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.in",
+      "parametros": {
+        "yPercent_final": 110,
+        "direcoes": [
+          "baixo",
+          "cima"
+        ]
+      }
+    },
+    "propriedades": [
+      "yPercent"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "slide-out",
+      "stagger-out"
+    ],
+    "gsap": "// pai com overflow: hidden\ntl.fromTo(el, { yPercent: 0 }, { yPercent: 110, duration: 0.4, ease: \"power3.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "vertical-spring-ticker",
+    "origem": "expansao"
+  },
+  {
+    "id": "whip-out",
+    "nome": "whip out",
+    "nome_pt": "saída chicote com borrão",
+    "aliases": [
+      "zap de saída",
+      "sair num tranco",
+      "whip out",
+      "sair com motion blur"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento sai num tranco rapidíssimo com rastro de borrão, como se fosse arrancado da tela.",
+    "como_funciona": "Anima x de 0 a 1200 (sai do quadro de qualquer posição) com expo.in e filter blur com keyframes 0, 8, 26 px acompanhando a aceleração.",
+    "quando_usar": "Descartar uma ideia com energia, cortes rápidos, sair antes do whip in do próximo elemento.",
+    "evitar": "Sem blur vira slide out apressado. Em toda saída do vídeo cansa.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "expo.in",
+      "parametros": {
+        "distancia_px": 1200,
+        "blur_pico_px": 26
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "whip-in",
+      "slide-out"
+    ],
+    "gsap": "tl.fromTo(el, { x: 0 }, { x: 1200, duration: 0.35, ease: \"expo.in\", immediateRender: false }, t);\ntl.fromTo(el, { filter: \"blur(0px)\" }, { keyframes: { filter: [\"blur(0px)\", \"blur(8px)\", \"blur(26px)\"] }, duration: 0.35, ease: \"none\", immediateRender: false }, t);",
+    "receita_hyperframes": "motion-blur-streak",
+    "origem": "expansao"
+  },
+  {
+    "id": "zoom-past",
+    "nome": "zoom past",
+    "nome_pt": "passar pela câmera",
+    "aliases": [
+      "fly out",
+      "vir para cima da câmera",
+      "zoom out de saída",
+      "atravessar a tela"
+    ],
+    "familia": "saidas",
+    "descricao": "O elemento cresce na direção da câmera, desfoca e passa por ela, sumindo para fora do quadro.",
+    "como_funciona": "Anima scale de 1 a 3.5, filter blur 0 a 16 px e opacity 1 a 0 com power3.in. Saída correspondente ao fly in.",
+    "quando_usar": "Fechar uma ideia com energia, passar de um título para o conteúdo, sair de um número grande.",
+    "evitar": "Junto com zoom through na mesma cena (vira redundante). Blur em muitos elementos pesa.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "power3.in",
+      "parametros": {
+        "escala_final": 3.5,
+        "blur_px": 16
+      }
+    },
+    "propriedades": [
+      "scale",
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "fly-in",
+      "blur-out"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 1, filter: \"blur(0px)\", opacity: 1 }, { scale: 3.5, filter: \"blur(16px)\", opacity: 0, duration: 0.45, ease: \"power3.in\", immediateRender: false }, t);",
+    "receita_hyperframes": "css-scale",
+    "origem": "expansao"
+  }
+]

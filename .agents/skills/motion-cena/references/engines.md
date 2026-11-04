@@ -25,8 +25,8 @@ npx hyperframes lint && npx hyperframes check
 npx hyperframes snapshot          # frames para inspeção
 npx hyperframes render            # MP4
 ```
-Useful skills: `/hyperframes` (router), `/motion-graphics`, `/faceless-explainer`, `/hyperframes-animation`, `/hyperframes-keyframes`, `/hyperframes-audio` (ducking, mix), `/media-use` (TTS/SFX/music), `/hyperframes-cli`.
-Format: root element with id/size; each timed element has the `clip` class with start/duration/track attributes; animation in a **paused** GSAP timeline registered globally so the renderer can seek any frame. Audio as an element with time and volume. Confirm the exact attribute names in the `/hyperframes-core` skill.
+Engine docs, read only the part you need: composition basics in `hyperframes-core/references/` (`minimal-composition.md`, `data-attributes.md`, `determinism-rules.md`, `sub-compositions.md`), effect rules in `hyperframes-animation/rules/`, CLI in `hyperframes-cli`, media in `media-use`. `hyperframes-keyframes` (camera moves) and `hyperframes-audio` (ducking, mix) live in `.agents/skills/` too; open them as documents only when a scene needs them.
+Format: root element with id/size; each timed element has the `clip` class with start/duration/track attributes; animation in a **paused** GSAP timeline registered globally so the renderer can seek any frame. Audio as an element with time and volume. Exact attribute names: `hyperframes-core/references/data-attributes.md`.
 Mapping: each scene in `timeline.json` → one `clip` with `start = scene.start`, `duration = scene.end - scene.start`; each `anchor` → a label/tween in the GSAP timeline at `anchor.start - 0.12`.
 
 ## Remotion: workflow

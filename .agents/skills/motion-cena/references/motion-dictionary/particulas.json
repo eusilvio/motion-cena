@@ -1,0 +1,533 @@
+[
+  {
+    "id": "bubbles",
+    "nome": "bubbles",
+    "nome_pt": "bolhas",
+    "aliases": [
+      "bolhas subindo",
+      "bolinhas de sabão",
+      "efervescente",
+      "borbulhas"
+    ],
+    "familia": "particulas",
+    "descricao": "Bolhas de tamanhos diferentes sobem balançando de um lado para o outro e estouram no alto.",
+    "como_funciona": "Cada bolha parte de uma altura sorteada por seed e sobe em y linear na sua velocidade durante a cena (sem passar dela); um segundo tween em x oscila com sine.inOut em yoyo finito; no topo ela cresce e some.",
+    "quando_usar": "Bebidas, produtos de limpeza e beleza, temas aquáticos, conteúdo infantil.",
+    "evitar": "Com texto importante atrás; bolhas demais tiram o foco.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "bolhas": 18,
+        "subida_s": [
+          5,
+          7.5
+        ],
+        "balanço_px": 20
+      }
+    },
+    "propriedades": [
+      "y",
+      "x",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "float",
+      "dust-float"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = círculos com borda clara; origem no centro da cena\nconst r = rng(64);\nitems.forEach((b) => {\n  // rise = segundos para atravessar a tela; cada bolha parte de uma altura sorteada e sobe a cena inteira\n  const x0 = (r() - 0.5) * 900, s = 0.4 + r() * 0.8, rise = 5 + r() * 2.5, y0 = 1000 - r() * 1400;\n  const speed = 2000 / rise, pop = (y0 + 840) / speed; // instante em que chega ao alto e estoura\n  const life = Math.min(sceneDur, pop);\n  tl.fromTo(b, { y: y0, scale: s, opacity: 0.8 }, { y: y0 - speed * life, duration: life, ease: \"none\" }, t);\n  tl.fromTo(b, { x: x0 - 20 }, { x: x0 + 20, duration: 0.8, ease: \"sine.inOut\", yoyo: true, repeat: Math.max(0, Math.floor(life / 0.8) - 1) }, t);\n  if (pop + 0.12 <= sceneDur) tl.fromTo(b, { scale: s, opacity: 0.8 }, { scale: s * 1.4, opacity: 0, duration: 0.12, immediateRender: false }, t + pop);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "confetti",
+    "nome": "confetti",
+    "nome_pt": "confete",
+    "aliases": [
+      "confete",
+      "chuva de papel",
+      "comemoração",
+      "confetti pop"
+    ],
+    "familia": "particulas",
+    "descricao": "Papeizinhos coloridos estouram para cima a partir de um ponto, giram e caem com a gravidade.",
+    "como_funciona": "Cada papel tem ângulo, velocidade e giro sorteados por seed fixa na montagem; x anda com power1.out, y sobe com power2.out e cai com power1.in em keyframes, e a opacity some no final.",
+    "quando_usar": "Conquista, meta batida, lançamento, número de resultado, CTA comemorativo.",
+    "evitar": "Em tema sério; mais de 60 papéis pesa e polui.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "power1.out",
+      "parametros": {
+        "particulas": 40,
+        "velocidade_px": [
+          700,
+          1300
+        ],
+        "abertura_rad": 1.6,
+        "queda_px": 900
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "produto",
+      "dados"
+    ],
+    "combina_com": [
+      "count-up",
+      "pop-in",
+      "explosion-burst"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = 40 retângulos pequenos no ponto de origem (cores da paleta por índice)\nconst r = rng(42);\nitems.forEach((c) => {\n  const ang = -Math.PI / 2 + (r() - 0.5) * 1.6, v = 700 + r() * 600;\n  const dx = Math.cos(ang) * v, up = Math.sin(ang) * v * 0.6;\n  tl.fromTo(c, { x: 0, rotation: 0, rotationX: 0 }, { x: dx, rotation: (r() - 0.5) * 1080, rotationX: r() * 720, duration: 1.6, ease: \"power1.out\" }, t);\n  tl.fromTo(c, { y: 0 }, { keyframes: [{ y: up, duration: 0.45, ease: \"power2.out\" }, { y: up + 900, duration: 1.15, ease: \"power1.in\" }] }, t);\n  tl.fromTo(c, { opacity: 1 }, { opacity: 0, duration: 0.3 }, t + 1.3);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "dust-float",
+    "nome": "dust float",
+    "nome_pt": "poeira flutuando",
+    "aliases": [
+      "partículas no ar",
+      "poeira no ar",
+      "pó flutuando",
+      "floating particles"
+    ],
+    "familia": "particulas",
+    "descricao": "Partículas de poeira iluminadas flutuam devagar pela cena e cintilam, dando ar e profundidade.",
+    "como_funciona": "Cada partícula recebe posição, deriva e tamanho por seed fixa; anda linear pela cena inteira e a opacity respira em yoyo com repeat finito calculado pela duração.",
+    "quando_usar": "Cenas calmas, depoimento, produto em fundo escuro, abertura atmosférica.",
+    "evitar": "Partículas grandes ou rápidas (viram neve ou bolhas). Com fundo claro some.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "particulas": 30,
+        "deriva_y_px": [
+          60,
+          180
+        ],
+        "respiro_s": [
+          3,
+          6
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "light-leak",
+      "push-in",
+      "bloom"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = pontinhos claros com blur leve, origem no centro da cena\nconst r = rng(23);\nitems.forEach((d) => {\n  const x0 = (r() - 0.5) * 1000, y0 = (r() - 0.5) * 1800, dx = (r() - 0.5) * 120, dy = 60 + r() * 120, br = 3 + r() * 3;\n  tl.fromTo(d, { x: x0, y: y0 }, { x: x0 + dx, y: y0 - dy, duration: sceneDur, ease: \"none\" }, t);\n  tl.fromTo(d, { opacity: 0.15 }, { opacity: 0.6, duration: br / 2, ease: \"sine.inOut\", yoyo: true, repeat: Math.max(0, Math.floor(sceneDur / (br / 2)) - 1) }, t);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "explosion-burst",
+    "nome": "explosion burst",
+    "nome_pt": "explosão",
+    "aliases": [
+      "explosão",
+      "boom",
+      "estouro",
+      "burst"
+    ],
+    "familia": "particulas",
+    "descricao": "Um clarão, uma onda de choque em anel e destroços voando para todo lado ao mesmo tempo.",
+    "como_funciona": "Três camadas no mesmo t: clarão (scale 0,2 → 2,2 sumindo em 0,3 s), anel (scale 0 → 3 com expo.out) e destroços em ângulos regulares com distância e giro sorteados por seed.",
+    "quando_usar": "Revelação bombástica, número chocante, \"explodiu\" de vendas, abertura energética.",
+    "evitar": "Em vídeos calmos; não repita no mesmo vídeo.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "expo.out",
+      "parametros": {
+        "destrocos": 16,
+        "distancia_px": [
+          300,
+          700
+        ],
+        "anel_escala": 3
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "dados",
+      "produto"
+    ],
+    "combina_com": [
+      "slam",
+      "shake",
+      "confetti"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = [clarão, anel, ...destroços], todos no ponto de origem\nconst [flash, ring, ...debris] = items, r = rng(77);\ntl.fromTo(flash, { scale: 0.2, opacity: 1 }, { scale: 2.2, opacity: 0, duration: 0.3, ease: \"power2.out\" }, t);\ntl.fromTo(ring, { scale: 0, opacity: 0.9 }, { scale: 3, opacity: 0, duration: 0.55, ease: \"expo.out\" }, t);\ndebris.forEach((d, i) => {\n  const ang = (i / debris.length) * Math.PI * 2, dist = 300 + r() * 400;\n  tl.fromTo(d, { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 }, { x: Math.cos(ang) * dist, y: Math.sin(ang) * dist, scale: 0.3, rotation: (r() - 0.5) * 720, opacity: 0, duration: 0.7 + r() * 0.3, ease: \"expo.out\" }, t);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "magnetic-particles",
+    "nome": "magnetic particles",
+    "nome_pt": "partículas atraídas",
+    "aliases": [
+      "partículas se juntando",
+      "ímã",
+      "formar o logo",
+      "assemble de partículas"
+    ],
+    "familia": "particulas",
+    "descricao": "Partículas espalhadas pela tela são puxadas como por um ímã e se juntam formando um logo, ícone ou palavra.",
+    "como_funciona": "Cada partícula tem posição final no CSS (o desenho do logo) e parte de um ponto sorteado por seed, com giro; o ease power4.in acelera na chegada e um ajuste curto com back.out assenta.",
+    "quando_usar": "Revelação de logo, \"tudo se conecta\", produto montado a partir de dados.",
+    "evitar": "Muitas partículas pequenas em DOM (acima de ~200 pesa); confundir com scatter 3D (este é plano).",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power4.in",
+      "parametros": {
+        "particulas": 80,
+        "espalhamento_px": [
+          1100,
+          1800
+        ],
+        "stagger_total_s": 0.3
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "scatter-3d-assemble",
+      "bloom",
+      "pulse"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = partículas já na posição final do desenho; partem espalhadas\nconst r = rng(50), from = items.map(() => ({ x: (r() - 0.5) * 1100, y: (r() - 0.5) * 1800, rotation: (r() - 0.5) * 360 }));\ntl.fromTo(items, { x: (i) => from[i].x, y: (i) => from[i].y, rotation: (i) => from[i].rotation, scale: 0.6 }, { x: 0, y: 0, rotation: 0, scale: 1.15, duration: 0.8, ease: \"power4.in\", stagger: { amount: 0.3 } }, t);\ntl.fromTo(items, { scale: 1.15 }, { scale: 1, duration: 0.25, ease: \"back.out(2)\", immediateRender: false }, t + 1.1);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "particle-trail",
+    "nome": "trail de partículas",
+    "nome_pt": "rastro de partículas",
+    "aliases": [
+      "particle trail",
+      "rastro brilhante",
+      "pó de fada",
+      "cometa"
+    ],
+    "familia": "particulas",
+    "descricao": "Um objeto em movimento solta partículas pelo caminho, que ficam para trás, caem um pouco e se apagam.",
+    "como_funciona": "O líder anda linear de x0 a x1; cada partícula i nasce no instante proporcional ao seu índice, na posição calculada do líder naquele instante, e depois desce, encolhe e some.",
+    "quando_usar": "Cursor ou ícone percorrendo a tela, varinha mágica, foguete, destaque de trajeto.",
+    "evitar": "Confundir com motion trail (cópias do próprio objeto). Partículas grandes viram bolinhas soltas.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "none",
+      "parametros": {
+        "particulas": 24,
+        "percurso_px": 900,
+        "vida_s": 0.6
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "historia"
+    ],
+    "combina_com": [
+      "sparks",
+      "motion-trail"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = [líder, ...partículas]; todos na mesma linha de origem\nconst [lead, ...dots] = items, r = rng(9), x0 = -450, x1 = 450, dur = 1.2;\ntl.fromTo(lead, { x: x0 }, { x: x1, duration: dur, ease: \"none\" }, t);\ndots.forEach((d, i) => {\n  const f = i / dots.length, ts = t + dur * f;\n  // escondida desde o início; acende na posição do líder no instante ts, depois cai e some\n  tl.fromTo(d, { x: x0 + (x1 - x0) * f, y: 0, scale: 1, opacity: 0 }, { opacity: 0.9, duration: 0.01, ease: \"none\" }, ts);\n  tl.fromTo(d, { y: 0, scale: 1, opacity: 0.9 }, { y: 30 + (r() - 0.5) * 80, scale: 0.2, opacity: 0, duration: 0.6, ease: \"power2.out\", immediateRender: false }, ts + 0.01);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "rain",
+    "nome": "rain",
+    "nome_pt": "chuva",
+    "aliases": [
+      "chuva caindo",
+      "garoa",
+      "tempestade",
+      "pingos"
+    ],
+    "familia": "particulas",
+    "descricao": "Riscos finos de chuva caem inclinados e rápidos sobre a cena.",
+    "como_funciona": "Cada pingo é um traço alongado rotacionado 12 graus; desce em 0,5 a 0,8 s com ease none e repete em loop finito, com atraso e posição em x sorteados por seed.",
+    "quando_usar": "Clima melancólico, dia difícil, previsão do tempo, cena de tensão.",
+    "evitar": "Pingos grossos e opacos (parecem riscos de tela) ou chuva sobre texto pequeno.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "pingos": 60,
+        "queda_s": [
+          0.5,
+          0.8
+        ],
+        "inclinacao_graus": 12,
+        "opacity": 0.35
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "color-grade-shift",
+      "vignette-pulse"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = traços finos (2x60 px, branco translúcido); origem no centro\nconst r = rng(19);\nitems.forEach((d) => {\n  const dur = 0.5 + r() * 0.3, x0 = (r() - 0.5) * 1300, off = r() * dur;\n  tl.set(d, { rotation: 12, opacity: 0.35 }, t);\n  tl.fromTo(d, { x: x0, y: -1050 }, { x: x0 - 220, y: 1050, duration: dur, ease: \"none\", repeat: Math.max(0, Math.floor((sceneDur - off) / dur) - 1) }, t + off);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "smoke-puff",
+    "nome": "smoke puff",
+    "nome_pt": "nuvem de fumaça",
+    "aliases": [
+      "fumaça",
+      "puff",
+      "poeira de impacto",
+      "nuvenzinha"
+    ],
+    "familia": "particulas",
+    "descricao": "Uma nuvem de fumaça sai de um ponto, se espalha, sobe um pouco e se dissolve, como objeto que pousa ou some num passe de mágica.",
+    "como_funciona": "Cinco a oito círculos borrados (filter blur) partem pequenos do ponto, crescem em scale, se afastam em ângulos fixos com leve subida e perdem opacity com power2.out.",
+    "quando_usar": "Objeto pousando, algo desaparecendo, \"puf\" de humor, personagem chegando.",
+    "evitar": "Fumaça como fundo contínuo (use dust float); nuvem com bordas duras.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power2.out",
+      "parametros": {
+        "nuvens": 7,
+        "raio_px": [
+          80,
+          160
+        ],
+        "escala_final": [
+          2,
+          3.2
+        ],
+        "subida_px": 60
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "squash-stretch",
+      "pop-in"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = círculos cinza-claro com filter: blur(12px) no CSS, no ponto de origem\nconst r = rng(36);\nitems.forEach((c, i) => {\n  const ang = (i / items.length) * Math.PI * 2, d = 80 + r() * 80;\n  tl.fromTo(c, { x: 0, y: 0, scale: 0.3, opacity: 0.9 }, { x: Math.cos(ang) * d, y: Math.sin(ang) * d * 0.5 - 60, scale: 2 + r() * 1.2, opacity: 0, duration: 0.8 + r() * 0.2, ease: \"power2.out\" }, t);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "snow",
+    "nome": "snow",
+    "nome_pt": "neve caindo",
+    "aliases": [
+      "neve",
+      "flocos",
+      "nevando",
+      "inverno"
+    ],
+    "familia": "particulas",
+    "descricao": "Flocos de neve caem em velocidades diferentes; os de longe são menores, mais lentos e desfocados.",
+    "como_funciona": "Cada floco tem uma profundidade sorteada por seed que define tamanho, blur, opacity e tempo de queda; cada floco parte de uma altura sorteada e anda em linha reta pela cena inteira; um modifier com gsap.utils.wrap leva quem sai embaixo de volta ao topo (loop sem repeat, sem passar da cena).",
+    "quando_usar": "Natal, frio, cenas calmas de fim de ano, clima nostálgico.",
+    "evitar": "Neve rápida demais (vira chuva) ou flocos todos iguais (sem profundidade).",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "flocos": 40,
+        "queda_s": [
+          4,
+          9
+        ],
+        "blur_max_px": 3
+      }
+    },
+    "propriedades": [
+      "y",
+      "x",
+      "scale",
+      "opacity",
+      "filter"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "dust-float",
+      "push-in"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = flocos (círculos brancos); origem no centro da cena\nconst r = rng(88), wrapY = gsap.utils.unitize(gsap.utils.wrap(-1000, 1000)); // sai embaixo, volta no topo\nitems.forEach((f) => {\n  const depth = r(), fall = 4 + (1 - depth) * 5, y0 = -1000 + r() * 2000, x0 = (r() - 0.5) * 1080;\n  // um tween linear por floco cobrindo a cena; o wrap dá o loop sem repeat (nada passa da cena)\n  tl.fromTo(f, { x: x0, y: y0, scale: 0.4 + depth * 0.8, opacity: 0.5 + depth * 0.5, filter: `blur(${((1 - depth) * 3).toFixed(1)}px)` },\n    { y: y0 + 2000 * sceneDur / fall, duration: sceneDur, ease: \"none\", modifiers: { y: wrapY } }, t);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "sparks",
+    "nome": "sparks",
+    "nome_pt": "faíscas",
+    "aliases": [
+      "faísca",
+      "fagulha",
+      "estrelinhas de impacto",
+      "impact sparks"
+    ],
+    "familia": "particulas",
+    "descricao": "Riscos curtos de luz saltam em volta de um ponto de impacto e apagam em menos de meio segundo.",
+    "como_funciona": "Cada faísca é um traço alongado, rotacionado na direção do seu ângulo; anda para fora com power3.out, encurta em scaleX e some, com leve queda em y.",
+    "quando_usar": "Batida, clique, palavra que cai (junto com slam), metal, energia.",
+    "evitar": "Faíscas lentas (viram confete) ou em tela cheia.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "power3.out",
+      "parametros": {
+        "particulas": 14,
+        "raio_px": [
+          120,
+          280
+        ],
+        "queda_px": 40
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "scaleX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "slam",
+      "pulse",
+      "shake"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\n\n// items = traços finos (ex.: 24x3 px), transformOrigin no início do traço\nconst r = rng(11);\nitems.forEach((s, i) => {\n  const ang = (i / items.length) * Math.PI * 2 + (r() - 0.5) * 0.4, d = 120 + r() * 160;\n  tl.fromTo(s, { x: 0, y: 0, rotation: ang * 180 / Math.PI, scaleX: 1.6, opacity: 1 }, { x: Math.cos(ang) * d, y: Math.sin(ang) * d + 40, scaleX: 0.2, opacity: 0, duration: 0.35 + r() * 0.15, ease: \"power3.out\" }, t);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "starfield",
+    "nome": "starfield",
+    "nome_pt": "campo de estrelas",
+    "aliases": [
+      "estrelas vindo",
+      "warp",
+      "hiperespaço",
+      "velocidade da luz"
+    ],
+    "familia": "particulas",
+    "descricao": "Estrelas saem do centro e passam pela câmera em todas as direções, como nave entrando em velocidade.",
+    "como_funciona": "Cada estrela tem ângulo, duração e defasagem sorteados por seed; vai de perto do centro até fora da tela crescendo em scale com power2.in, em loop finito.",
+    "quando_usar": "Abertura épica, \"vamos acelerar\", tecnologia, espaço, contagem regressiva.",
+    "evitar": "Como fundo de texto longo (distrai) ou em cena calma.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "power2.in",
+      "parametros": {
+        "estrelas": 60,
+        "duracao_s": [
+          1,
+          2.2
+        ],
+        "raio_final_px": [
+          900,
+          1200
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "tecnico",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "zoom-through",
+      "motion-blur"
+    ],
+    "gsap": "const rng = (s) => () => ((s = (s * 16807) % 2147483647) / 2147483647); // pseudoaleatório com seed fixa\nconst sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = pontos brancos no centro da cena\nconst r = rng(3);\nitems.forEach((s) => {\n  const ang = r() * Math.PI * 2, d = 900 + r() * 300, dur = 1 + r() * 1.2, off = r() * dur;\n  tl.fromTo(s, { x: Math.cos(ang) * 40, y: Math.sin(ang) * 40, scale: 0.1, opacity: 0 }, { x: Math.cos(ang) * d, y: Math.sin(ang) * d, scale: 1.4, opacity: 1, duration: dur, ease: \"power2.in\", repeat: Math.max(0, Math.floor((sceneDur - off) / dur) - 1) }, t + off);\n});",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  }
+]

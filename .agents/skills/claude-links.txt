@@ -1,0 +1,10 @@
+# Skills that Claude Code loads natively: setup.sh and setup.ps1 link each one into .claude/skills/
+# (and remove links to skills that left this list). Every linked skill sends its description on
+# every API call, so only what the pipeline uses is here; the other skills in .agents/skills/ are
+# read as documents when motion-cena points to them. One name per line; # starts a comment.
+motion-cena
+hyperframes
+hyperframes-core
+hyperframes-animation
+hyperframes-cli
+media-use

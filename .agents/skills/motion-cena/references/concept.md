@@ -31,7 +31,7 @@ For each idea, a one-sentence pitch ("a vida dele é um cupom fiscal que vai sai
 
 ## Step 3: veto what repeats
 
-Read `creatives/registro.md` (every video already delivered, with the same axes). If it doesn't exist yet (the person's first video), create it from `assets/registro.template.md`; it is local and stays out of git. Veto the idea that:
+Check every video already delivered, on the same axes, without reading the whole log: `uv run scripts/registro.py --counts` (most used values per axis) and `uv run scripts/registro.py --recent 12` (latest rows). Open `creatives/registro.md` itself only when a veto is unclear. If it doesn't exist yet (the person's first video), create it from `assets/registro.template.md`; it is local and stays out of git. Veto the idea that:
 - uses the same device as any previous video;
 - repeats 3 or more axes of one of the last 3 videos;
 - falls into the "house default" (dark background + big serif + line icon + word-by-word caption) without the script asking for exactly that.

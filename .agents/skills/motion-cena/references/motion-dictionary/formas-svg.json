@@ -1,0 +1,920 @@
+[
+  {
+    "id": "draw-on",
+    "nome": "draw-on",
+    "nome_pt": "traço se desenhando",
+    "aliases": [
+      "desenhar a linha",
+      "line draw",
+      "stroke draw",
+      "traço animado",
+      "desenho do contorno"
+    ],
+    "familia": "formas-svg",
+    "descricao": "O contorno de uma forma ou ícone aparece como se uma caneta estivesse desenhando o traço.",
+    "como_funciona": "Define stroke-dasharray igual ao comprimento total do path e anima stroke-dashoffset desse comprimento até 0; o comprimento é medido com getTotalLength() no setup.",
+    "quando_usar": "Ícones, setas, assinaturas, contornos de logo e qualquer linha que precise nascer na tela.",
+    "evitar": "Em paths com preenchimento sólido (o traço some sob o fill) ou em dezenas de paths ao mesmo tempo.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "duracao_faixa_s": "0.8-1.2"
+      }
+    },
+    "propriedades": [
+      "strokeDasharray",
+      "strokeDashoffset"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "stroke-to-fill",
+      "arrow-draw",
+      "check-mark-draw",
+      "fade-in"
+    ],
+    "gsap": "// draw-on: el = <path> SVG com stroke\nconst path = el;\nconst L = path.getTotalLength();\ntl.fromTo(path, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.0, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "morph",
+    "nome": "morph",
+    "nome_pt": "forma virando outra",
+    "aliases": [
+      "transformar a forma",
+      "shape morph",
+      "virar outra forma",
+      "metamorfose"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma forma se transforma suavemente em outra no mesmo lugar, mudando contorno, tamanho e cor.",
+    "como_funciona": "Sem plugin: o mesmo elemento anima borderRadius, scale e cor ao mesmo tempo. Para paths SVG arbitrários, MorphSVGPlugin interpola os pontos; alternativa é o crossfade de dois paths no mesmo centro (scale-swap-transition).",
+    "quando_usar": "Mostrar que uma coisa vira outra: ideia que vira produto, botão que vira card, círculo que vira logo.",
+    "evitar": "Formas com número de pontos muito diferente sem MorphSVG (o resultado embola) ou morph longo demais, que parece indeciso.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.inOut",
+      "parametros": {}
+    },
+    "propriedades": [
+      "borderRadius",
+      "scale",
+      "backgroundColor",
+      "morphSVG"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "polygon-morph",
+      "line-to-shape",
+      "match-cut",
+      "pop-in"
+    ],
+    "gsap": "// morph sem plugin: mesmo elemento muda raio + escala + cor\nconst A = \"#1F6FEB\", B = \"#D0592C\";\ntl.fromTo(el, { borderRadius: \"50%\", scale: 1, backgroundColor: A },\n  { borderRadius: \"16%\", scale: 1.15, backgroundColor: B, duration: 0.6, ease: \"power3.inOut\" }, t);\n// paths SVG arbitrários: MorphSVGPlugin -> tl.fromTo(el, { morphSVG: el }, { morphSVG: \"#alvo\", duration: 0.6, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": "card-morph-anchor",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "arrow-draw",
+    "nome": "arrow draw",
+    "nome_pt": "seta se desenhando",
+    "aliases": [
+      "desenhar seta",
+      "seta apontando",
+      "seta animada",
+      "flecha"
+    ],
+    "familia": "formas-svg",
+    "descricao": "A haste da seta se desenha e, quando chega ao fim, a ponta aparece com um pequeno estalo.",
+    "como_funciona": "A haste usa stroke-dashoffset (comprimento medido) com ease in-out; a ponta é um elemento separado que entra com scale 0 → 1 e back.out logo antes da haste terminar.",
+    "quando_usar": "Apontar para um detalhe na tela, indicar direção, ligar texto a um elemento.",
+    "evitar": "Setas longas e curvas demais (parecem rabisco) ou ponta que aparece antes da haste.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power2.inOut",
+      "parametros": {
+        "duracao_haste_s": 0.6
+      }
+    },
+    "propriedades": [
+      "strokeDasharray",
+      "strokeDashoffset",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto"
+    ],
+    "combina_com": [
+      "circle-draw",
+      "data-point-highlight",
+      "pulse"
+    ],
+    "gsap": "// a = haste (<path>), b = ponta (<path> separada, origem no centro)\nconst shaft = a, head = b, L = shaft.getTotalLength();\ntl.fromTo(shaft, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.6, ease: \"power2.inOut\" }, t);\ntl.fromTo(head, { scale: 0, opacity: 0, transformOrigin: \"50% 50%\" }, { scale: 1, opacity: 1, duration: 0.25, ease: \"back.out(2.5)\" }, t + 0.55);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "blob",
+    "nome": "blob",
+    "nome_pt": "mancha orgânica se mexendo",
+    "aliases": [
+      "forma orgânica",
+      "gosma",
+      "blob morph",
+      "mancha líquida",
+      "bolha viva"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma mancha de contorno orgânico muda de forma devagar, como algo vivo, atrás do conteúdo.",
+    "como_funciona": "MorphSVGPlugin alterna o path entre três formas orgânicas fixas guardadas no defs, em ciclos sine.inOut; uma rotação linear lenta soma movimento. Número de ciclos calculado pela duração da cena.",
+    "quando_usar": "Fundo de destaque para foto de pessoa, produto ou número; dá vida a cenas paradas.",
+    "evitar": "Cores muito saturadas e ciclos rápidos (vira lava lamp) ou blobs atrás de texto pequeno.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "sine.inOut",
+      "parametros": {
+        "ciclo_s": 1.4,
+        "formas": 3,
+        "rotacao_total_graus": 40
+      }
+    },
+    "propriedades": [
+      "morphSVG",
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "motivacional",
+      "produto",
+      "historia",
+      "opiniao"
+    ],
+    "combina_com": [
+      "float",
+      "pop-in",
+      "glow"
+    ],
+    "gsap": "// MorphSVGPlugin: três formas orgânicas fixas (#blob1..3) no <defs>; loop finito\nconst shapes = [\"#blob2\", \"#blob3\", \"#blob1\"], cycle = 1.4, sceneDur = 4.2;\nconst n = Math.floor(sceneDur / cycle);\nconst bb = el.getBBox(), origin = bb.x + bb.width / 2 + \" \" + (bb.y + bb.height / 2); // pivô fixo: a forma muda, o centro não\ntl.set(el, { morphSVG: \"#blob1\" }, t);\nfor (let k = 0; k < n; k++) tl.to(el, { morphSVG: shapes[k % 3], duration: cycle, ease: \"sine.inOut\" }, t + k * cycle);\ntl.fromTo(el, { rotation: 0, svgOrigin: origin }, { rotation: 40, duration: n * cycle, ease: \"none\" }, t);",
+    "receita_hyperframes": "sine-wave-loop",
+    "origem": "expansao"
+  },
+  {
+    "id": "check-mark-draw",
+    "nome": "check mark draw",
+    "nome_pt": "check se desenhando",
+    "aliases": [
+      "visto",
+      "certinho",
+      "concluído",
+      "check animado",
+      "success check"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Um círculo se fecha e, logo em seguida, o sinal de visto se desenha dentro dele, com um pulso no fim.",
+    "como_funciona": "DrawSVGPlugin no anel (começando no topo, rotation -90°) e depois no path do check, mais rápido e com ease out; o selo inteiro dá um pulso de escala por keyframes.",
+    "quando_usar": "Confirmar sucesso, item cumprido de lista, pagamento aprovado, 'pronto'.",
+    "evitar": "Para erro ou negação (use x-mark-draw) ou em listas longas sem stagger.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power3.out",
+      "parametros": {
+        "duracao_anel_s": 0.5,
+        "duracao_check_s": 0.3
+      }
+    },
+    "propriedades": [
+      "drawSVG",
+      "rotation",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "motivacional"
+    ],
+    "combina_com": [
+      "progress-steps",
+      "toast",
+      "pulse"
+    ],
+    "gsap": "// DrawSVGPlugin: a = anel, b = check, el = selo inteiro\nconst ring = a, check = b;\ntl.fromTo(ring, { drawSVG: \"0%\", rotation: -90, transformOrigin: \"50% 50%\" }, { drawSVG: \"100%\", duration: 0.5, ease: \"power2.inOut\" }, t);\ntl.fromTo(check, { drawSVG: \"0%\" }, { drawSVG: \"100%\", duration: 0.3, ease: \"power3.out\" }, t + 0.4);\ntl.fromTo(el, { scale: 1 }, { keyframes: { scale: [1, 1.12, 1] }, duration: 0.3, ease: \"none\" }, t + 0.7);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "circle-draw",
+    "nome": "circle draw",
+    "nome_pt": "círculo à mão em volta",
+    "aliases": [
+      "circular",
+      "marcar com círculo",
+      "rodear",
+      "círculo de marca-texto",
+      "hand drawn circle"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Um círculo com cara de feito à mão contorna uma palavra ou objeto para destacar.",
+    "como_funciona": "DrawSVGPlugin anima drawSVG de 0% a 100% num path de elipse irregular que passa um pouco do ponto de partida; uma rotação leve de -20° a 0° dá o gesto de mão.",
+    "quando_usar": "Destacar um número, um preço ou um detalhe da interface, em estilo anotação.",
+    "evitar": "Círculos geometricamente perfeitos (perde o charme) ou em mais de um item por cena.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power2.out",
+      "parametros": {
+        "volta_extra_pct": 8
+      }
+    },
+    "propriedades": [
+      "drawSVG",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "opiniao",
+      "dados",
+      "produto"
+    ],
+    "combina_com": [
+      "arrow-draw",
+      "underline-sweep",
+      "highlight"
+    ],
+    "gsap": "// DrawSVGPlugin: el = <path> de elipse irregular que passa ~8% do início\ntl.fromTo(el, { drawSVG: \"0%\", rotation: -20, transformOrigin: \"50% 50%\" }, { drawSVG: \"100%\", rotation: 0, duration: 0.7, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "css-marker-patterns",
+    "origem": "expansao"
+  },
+  {
+    "id": "corner-brackets",
+    "nome": "corner brackets",
+    "nome_pt": "cantoneiras de foco",
+    "aliases": [
+      "moldura de foco",
+      "mira",
+      "cantos em L",
+      "focus frame",
+      "caixa de detecção"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Quatro cantos em L chegam de fora e se fecham em volta de um objeto, como uma câmera focando ou IA detectando.",
+    "como_funciona": "Cada canto parte de um deslocamento fixo para fora (±60 px na diagonal) e anima x, y até 0 com opacity, com 0,03 s de atraso entre eles.",
+    "quando_usar": "Apontar o alvo da explicação, demos de IA, visão computacional, 'olha isso aqui'.",
+    "evitar": "Em objetos que se mexem muito sem acompanhar (use ai-tracking-box) ou com cantos grossos demais.",
+    "padrao": {
+      "duracao_s": 0.55,
+      "ease": "power3.out",
+      "parametros": {
+        "deslocamento_px": 60
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "punch-zoom",
+      "data-point-highlight",
+      "scramble"
+    ],
+    "gsap": "// items = 4 cantos em L (sup-esq, sup-dir, inf-esq, inf-dir)\nconst off = [[-60, -60], [60, -60], [-60, 60], [60, 60]];\nitems.forEach((c, i) => tl.fromTo(c, { x: off[i][0], y: off[i][1], opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.45, ease: \"power3.out\" }, t + i * 0.03));",
+    "receita_hyperframes": "ai-tracking-box",
+    "origem": "expansao"
+  },
+  {
+    "id": "dash-march",
+    "nome": "dash march",
+    "nome_pt": "tracejado andando",
+    "aliases": [
+      "formigas andando",
+      "marching ants",
+      "linha tracejada animada",
+      "fluxo na linha",
+      "dash flow"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma linha tracejada parece correr ao longo do próprio caminho, indicando fluxo ou conexão ativa.",
+    "como_funciona": "O path tem stroke-dasharray fixo (ex.: 16 12) e o stroke-dashoffset desce de forma linear um múltiplo do padrão; um único tween linear com duração calculada pela cena substitui o loop infinito.",
+    "quando_usar": "Conexões entre nós, cabos, fluxo de dados, rota em andamento, área selecionada.",
+    "evitar": "Velocidade alta (vira vibração) ou em muitas linhas paralelas, que cansa o olho.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "traco_px": 16,
+        "espaco_px": 12,
+        "ciclo_s": 0.6
+      }
+    },
+    "propriedades": [
+      "strokeDashoffset"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "line-connect",
+      "path-follow",
+      "map-route-draw"
+    ],
+    "gsap": "// path com stroke-dasharray: 16 12 no CSS; cada ciclo anda um padrão (28 px)\nconst sceneDur = 3, cycle = 0.6, n = Math.floor(sceneDur / cycle);\ntl.fromTo(el, { strokeDashoffset: 0 }, { strokeDashoffset: -28 * n, duration: cycle * n, ease: \"none\" }, t);",
+    "receita_hyperframes": "svg-icon-enrichment",
+    "origem": "expansao"
+  },
+  {
+    "id": "dot-to-line",
+    "nome": "dot to line",
+    "nome_pt": "ponto que vira linha",
+    "aliases": [
+      "ponto esticando",
+      "bolinha vira traço",
+      "divisor nascendo",
+      "dot expand"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Um ponto pequeno surge no centro e se estica para os dois lados até virar uma linha.",
+    "como_funciona": "A linha completa existe no DOM, recortada por clip-path inset com cantos arredondados que só deixa ver um ponto central; o ponto entra com scale e depois o inset abre até 0 nas laterais.",
+    "quando_usar": "Divisores de seção, início de linha do tempo, base de gráfico, separar título de subtítulo.",
+    "evitar": "Esticar com scaleX em vez de clip-path (deforma as pontas arredondadas).",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "expo.inOut",
+      "parametros": {
+        "comprimento_px": 720,
+        "espessura_px": 12
+      }
+    },
+    "propriedades": [
+      "scale",
+      "clipPath"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "historia"
+    ],
+    "combina_com": [
+      "timeline-scrub",
+      "chart-axes-build",
+      "fade-in"
+    ],
+    "gsap": "// el = linha de 720x12 px; clip-path deixa ver só o ponto central\ntl.fromTo(el, { scale: 0, clipPath: \"inset(0px 354px 0px 354px round 6px)\" }, { scale: 1, duration: 0.25, ease: \"back.out(2)\" }, t);\ntl.fromTo(el, { clipPath: \"inset(0px 354px 0px 354px round 6px)\" }, { clipPath: \"inset(0px 0px 0px 0px round 6px)\", duration: 0.5, ease: \"expo.inOut\", immediateRender: false }, t + 0.3);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "line-connect",
+    "nome": "line connect",
+    "nome_pt": "linha ligando pontos",
+    "aliases": [
+      "conectar pontos",
+      "ligar dois itens",
+      "node connect",
+      "linha entre nós"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Um ponto aparece, uma linha sai dele e cresce até o segundo ponto, que surge quando a linha chega.",
+    "como_funciona": "A linha é um retângulo fino já posicionado e rotacionado entre os dois nós; anima scaleX de 0 a 1 com origem no primeiro nó. Os nós entram com pop em t e no fim da linha.",
+    "quando_usar": "Mostrar relação causa e efeito, rede de contatos, etapas ligadas, A leva a B.",
+    "evitar": "Conectar muitos pares ao mesmo tempo sem stagger; linhas cruzadas viram teia ilegível.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power2.inOut",
+      "parametros": {
+        "duracao_linha_s": 0.5
+      }
+    },
+    "propriedades": [
+      "scale",
+      "scaleX"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "dados"
+    ],
+    "combina_com": [
+      "dash-march",
+      "pop-in",
+      "stagger"
+    ],
+    "gsap": "// items = [nóA, nóB]; el = linha já rotacionada de A até B\nconst [nA, nB] = items, line = el;\ntl.fromTo(nA, { scale: 0 }, { scale: 1, duration: 0.3, ease: \"back.out(1.7)\" }, t);\ntl.fromTo(line, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.5, ease: \"power2.inOut\" }, t + 0.2);\ntl.fromTo(nB, { scale: 0 }, { scale: 1, duration: 0.3, ease: \"back.out(1.7)\" }, t + 0.6);",
+    "receita_hyperframes": "avatar-cloud-network",
+    "origem": "expansao"
+  },
+  {
+    "id": "line-to-shape",
+    "nome": "line to shape",
+    "nome_pt": "linha que se fecha em forma",
+    "aliases": [
+      "linha vira forma",
+      "traço vira ícone",
+      "dobrar a linha",
+      "line morph"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma linha reta se desenha e em seguida se dobra e fecha, virando um ícone ou forma.",
+    "como_funciona": "O mesmo path começa como linha reta: primeiro draw-on por stroke-dashoffset; depois tl.set remove o dasharray e MorphSVGPlugin interpola a linha até o path da forma final.",
+    "quando_usar": "Transição de um elemento de layout (divisor, sublinhado) para um ícone ou logo.",
+    "evitar": "Formas finais complexas demais (o morph embola) ou repetir em toda cena.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power3.inOut",
+      "parametros": {
+        "duracao_linha_s": 0.5,
+        "duracao_morph_s": 0.7
+      }
+    },
+    "propriedades": [
+      "strokeDashoffset",
+      "morphSVG"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "dot-to-line",
+      "morph",
+      "stroke-to-fill"
+    ],
+    "gsap": "// MorphSVGPlugin: a mesma <path> começa reta e se fecha em #forma\nconst L = el.getTotalLength();\ntl.fromTo(el, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.5, ease: \"power2.out\" }, t);\ntl.set(el, { strokeDasharray: \"none\" }, t + 0.5);\ntl.fromTo(el, { morphSVG: el }, { morphSVG: \"#forma\", duration: 0.7, ease: \"power3.inOut\", immediateRender: false }, t + 0.5);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "liquid-fill",
+    "nome": "liquid fill",
+    "nome_pt": "enchendo de líquido",
+    "aliases": [
+      "wave fill",
+      "encher com onda",
+      "nível subindo",
+      "copo enchendo",
+      "preenchimento líquido"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma forma (copo, ícone, logo, letra) vai enchendo de baixo para cima com uma superfície ondulada.",
+    "como_funciona": "O container tem clip-path no formato da forma; dentro, a camada de líquido sobe por yPercent até o nível alvo e uma faixa de onda (SVG com período fixo) desliza em x de forma linear, um número inteiro de períodos.",
+    "quando_usar": "Mostrar nível, porcentagem de meta, bateria, reservatório, progresso com apelo visual.",
+    "evitar": "Para valores exatos que precisam ser lidos com precisão (use progress bar) ou ondas altas que escondem o nível.",
+    "padrao": {
+      "duracao_s": 1.4,
+      "ease": "power2.out",
+      "parametros": {
+        "nivel_pct": 70,
+        "periodo_onda_px": 540,
+        "ciclos_onda": 3
+      }
+    },
+    "propriedades": [
+      "yPercent",
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "dados",
+      "produto",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "count-up",
+      "percent-ring",
+      "float"
+    ],
+    "gsap": "// container com clip-path da forma; el = líquido, a = faixa de onda (2x a largura)\nconst liquid = el, wave = a, level = 0.7; // 70% cheio\ntl.fromTo(liquid, { yPercent: 100 }, { yPercent: 100 - level * 100, duration: 1.4, ease: \"power2.out\" }, t);\n// onda: anda um período (540 px) a cada 0.8 s, 3 ciclos\ntl.fromTo(wave, { x: 0 }, { x: -540 * 3, duration: 0.8 * 3, ease: \"none\" }, t);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "loading-spinner",
+    "nome": "loading spinner",
+    "nome_pt": "carregando (finito)",
+    "aliases": [
+      "spinner",
+      "carregando",
+      "loader",
+      "rodinha girando"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Um arco gira e estica e encolhe como um loader, por um número fixo de voltas, e some ao terminar.",
+    "como_funciona": "Rotação linear de 360° × n voltas na duração da espera, mais drawSVG oscilando entre 10% e 70% com yoyo e repeat calculado (n × 2 - 1); no fim, fromTo de saída.",
+    "quando_usar": "Simular espera antes de um resultado (IA pensando, pagamento processando) para criar expectativa.",
+    "evitar": "Espera longa sem motivo narrativo; repeat infinito quebra o render, sempre calcule as voltas.",
+    "padrao": {
+      "duracao_s": 2.4,
+      "ease": "none",
+      "parametros": {
+        "voltas": 3,
+        "volta_s": 0.8
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "drawSVG",
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "check-mark-draw",
+      "skeleton-shimmer",
+      "polygon-morph"
+    ],
+    "gsap": "// DrawSVGPlugin: arco gira e respira; voltas finitas calculadas pela espera\nconst wait = 2.4, turn = 0.8, n = Math.round(wait / turn);\ntl.fromTo(el, { rotation: 0, transformOrigin: \"50% 50%\" }, { rotation: 360 * n, duration: wait, ease: \"none\" }, t);\ntl.fromTo(el, { drawSVG: \"0% 10%\" }, { drawSVG: \"0% 70%\", duration: turn / 2, ease: \"sine.inOut\", yoyo: true, repeat: n * 2 - 1 }, t);\ntl.fromTo(el, { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.6, duration: 0.25, ease: \"power2.in\", immediateRender: false }, t + wait);",
+    "receita_hyperframes": "svg-icon-enrichment",
+    "origem": "expansao"
+  },
+  {
+    "id": "path-follow",
+    "nome": "path follow",
+    "nome_pt": "seguir o caminho",
+    "aliases": [
+      "motion path",
+      "andar pela linha",
+      "seguir trajetória",
+      "objeto na curva"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Um objeto percorre uma trajetória curva desenhada no SVG, girando para acompanhar a direção da curva.",
+    "como_funciona": "MotionPathPlugin com path, align e autoRotate: o plugin converte o progresso do tween em x, y e rotação sobre o path. O estado inicial é fixado com tl.set antes do tween.",
+    "quando_usar": "Avião sobre um mapa, bolinha seguindo um fluxo, ícone viajando entre etapas de um processo.",
+    "evitar": "Curvas com cantos vivos e autoRotate (o objeto gira de repente) ou trajetórias que saem da área segura do vertical.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "power1.inOut",
+      "parametros": {
+        "autoRotate": true,
+        "alinhamento": "centro do objeto no path"
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "historia"
+    ],
+    "combina_com": [
+      "draw-on",
+      "map-route-draw",
+      "dash-march"
+    ],
+    "gsap": "// MotionPathPlugin: el percorre o <path id=\"rota\"> girando com a curva\nconst route = scene.querySelector(\"#rota\");\ntl.set(el, { x: 0, y: 0, rotation: 0 }, t);\ntl.to(el, { motionPath: { path: route, align: route, alignOrigin: [0.5, 0.5], autoRotate: true }, duration: 1.6, ease: \"power1.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "polygon-morph",
+    "nome": "polygon morph",
+    "nome_pt": "polígono mudando de lados",
+    "aliases": [
+      "triângulo vira quadrado",
+      "sequência de formas",
+      "shape shift",
+      "contagem de lados"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma forma geométrica passa por uma sequência de polígonos (triângulo, quadrado, hexágono), girando a cada troca.",
+    "como_funciona": "MorphSVGPlugin troca o path entre polígonos fixos em passos curtos com pausa entre eles; cada passo soma 60° de rotação, dando ritmo mecânico. Diferente do morph simples, é uma sequência no compasso.",
+    "quando_usar": "Marcar etapas ou contagem (1, 2, 3), loaders de marca, cenas de geometria e lógica.",
+    "evitar": "Sem pausa entre os passos (vira borrão) ou com ease elástico, que desfigura os vértices.",
+    "padrao": {
+      "duracao_s": 1.8,
+      "ease": "power3.inOut",
+      "parametros": {
+        "formas": [
+          "#tri",
+          "#quad",
+          "#hex"
+        ],
+        "passo_s": 0.45,
+        "pausa_s": 0.15
+      }
+    },
+    "propriedades": [
+      "morphSVG",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "morph",
+      "loading-spinner",
+      "shape-grid-stagger"
+    ],
+    "gsap": "// MorphSVGPlugin: el passa por polígonos fixos, 60° por troca\nconst seq = [\"#quad\", \"#hex\", \"#tri\"], step = 0.45, gap = 0.15;\ntl.set(el, { morphSVG: \"#tri\", rotation: 0, transformOrigin: \"50% 50%\" }, t);\nseq.forEach((s, k) => tl.to(el, { morphSVG: s, rotation: 60 * (k + 1), duration: step, ease: \"power3.inOut\" }, t + k * (step + gap)));",
+    "receita_hyperframes": "scale-swap-transition",
+    "origem": "expansao"
+  },
+  {
+    "id": "shape-burst",
+    "nome": "shape burst",
+    "nome_pt": "explosão de formas",
+    "aliases": [
+      "formas explodindo",
+      "burst de formas",
+      "espalhar formas",
+      "estouro geométrico"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Pequenas formas geométricas saem do centro em todas as direções, girando, e somem logo depois.",
+    "como_funciona": "Cada forma recebe ângulo fixo (índice / total × 360°) e distância alternada; anima x/y pelo cosseno e seno do ângulo, com scale e rotation, e depois opacity até 0. Tudo determinístico.",
+    "quando_usar": "Reforçar um momento de conquista, revelar um logo ou número que acabou de chegar.",
+    "evitar": "Em cenas calmas ou repetido em toda cena; com mais de 12 formas vira confete e perde a leitura.",
+    "padrao": {
+      "duracao_s": 0.75,
+      "ease": "power3.out",
+      "parametros": {
+        "formas": 8,
+        "distancia_px": [
+          260,
+          340
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "produto",
+      "dados"
+    ],
+    "combina_com": [
+      "pop-in",
+      "star-burst",
+      "punch-zoom",
+      "count-up"
+    ],
+    "gsap": "// items = 8 formas empilhadas no centro; ângulos fixos, distância alternada\nitems.forEach((s, i) => {\n  const ang = (i / items.length) * Math.PI * 2, d = i % 2 ? 260 : 340;\n  tl.fromTo(s, { x: 0, y: 0, rotation: 0 }, { x: Math.cos(ang) * d, y: Math.sin(ang) * d, rotation: 90 + i * 25, duration: 0.6, ease: \"power3.out\" }, t);\n  // escala e opacidade num tween só: dois tweens disputando scale no mesmo trecho não são seek-safe\n  tl.fromTo(s, { scale: 0, opacity: 1 }, { keyframes: [{ scale: 1, duration: 0.45, ease: \"power3.out\" }, { scale: 0.4, opacity: 0, duration: 0.3, ease: \"power2.in\" }] }, t);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "shape-grid-stagger",
+    "nome": "shape stagger grid",
+    "nome_pt": "grade de formas em cascata",
+    "aliases": [
+      "grid stagger",
+      "grade aparecendo",
+      "mosaico entrando",
+      "padrão de pontos"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma grade de formas aparece em onda, começando do centro (ou de um canto) e se espalhando.",
+    "como_funciona": "Um único fromTo nos itens com stagger { grid: [linhas, colunas], from: \"center\", amount }; o GSAP calcula o atraso pela distância de cada célula até a origem.",
+    "quando_usar": "Fundos geométricos, padrões de marca, apresentar uma coleção de ícones ou produtos.",
+    "evitar": "Grades enormes com amount alto (a onda demora); de cara para texto, a onda distrai.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "back.out(1.6)",
+      "parametros": {
+        "grid": [
+          4,
+          6
+        ],
+        "from": "center",
+        "amount_s": 0.6
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "stagger",
+      "heatmap-fade",
+      "push-in"
+    ],
+    "gsap": "// items = células na ordem de leitura; grid [linhas, colunas] (aqui 4 linhas de 6)\ntl.fromTo(items, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: \"back.out(1.6)\", stagger: { grid: [4, 6], from: \"center\", amount: 0.6 } }, t);",
+    "receita_hyperframes": "center-outward-expansion",
+    "origem": "expansao"
+  },
+  {
+    "id": "star-burst",
+    "nome": "star burst",
+    "nome_pt": "raios saindo do centro",
+    "aliases": [
+      "raios",
+      "explosão de linhas",
+      "brilho em raios",
+      "estrela de traços",
+      "sparkle lines"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Raios curtos disparam do centro para fora e se recolhem na ponta, como um estalo de luz em volta do objeto.",
+    "como_funciona": "DrawSVGPlugin em cada raio (line do centro para fora): drawSVG \"0% 0%\" → \"0% 100%\" (cresce) e depois → \"100% 100%\" (some pela ponta), com stagger mínimo; o objeto central dá um pop.",
+    "quando_usar": "Momento de acerto, novidade, preço especial, 'ideia'. Funciona bem em ícones e selos.",
+    "evitar": "Em texto corrido ou várias vezes no vídeo; raios longos demais parecem desenho infantil.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.out",
+      "parametros": {
+        "raios": 12,
+        "stagger_s": 0.015
+      }
+    },
+    "propriedades": [
+      "drawSVG",
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "pop-in",
+      "shape-burst",
+      "glow"
+    ],
+    "gsap": "// DrawSVGPlugin: items = 12 raios <line> do centro para fora; el = objeto central\ntl.fromTo(items, { drawSVG: \"0% 0%\" }, { drawSVG: \"0% 100%\", duration: 0.25, ease: \"power2.out\", stagger: 0.015 }, t);\ntl.fromTo(items, { drawSVG: \"0% 100%\" }, { drawSVG: \"100% 100%\", duration: 0.3, ease: \"power2.in\", stagger: 0.015, immediateRender: false }, t + 0.25);\ntl.fromTo(el, { scale: 0.6 }, { scale: 1, duration: 0.4, ease: \"back.out(2)\" }, t);",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "stroke-to-fill",
+    "nome": "stroke to fill",
+    "nome_pt": "contorno vira preenchimento",
+    "aliases": [
+      "contorno que preenche",
+      "outline to solid",
+      "desenha e pinta",
+      "ícone se completando"
+    ],
+    "familia": "formas-svg",
+    "descricao": "O contorno da forma se desenha e, ao fechar, o preenchimento aparece enquanto o traço some.",
+    "como_funciona": "Primeiro stroke-dashoffset do comprimento até 0 com fill-opacity 0; no fim, segundo tween cruza fillOpacity 0 → 1 e strokeOpacity 1 → 0.",
+    "quando_usar": "Revelar logo, ícone de destaque ou ilustração de capa com acabamento.",
+    "evitar": "Formas com muitos subpaths (cada um fecha num tempo) ou quando o traço e o fill têm cores que brigam.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power2.inOut",
+      "parametros": {
+        "duracao_traco_s": 0.9,
+        "duracao_fill_s": 0.4
+      }
+    },
+    "propriedades": [
+      "strokeDasharray",
+      "strokeDashoffset",
+      "fillOpacity",
+      "strokeOpacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "explicativo"
+    ],
+    "combina_com": [
+      "draw-on",
+      "glow",
+      "pop-in"
+    ],
+    "gsap": "const L = el.getTotalLength();\ntl.fromTo(el, { strokeDasharray: L, strokeDashoffset: L, fillOpacity: 0 }, { strokeDashoffset: 0, duration: 0.9, ease: \"power2.inOut\" }, t);\ntl.fromTo(el, { fillOpacity: 0, strokeOpacity: 1 }, { fillOpacity: 1, strokeOpacity: 0, duration: 0.4, ease: \"power2.out\", immediateRender: false }, t + 0.8);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  },
+  {
+    "id": "underline-sweep",
+    "nome": "underline sweep",
+    "nome_pt": "sublinhado varrendo",
+    "aliases": [
+      "sublinhar",
+      "underline",
+      "traço embaixo",
+      "linha embaixo da palavra"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Uma linha nasce embaixo da palavra da esquerda para a direita e, na saída, some para a direita.",
+    "como_funciona": "Elemento de linha absoluto sob o texto: scaleX 0 → 1 com origem à esquerda; na saída, um clip-path inset recolhe a linha para a direita (immediateRender: false no segundo tween; trocar a origem no meio da timeline não é seek-safe).",
+    "quando_usar": "Marcar a palavra-chave da frase sem cobrir o texto, títulos de seção, links.",
+    "evitar": "Junto com highlight na mesma palavra (redundante) ou em linhas inteiras de texto.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "power3.out",
+      "parametros": {
+        "espessura_px": 10,
+        "saida_apos_s": 1.6
+      }
+    },
+    "propriedades": [
+      "scaleX"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "opiniao",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "word-reveal",
+      "circle-draw",
+      "fade-in"
+    ],
+    "gsap": "// el = linha absoluta sob a palavra\ntl.fromTo(el, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: 0.45, ease: \"power3.out\" }, t);\n// saída: some para a direita com clip-path (trocar transformOrigin no meio da timeline não é seek-safe)\ntl.fromTo(el, { clipPath: \"inset(0% 0% 0% 0%)\" }, { clipPath: \"inset(0% 0% 0% 100%)\", duration: 0.35, ease: \"power3.in\", immediateRender: false }, t + 1.6);",
+    "receita_hyperframes": "css-marker-patterns",
+    "origem": "expansao"
+  },
+  {
+    "id": "x-mark-draw",
+    "nome": "x mark",
+    "nome_pt": "x de erro se desenhando",
+    "aliases": [
+      "xis",
+      "errado",
+      "negação",
+      "cancelar",
+      "x animado"
+    ],
+    "familia": "formas-svg",
+    "descricao": "Dois traços riscam um X rápido, um depois do outro, e o símbolo dá um tranco lateral de 'não'.",
+    "como_funciona": "DrawSVGPlugin nos dois paths em sequência com ease in curto (gesto de risco), seguido de keyframes de x decaindo no grupo.",
+    "quando_usar": "Mito versus verdade, erro comum, 'não faça isso', opção descartada.",
+    "evitar": "Junto com shake na tela inteira na mesma batida (excesso) ou para algo positivo.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.in",
+      "parametros": {
+        "duracao_traco_s": 0.18,
+        "tranco_px": 10
+      }
+    },
+    "propriedades": [
+      "drawSVG",
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "tecnico"
+    ],
+    "combina_com": [
+      "check-mark-draw",
+      "shake",
+      "comparison-bars"
+    ],
+    "gsap": "// DrawSVGPlugin: items = [traço1, traço2]; el = grupo do X\nconst [s1, s2] = items;\ntl.fromTo(s1, { drawSVG: \"0%\" }, { drawSVG: \"100%\", duration: 0.18, ease: \"power2.in\" }, t);\ntl.fromTo(s2, { drawSVG: \"0%\" }, { drawSVG: \"100%\", duration: 0.18, ease: \"power2.in\" }, t + 0.14);\ntl.fromTo(el, { x: 0 }, { keyframes: { x: [0, -10, 8, -5, 3, 0] }, duration: 0.3, ease: \"none\" }, t + 0.32);",
+    "receita_hyperframes": "svg-path-draw",
+    "origem": "expansao"
+  }
+]

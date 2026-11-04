@@ -91,7 +91,15 @@ def ding() -> np.ndarray:
     return tone * env(len(x), 0.005, 6)
 
 
-KIT = {f.__name__: f for f in (whoosh, pop, tick, click, impact, riser, glitch, ding)}
+def beep() -> np.ndarray:
+    """Scanner / device beep: 2.85 kHz with a touch of 3rd harmonic, 115 ms, soft edges."""
+    x = t(0.115)
+    tone = 0.6 * np.sin(2 * np.pi * 2850 * x) + 0.18 * np.sin(2 * np.pi * 2850 * 3 * x)
+    edges = np.minimum(1, x / 0.004) * np.minimum(1, (0.115 - x) / 0.012)
+    return tone * edges
+
+
+KIT = {f.__name__: f for f in (whoosh, pop, tick, click, impact, riser, glitch, ding, beep)}
 
 
 def write_wav(path: Path, signal: np.ndarray) -> None:

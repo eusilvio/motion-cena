@@ -1,0 +1,89 @@
+name: Efeito novo
+description: Propor um termo novo para o dicionário de efeitos.
+title: "[efeito] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Pode escrever em português ou em inglês (English is welcome).
+
+        Antes, confira se ele já está no catálogo de 388 efeitos: `uv run .agents/skills/motion-cena/scripts/motion_lookup.py "<nome>" --brief` (busca por nome, apelido e nome em português). Combinação de dois efeitos que já existem vai em "Combinations that work", não vira termo novo. Se você já sabe fazer, pode ir direto para o PR; o passo a passo está no CONTRIBUTING.md (porta 1).
+
+  - type: input
+    id: term
+    attributes:
+      label: Nome do efeito
+      description: O nome que motion designers usam.
+      placeholder: split-flap
+    validations:
+      required: true
+
+  - type: dropdown
+    id: family
+    attributes:
+      label: Família
+      options:
+        - Entradas
+        - Ritmo (ease)
+        - Texto
+        - Formas
+        - Ênfase
+        - Física
+        - Câmera
+        - Transições
+        - Acabamento
+        - Família nova (explique abaixo)
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: O que é
+      description: Uma ou duas frases sobre o que a pessoa vê na tela.
+      placeholder: As letras giram como num painel de aeroporto até parar na palavra certa.
+    validations:
+      required: true
+
+  - type: input
+    id: default
+    attributes:
+      label: Padrão (duração e ease)
+      placeholder: 0,6 s, 0,04 s por letra, power2.out
+
+  - type: textarea
+    id: when
+    attributes:
+      label: Quando usar
+      description: Gênero, momento do roteiro, o que ele diz que os outros não dizem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: gap
+    attributes:
+      label: Por que os efeitos atuais não resolvem
+      description: Qual efeito do dicionário chega mais perto e o que falta nele.
+    validations:
+      required: true
+
+  - type: textarea
+    id: gsap
+    attributes:
+      label: Esboço da receita GSAP (opcional)
+      description: Um `tl` pausado, `fromTo` com estado inicial, sem `Math.random`.
+      render: js
+
+  - type: input
+    id: reference
+    attributes:
+      label: Exemplo público (opcional)
+      description: Link para um exemplo do efeito. Não anexe vídeo de outra pessoa baixado.
+
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: PR
+      options:
+        - label: Quero abrir o PR com a receita e a cena de demo.

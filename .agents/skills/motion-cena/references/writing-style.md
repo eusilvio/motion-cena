@@ -113,7 +113,7 @@ Copy can pass the checker and still sound machine-made because every choice is t
 1. **Default word**: the abstraction any model would use ("constância", "propósito", "mindset", "sucesso"). Replace it with the concrete thing from the story's world (the number, the object, the place, the time of day).
 2. **Generic example**: "ir pra academia", "acordar cedo", "o cara que desistiu" (going to the gym, waking up early, the guy who gave up). Use the real data from `source/` or the brief. If there is none, **ask the user** for their case. Never invent a scene, number or quote.
 3. **Punchline in every scene**: save it for 1 or 2 moments (the hook and the turn or the ending). The rest ends without a bow.
-4. **Template repeated across videos**: read the "Time structure" column of `creatives/registro.md`. If the new script has the same sequence of moves as the last 3 (e.g. mistake scene → concept → what to do → question), reorder it.
+4. **Template repeated across videos**: check the "Time structure" of the latest pieces (`scripts/registro.py --recent 3`). If the new script has the same sequence of moves as the last 3 (e.g. mistake scene → concept → what to do → question), reorder it.
 5. **"Cover the line and guess" test**: at the hook, the turn and the ending, cover the sentence and write what a model would say there. If it matches yours, switch to your second or third thought.
 
 ## What NOT to touch

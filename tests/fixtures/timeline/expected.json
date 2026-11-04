@@ -1,0 +1,407 @@
+{
+ "meta": {
+  "title": "Fixture sintética: café coado",
+  "platform": "vertical",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 13.2,
+  "durationFrames": 396
+ },
+ "scenes": [
+  {
+   "id": "s1",
+   "narration": "Às seis da manhã, a cafeteira já está ligada.",
+   "visual": "cozinha",
+   "motion": "push-in",
+   "anchors": [
+    {
+     "id": "maquina",
+     "phrase": "Cafeteira!",
+     "effect": "pop in",
+     "start": 1.16,
+     "end": 1.7,
+     "startFrame": 35,
+     "endFrame": 51
+    },
+    {
+     "id": "hora",
+     "phrase": "manhã",
+     "effect": "count-up",
+     "start": 0.71,
+     "end": 1.04,
+     "startFrame": 21,
+     "endFrame": 31
+    }
+   ],
+   "sfx": [
+    {
+     "type": "riser",
+     "at": "scene_start",
+     "offset": -1.6
+    },
+    {
+     "type": "pop",
+     "at": "anchor:maquina"
+    },
+    {
+     "type": "whoosh",
+     "at": "scene_end",
+     "gain_db": -12
+    }
+   ],
+   "start": 0.0,
+   "end": 2.77,
+   "startFrame": 0,
+   "durationFrames": 83,
+   "words": [
+    {
+     "word": "Às",
+     "start": 0.21,
+     "end": 0.35
+    },
+    {
+     "word": "seis",
+     "start": 0.36,
+     "end": 0.6
+    },
+    {
+     "word": "da",
+     "start": 0.61,
+     "end": 0.7
+    },
+    {
+     "word": "manha,",
+     "start": 0.71,
+     "end": 1.04
+    },
+    {
+     "word": "a",
+     "start": 1.1,
+     "end": 1.15
+    },
+    {
+     "word": "CAFETEIRA",
+     "start": 1.16,
+     "end": 1.7
+    },
+    {
+     "word": "já",
+     "start": 1.71,
+     "end": 1.85
+    },
+    {
+     "word": "está",
+     "start": 1.86,
+     "end": 2.05
+    },
+    {
+     "word": "ligada.",
+     "start": 2.06,
+     "end": 2.48
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "narration": "Café, água e tempo. Mais água, menos pressa.",
+   "visual": "chaleira",
+   "motion": "stagger",
+   "anchors": [
+    {
+     "id": "agua",
+     "phrase": "água",
+     "effect": "highlight",
+     "start": 3.34,
+     "end": 3.7,
+     "startFrame": 100,
+     "endFrame": 111
+    },
+    {
+     "id": "mais",
+     "phrase": "Mais água",
+     "effect": "pulse",
+     "start": 4.7,
+     "end": 5.3,
+     "startFrame": 141,
+     "endFrame": 159
+    },
+    {
+     "id": "calma",
+     "phrase": "menos pressa",
+     "effect": "slam",
+     "start": 5.36,
+     "end": 6.2,
+     "startFrame": 161,
+     "endFrame": 186
+    }
+   ],
+   "sfx": [
+    {
+     "type": "tick",
+     "at": 0.5,
+     "gain_db": -20
+    },
+    {
+     "type": "riser",
+     "at": "anchor:calma",
+     "offset": -1.6
+    }
+   ],
+   "start": 2.77,
+   "end": 6.67,
+   "startFrame": 83,
+   "durationFrames": 117,
+   "words": [
+    {
+     "word": "Café,",
+     "start": 2.92,
+     "end": 3.3
+    },
+    {
+     "word": "água",
+     "start": 3.34,
+     "end": 3.7
+    },
+    {
+     "word": "e",
+     "start": 3.71,
+     "end": 3.78
+    },
+    {
+     "word": "tempo.",
+     "start": 3.79,
+     "end": 4.3
+    },
+    {
+     "word": "Mais",
+     "start": 4.7,
+     "end": 4.95
+    },
+    {
+     "word": "água,",
+     "start": 4.96,
+     "end": 5.3
+    },
+    {
+     "word": "menos",
+     "start": 5.36,
+     "end": 5.7
+    },
+    {
+     "word": "pressa.",
+     "start": 5.71,
+     "end": 6.2
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "narration": "",
+   "duration": 1.2,
+   "visual": "pó caindo no filtro, sem voz",
+   "motion": "slow zoom",
+   "sfx": [
+    {
+     "type": "impact",
+     "at": "scene_start"
+    }
+   ],
+   "start": 6.67,
+   "end": 7.87,
+   "startFrame": 200,
+   "durationFrames": 36,
+   "words": [],
+   "anchors": []
+  },
+  {
+   "id": "s4",
+   "narration": "Espere 12 minutos antes de servir.",
+   "visual": "relógio",
+   "motion": "draw-on",
+   "anchors": [
+    {
+     "id": "tempo",
+     "phrase": "12 minutos",
+     "effect": "count-up",
+     "start": 8.41,
+     "end": 9.01,
+     "startFrame": 252,
+     "endFrame": 270
+    }
+   ],
+   "sfx": [
+    {
+     "type": "ding",
+     "at": "anchor:nunca"
+    },
+    {
+     "type": "click",
+     "at": "0.25"
+    }
+   ],
+   "start": 7.87,
+   "end": 10.47,
+   "startFrame": 236,
+   "durationFrames": 78,
+   "words": [
+    {
+     "word": "Espera",
+     "start": 8.02,
+     "end": 8.4
+    },
+    {
+     "word": "12",
+     "start": 8.41,
+     "end": 8.71
+    },
+    {
+     "word": "minutos",
+     "start": 8.71,
+     "end": 9.01
+    },
+    {
+     "word": "antes",
+     "start": 9.05,
+     "end": 9.4
+    },
+    {
+     "word": "de",
+     "start": 9.41,
+     "end": 9.5
+    },
+    {
+     "word": "servir.",
+     "start": 9.51,
+     "end": 10.0
+    }
+   ]
+  },
+  {
+   "id": "s5",
+   "narration": "Bom café!",
+   "visual": "xícara",
+   "motion": "scale up",
+   "anchors": [
+    {
+     "id": "final",
+     "phrase": "café",
+     "effect": "glow",
+     "start": 10.86,
+     "end": 11.4,
+     "startFrame": 326,
+     "endFrame": 342
+    }
+   ],
+   "sfx": [
+    {
+     "type": "whoosh",
+     "at": "scene_start",
+     "offset": -0.2
+    }
+   ],
+   "start": 10.47,
+   "end": 11.7,
+   "startFrame": 314,
+   "durationFrames": 37,
+   "words": [
+    {
+     "word": "Bom",
+     "start": 10.62,
+     "end": 10.85
+    },
+    {
+     "word": "café!",
+     "start": 10.86,
+     "end": 11.4
+    }
+   ]
+  },
+  {
+   "id": "s6",
+   "narration": "",
+   "duration": 1.5,
+   "visual": "cartela final",
+   "motion": "fade in",
+   "sfx": [
+    {
+     "type": "ding",
+     "at": "scene_end"
+    }
+   ],
+   "start": 11.7,
+   "end": 13.2,
+   "startFrame": 351,
+   "durationFrames": 45,
+   "words": [],
+   "anchors": []
+  }
+ ],
+ "sfx_cues": [
+  {
+   "type": "riser",
+   "at": "scene_start",
+   "offset": -1.6,
+   "scene": "s1",
+   "time": 0.0
+  },
+  {
+   "type": "pop",
+   "at": "anchor:maquina",
+   "scene": "s1",
+   "time": 1.16
+  },
+  {
+   "type": "whoosh",
+   "at": "scene_end",
+   "gain_db": -12,
+   "scene": "s1",
+   "time": 2.62
+  },
+  {
+   "type": "tick",
+   "at": 0.5,
+   "gain_db": -20,
+   "scene": "s2",
+   "time": 3.27
+  },
+  {
+   "type": "riser",
+   "at": "anchor:calma",
+   "offset": -1.6,
+   "scene": "s2",
+   "time": 3.76
+  },
+  {
+   "type": "impact",
+   "at": "scene_start",
+   "scene": "s3",
+   "time": 6.67
+  },
+  {
+   "type": "click",
+   "at": "0.25",
+   "scene": "s4",
+   "time": 8.12
+  },
+  {
+   "type": "whoosh",
+   "at": "scene_start",
+   "offset": -0.2,
+   "scene": "s5",
+   "time": 10.27
+  },
+  {
+   "type": "ding",
+   "at": "scene_end",
+   "scene": "s6",
+   "time": 13.05
+  }
+ ],
+ "warnings": [
+  "scene s3: no narration matched (silent scene or mismatch)",
+  "scene s6: no narration matched (silent scene or mismatch)",
+  "scene s4: anchor 'água fervendo' not found in spoken words",
+  "scene s4: sfx anchor 'anchor:nunca' unresolved"
+ ]
+}

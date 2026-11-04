@@ -1,0 +1,651 @@
+[
+  {
+    "id": "alpha-cutout",
+    "nome": "alpha cutout",
+    "nome_pt": "sair do quadro",
+    "aliases": [
+      "pop out",
+      "recorte saindo da moldura",
+      "out of frame",
+      "pessoa saindo da foto"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "Uma pessoa ou objeto recortado sai de dentro de uma moldura e ultrapassa a borda, ganhando relevo.",
+    "como_funciona": "A moldura entra primeiro; o recorte (PNG com transparência) sobe em y com back.out e o clip-path inset se abre para além da moldura no topo, deixando-o vazar da borda.",
+    "quando_usar": "Thumbnails animadas, apresentação de pessoa, produto saltando da tela de um celular.",
+    "evitar": "Recorte mal feito (bordas sujas aparecem); moldura muito pequena.",
+    "padrao": {
+      "duracao_s": 0.85,
+      "ease": "back.out(1.6)",
+      "parametros": {
+        "subida_px": 180,
+        "atraso_s": 0.25
+      }
+    },
+    "propriedades": [
+      "y",
+      "scale",
+      "clip-path",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "frame-in-frame",
+      "pop-in"
+    ],
+    "gsap": "// items = [moldura, recorte PNG com fundo transparente por cima da moldura]\nconst [frame, cutout] = items;\ntl.fromTo(frame, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: \"power3.out\" }, t);\ntl.fromTo(cutout, { y: 120, scale: 0.95, clipPath: \"inset(0% 0% 30% 0%)\" }, { y: -60, scale: 1.05, clipPath: \"inset(-50% -50% 0% -50%)\", duration: 0.6, ease: \"back.out(1.6)\" }, t + 0.25);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "collage-stagger",
+    "nome": "collage",
+    "nome_pt": "colagem em sequência",
+    "aliases": [
+      "colagem",
+      "mural de fotos",
+      "fotos espalhadas",
+      "moodboard"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "Várias fotos caem na tela uma depois da outra, cada uma num ângulo, montando um mural sobreposto.",
+    "como_funciona": "Cada foto parte de scale 1,3 e opacity 0 e assenta na sua rotação final (fixa, entre -8° e 8°) com back.out, em stagger de 0,1 s.",
+    "quando_usar": "Bastidores, memórias, recap do ano, portfólio, prova social com prints.",
+    "evitar": "Fotos demais (acima de ~9) ou rotações iguais (perde o ar manual).",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "back.out(1.5)",
+      "parametros": {
+        "stagger_s": 0.1,
+        "rotacoes_graus": [
+          -6,
+          4,
+          -3,
+          8,
+          -8,
+          2
+        ],
+        "escala_inicial": 1.3
+      }
+    },
+    "propriedades": [
+      "scale",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "polaroid-drop",
+      "stop-motion",
+      "paper-texture"
+    ],
+    "gsap": "// items = fotos já posicionadas; rotações finais fixas\nconst rot = [-6, 4, -3, 8, -8, 2];\ntl.fromTo(items, { scale: 1.3, opacity: 0, rotation: (i) => rot[i % rot.length] * 2 }, { scale: 1, opacity: 1, rotation: (i) => rot[i % rot.length], duration: 0.45, ease: \"back.out(1.5)\", stagger: 0.1 }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "frame-in-frame",
+    "nome": "frame-in-frame",
+    "nome_pt": "quadro dentro do quadro",
+    "aliases": [
+      "droste",
+      "zoom infinito",
+      "tela dentro da tela",
+      "recursivo"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "A cena contém uma cópia menor de si mesma, que contém outra, e a câmera avança num zoom infinito sem emenda.",
+    "como_funciona": "Cópias aninhadas, cada uma com 70% da anterior (scale 0,7^i no CSS); o grupo cresce de scale 1 a 1/0,7 linear e repete, então cada volta cai exatamente sobre a cópia seguinte.",
+    "quando_usar": "Metáfora de ciclo, \"um dentro do outro\", tela de celular mostrando o próprio vídeo, humor.",
+    "evitar": "Mais de 5 níveis (render pesa) ou com texto que fica pequeno demais.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "razao": 0.7,
+        "niveis": 5,
+        "volta_s": 1.5
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "historia"
+    ],
+    "combina_com": [
+      "alpha-cutout",
+      "push-in"
+    ],
+    "gsap": "const sceneDur = 4; // duração da cena em s (troque pela real)\n\n// el = grupo com as cópias aninhadas, cada uma 70% da anterior (scale 0.7^i no CSS)\ntl.fromTo(el, { scale: 1 }, { scale: 1 / 0.7, duration: 1.5, ease: \"none\", repeat: Math.max(0, Math.floor(sceneDur / 1.5) - 1) }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "grid-reveal",
+    "nome": "grid reveal",
+    "nome_pt": "revelação em grade",
+    "aliases": [
+      "mosaico",
+      "ladrilhos",
+      "grid de quadrados",
+      "tiles"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "Uma imagem dentro da cena aparece em ladrilhos que surgem do centro para fora, montando a figura inteira.",
+    "como_funciona": "A imagem é cortada em uma grade de 8 linhas por 5 colunas (cada ladrilho com clip-path ou background-position); os ladrilhos fazem scale 0 → 1 com stagger em grade a partir do centro.",
+    "quando_usar": "Revelar foto, mapa, print de painel, logo de cliente, mosaico de prova social.",
+    "evitar": "Confundir com grid dissolve (transição de cena, arquivo D); grades finas demais pesam.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "back.out(1.5)",
+      "parametros": {
+        "grade": [
+          8,
+          5
+        ],
+        "stagger_total_s": 0.6,
+        "origem": "center (ou edges/start)"
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "dados",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pop-in",
+      "collage-stagger"
+    ],
+    "gsap": "// items = ladrilhos da imagem em ordem de leitura (8 linhas x 5 colunas)\ntl.fromTo(items, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: \"back.out(1.5)\", stagger: { grid: [8, 5], from: \"center\", amount: 0.6 } }, t);",
+    "receita_hyperframes": "css-grid",
+    "origem": "expansao"
+  },
+  {
+    "id": "kaleidoscope",
+    "nome": "kaleidoscope",
+    "nome_pt": "caleidoscópio",
+    "aliases": [
+      "caleidoscópio",
+      "simetria radial",
+      "espelhos em círculo",
+      "mandala"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "A imagem é repetida em fatias espelhadas ao redor do centro e gira, formando padrões de caleidoscópio.",
+    "como_funciona": "Oito fatias triangulares (clip-path) giradas em i*45°, as ímpares espelhadas em scaleX -1, cada uma com a mesma imagem; as imagens internas giram e crescem juntas e o grupo gira devagar no sentido oposto.",
+    "quando_usar": "Abertura psicodélica, música, arte, transição interna de um momento de \"viagem\".",
+    "evitar": "Com rostos ou texto (vira confuso); por muito tempo cansa.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "fatias": 8,
+        "giro_interno_graus": 90,
+        "giro_grupo_graus": -30
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "color-grade-shift",
+      "bloom"
+    ],
+    "gsap": "const sceneDur = 4; // duração da cena em s (troque pela real)\n\n// el = grupo de 8 fatias (rotate(i*45deg), ímpares com scaleX(-1), clip-path triangular); items = imagem dentro de cada fatia\ntl.fromTo(items, { rotation: 0, scale: 1.2 }, { rotation: 90, scale: 1.4, duration: sceneDur, ease: \"none\" }, t);\ntl.fromTo(el, { rotation: 0 }, { rotation: -30, duration: sceneDur, ease: \"sine.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "luma-matte",
+    "nome": "luma matte",
+    "nome_pt": "máscara por luminosidade",
+    "aliases": [
+      "luma key",
+      "máscara de tinta",
+      "ink reveal",
+      "revelar com textura"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "A imagem aparece seguindo as áreas claras de uma textura (tinta, fumaça, nuvem), abrindo de forma orgânica.",
+    "como_funciona": "Uma textura em tons de cinza dentro de um SVG mask passa por feComponentTransfer com slope alto; o attr intercept vai de -1 a 1 e as áreas mais claras abrem primeiro, como um limiar.",
+    "quando_usar": "Revelações artísticas, abertura com tinta, aquarela, fumaça, conteúdo artesanal.",
+    "evitar": "Textura com pouco contraste (abre tudo de uma vez); em muitas camadas pesa.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "slope": 4,
+        "intercept": [
+          -1,
+          1
+        ],
+        "textura": "tinta, nuvem ou fumaça em cinza"
+      }
+    },
+    "propriedades": [
+      "attr:intercept"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "paper-texture",
+      "light-leak"
+    ],
+    "gsap": "// items = [feFuncR, feFuncG, feFuncB] (type=\"linear\" slope=\"4\") no filtro da textura dentro do <mask>\ntl.fromTo(items, { attr: { intercept: -1 } }, { attr: { intercept: 1 }, duration: 1.0, ease: \"power2.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "mask-wipe-local",
+    "nome": "mask wipe",
+    "nome_pt": "revelação com corte diagonal",
+    "aliases": [
+      "wipe local",
+      "revelar imagem",
+      "cortina diagonal",
+      "reveal diagonal"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "Uma imagem ou card dentro da cena é revelado por um corte diagonal que varre de um lado ao outro.",
+    "como_funciona": "clip-path polygon com borda inclinada anda de fora do elemento até cobri-lo inteiro (4 pontos que se movem juntos); só o elemento é revelado, a cena não muda.",
+    "quando_usar": "Fotos em sequência, prints, imagens de prova, cards de lista.",
+    "evitar": "Confundir com wipe (troca de cena, arquivo D). Usar a mesma direção em tudo.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.inOut",
+      "parametros": {
+        "inclinacao_pct": 20,
+        "direcao": "esquerda para direita (ou qualquer)"
+      }
+    },
+    "propriedades": [
+      "clip-path"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "stagger",
+      "collage-stagger"
+    ],
+    "gsap": "// borda inclinada de 20%: começa toda à esquerda, termina cobrindo o elemento\ntl.fromTo(el, { clipPath: \"polygon(0% 0%, 0% 0%, -20% 100%, -20% 100%)\" }, { clipPath: \"polygon(0% 0%, 120% 0%, 100% 100%, -20% 100%)\", duration: 0.6, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "mirror",
+    "nome": "mirror",
+    "nome_pt": "espelho",
+    "aliases": [
+      "espelhar",
+      "simetria",
+      "reflexo espelhado",
+      "efeito espelho"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "A imagem se abre a partir do eixo central e a metade de um lado é espelhada no outro, criando uma composição simétrica.",
+    "como_funciona": "Original e cópia com scaleX -1 usam o mesmo clip-path, que abre de largura zero no centro até a metade esquerda; como a cópia está invertida, ela cresce para a direita.",
+    "quando_usar": "Arquitetura, paisagem, produto centralizado, estética de clipe e moda.",
+    "evitar": "Rostos (fica estranho) ou texto (sai invertido do lado espelhado).",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.out",
+      "parametros": {
+        "eixo": "vertical (horizontal: troque por scaleY -1)"
+      }
+    },
+    "propriedades": [
+      "clip-path",
+      "scaleX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "opiniao",
+      "historia"
+    ],
+    "combina_com": [
+      "kaleidoscope",
+      "push-in"
+    ],
+    "gsap": "// items = [original, cópia espelhada]; o clip local é igual nos dois, a inversão faz a cópia abrir para a direita\nconst [orig, copy] = items;\ntl.fromTo(orig, { clipPath: \"inset(0% 50% 0% 50%)\" }, { clipPath: \"inset(0% 50% 0% 0%)\", duration: 0.7, ease: \"power3.out\" }, t);\ntl.fromTo(copy, { scaleX: -1, clipPath: \"inset(0% 50% 0% 50%)\" }, { scaleX: -1, clipPath: \"inset(0% 50% 0% 0%)\", duration: 0.7, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "picture-in-picture",
+    "nome": "picture-in-picture",
+    "nome_pt": "janela no canto",
+    "aliases": [
+      "pip",
+      "quadro no canto",
+      "rosto no canto",
+      "janelinha"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "O vídeo em tela cheia encolhe para uma janelinha arredondada no canto e o novo conteúdo aparece atrás.",
+    "como_funciona": "O elemento vai de scale 1 para 0,32 e é levado ao canto com x/y, enquanto o clip-path inset ganha cantos arredondados (round 0 → 60 px).",
+    "quando_usar": "Rosto do apresentador sobre tela de tutorial, reação, comentário sobre um vídeo.",
+    "evitar": "Janela cobrindo legenda ou interface; janela menor que ~25% em vertical.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.inOut",
+      "parametros": {
+        "escala": 0.32,
+        "canto": "superior direito",
+        "x_px": 327,
+        "y_px": -613,
+        "raio_px": 60
+      }
+    },
+    "propriedades": [
+      "scale",
+      "x",
+      "y",
+      "clip-path"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "frosted-glass",
+      "split-screen"
+    ],
+    "gsap": "// el = vídeo em tela cheia; destino: canto superior direito com margem de 40 px\ntl.fromTo(el, { scale: 1, x: 0, y: 0, clipPath: \"inset(0% round 0px)\" }, { scale: 0.32, x: 327, y: -613, clipPath: \"inset(0% round 60px)\", duration: 0.7, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "polaroid-drop",
+    "nome": "polaroid drop",
+    "nome_pt": "polaroid caindo e revelando",
+    "aliases": [
+      "polaroid",
+      "foto instantânea",
+      "revelar foto",
+      "foto caindo"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "Uma polaroid cai na mesa girando, assenta com sombra e a foto revela do branco até a imagem final.",
+    "como_funciona": "A moldura cai de y -900 e rotação -25° até 0/-4° com power3.out; a foto interna vai de brightness(3) saturate(0) a normal em 1,2 s, como revelação química.",
+    "quando_usar": "Memória, momento marcante da história, apresentação de pessoa, foto do produto em uso.",
+    "evitar": "Várias polaroids revelando juntas (use collage); revelação rápida demais.",
+    "padrao": {
+      "duracao_s": 1.6,
+      "ease": "power3.out",
+      "parametros": {
+        "queda_px": 900,
+        "rotacao_final_graus": -4,
+        "revelacao_s": 1.2
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotation",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "collage-stagger",
+      "grain",
+      "dust-scratches"
+    ],
+    "gsap": "// items = [moldura branca da polaroid, foto dentro dela]\nconst [frame, photo] = items;\ntl.fromTo(frame, { y: -900, rotation: -25 }, { y: 0, rotation: -4, duration: 0.6, ease: \"power3.out\" }, t);\ntl.fromTo(photo, { filter: \"brightness(3) saturate(0) contrast(0.6)\" }, { filter: \"brightness(1) saturate(1) contrast(1)\", duration: 1.2, ease: \"power1.inOut\" }, t + 0.4);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "shape-mask",
+    "nome": "shape mask",
+    "nome_pt": "recorte em forma",
+    "aliases": [
+      "máscara de forma",
+      "foto dentro da estrela",
+      "recorte em círculo",
+      "moldura em forma"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "A imagem aparece dentro de uma forma (estrela, círculo, blob) que cresce do centro e fica como moldura.",
+    "como_funciona": "clip-path polygon gerado por função (estrela de 10 pontos, com correção de proporção para 9:16) é interpolado de escala 0 até o tamanho final; como os pontos são os mesmos, o GSAP interpola sem quebrar.",
+    "quando_usar": "Retrato de convidado, foto de produto, destaque de personagem na história.",
+    "evitar": "Confundir com mask reveal (transição de cena); formas com muitos pontos finos.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.inOut",
+      "parametros": {
+        "forma": "estrela de 5 pontas (ou círculo/hexágono)",
+        "tamanho_final_pct": 45
+      }
+    },
+    "propriedades": [
+      "clip-path"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "pop-in",
+      "float"
+    ],
+    "gsap": "// estrela de 5 pontas como polygon; 0.5625 = 1080/1920 corrige a proporção vertical\nconst star = (s) => \"polygon(\" + Array.from({ length: 10 }, (_, i) => {\n  const ang = -Math.PI / 2 + i * Math.PI / 5, rr = (i % 2 ? 0.45 : 1) * s;\n  return (50 + Math.cos(ang) * rr).toFixed(2) + \"% \" + (50 + Math.sin(ang) * rr * 0.5625).toFixed(2) + \"%\";\n}).join(\", \") + \")\";\ntl.fromTo(el, { clipPath: star(0) }, { clipPath: star(45), duration: 0.8, ease: \"power3.inOut\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "split-screen",
+    "nome": "split screen",
+    "nome_pt": "tela dividida",
+    "aliases": [
+      "tela dividida",
+      "lado a lado",
+      "comparação na tela",
+      "dois quadros"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "A tela se divide em duas metades, cada uma com um conteúdo, entrando por lados opostos com uma linha divisória.",
+    "como_funciona": "A metade de cima desce de yPercent -100 e a de baixo sobe de 100, com 0,08 s de diferença; a divisória cresce em scaleX a partir do centro.",
+    "quando_usar": "Antes e depois, comparação, reação, duas opiniões, tutorial (rosto e tela).",
+    "evitar": "Mais de 3 divisões em vídeo vertical (fica minúsculo).",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.out",
+      "parametros": {
+        "divisao": "horizontal (vertical: troque yPercent por xPercent)",
+        "atraso_s": 0.08
+      }
+    },
+    "propriedades": [
+      "yPercent",
+      "scaleX"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "explicativo",
+      "produto"
+    ],
+    "combina_com": [
+      "card-tilt",
+      "count-up"
+    ],
+    "gsap": "// items = [metade de cima, metade de baixo, divisória]\nconst [upper, lower, line] = items;\ntl.fromTo(upper, { yPercent: -100 }, { yPercent: 0, duration: 0.6, ease: \"power3.out\" }, t);\ntl.fromTo(lower, { yPercent: 100 }, { yPercent: 0, duration: 0.6, ease: \"power3.out\" }, t + 0.08);\ntl.fromTo(line, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: \"power2.inOut\" }, t + 0.4);",
+    "receita_hyperframes": "split-tilt-cards",
+    "origem": "expansao"
+  },
+  {
+    "id": "spotlight",
+    "nome": "spotlight",
+    "nome_pt": "holofote",
+    "aliases": [
+      "foco de luz",
+      "lanterna",
+      "destacar com círculo",
+      "spotlight mask"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "A cena escurece e só um círculo de luz fica aberto sobre o ponto importante; depois o foco pode andar até o próximo.",
+    "como_funciona": "Um círculo transparente com box-shadow gigante escuro (0 0 0 4000px) entra de scale 4 a 1 com opacity; para mudar de alvo, só x e y se movem.",
+    "quando_usar": "Tutorial de interface, destacar detalhe de produto, apontar dado em gráfico.",
+    "evitar": "Foco pequeno demais para o alvo ou trocar de alvo rápido demais.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.out",
+      "parametros": {
+        "escuro_opacity": 0.72,
+        "raio_px": 180,
+        "troca_alvo_s": 0.6
+      }
+    },
+    "propriedades": [
+      "scale",
+      "x",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "tecnico",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "pulse",
+      "highlight"
+    ],
+    "gsap": "// el = círculo transparente com box-shadow: 0 0 0 4000px rgba(0,0,0,0.72) (o escuro é a sombra)\ntl.fromTo(el, { scale: 4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: \"power3.out\" }, t);\n// anda até o segundo alvo\ntl.fromTo(el, { x: 0, y: 0 }, { x: 220, y: -340, duration: 0.6, ease: \"power3.inOut\", immediateRender: false }, t + 1.0);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "sticker-slap",
+    "nome": "sticker peel",
+    "nome_pt": "adesivo colando",
+    "aliases": [
+      "sticker",
+      "adesivo",
+      "colar adesivo",
+      "selo colado"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "Um adesivo de borda branca é colado na tela com um tapa: chega grande e inclinado, achata e a ponta dobrada assenta por último.",
+    "como_funciona": "O adesivo cai de scale 1,4 e rotação 18° para 1 e -6° com back.out em 0,3 s; a sombra encolhe junto e o clip-path polygon do canto termina de fechar logo depois.",
+    "quando_usar": "Selo de \"novo\", \"grátis\", preço, emoji de reação, carimbos sobre a foto.",
+    "evitar": "Mais de 3 adesivos por cena; adesivo sem borda branca perde a leitura.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "back.out(2)",
+      "parametros": {
+        "escala_inicial": 1.4,
+        "rotacao_graus": [
+          18,
+          -6
+        ],
+        "dobra_pct": 22
+      }
+    },
+    "propriedades": [
+      "scale",
+      "rotation",
+      "clip-path",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "opiniao",
+      "motivacional"
+    ],
+    "combina_com": [
+      "pop-in",
+      "page-curl",
+      "collage-stagger"
+    ],
+    "gsap": "// items = [adesivo, sombra do adesivo]\nconst [sticker, shadow] = items;\ntl.fromTo(sticker, { scale: 1.4, rotation: 18, opacity: 0 }, { scale: 1, rotation: -6, opacity: 1, duration: 0.3, ease: \"back.out(2)\" }, t);\ntl.fromTo(shadow, { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 0.35, duration: 0.3, ease: \"power2.out\" }, t);\n// ponta dobrada desce e o adesivo fica inteiro\ntl.fromTo(sticker, { clipPath: \"polygon(0% 0%, 100% 0%, 100% 78%, 78% 100%, 0% 100%)\" }, { clipPath: \"polygon(0% 0%, 100% 0%, 100% 100%, 100% 100%, 0% 100%)\", duration: 0.2, ease: \"power2.out\" }, t + 0.25);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "text-mask",
+    "nome": "text mask",
+    "nome_pt": "vídeo dentro do texto",
+    "aliases": [
+      "vídeo dentro da letra",
+      "texto vazado",
+      "knockout text",
+      "imagem dentro do texto"
+    ],
+    "familia": "mascaras-composicao",
+    "descricao": "Uma palavra grande funciona como janela: dentro das letras passa um vídeo ou foto em movimento.",
+    "como_funciona": "O vídeo fica dentro de um wrapper com mask-image (ou background-clip: text) no formato da palavra; o wrapper entra com scale 1,2 → 1 e o vídeo faz um leve parallax vertical durante a cena.",
+    "quando_usar": "Títulos de capítulo, nome de cidade ou marca, abertura de vlog.",
+    "evitar": "Fonte fina (o vídeo some) ou vídeo escuro em fundo escuro.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.out",
+      "parametros": {
+        "peso_fonte": 900,
+        "parallax_pct": 8
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "yPercent"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "motivacional",
+      "produto"
+    ],
+    "combina_com": [
+      "push-in",
+      "line-reveal"
+    ],
+    "gsap": "const sceneDur = 4; // duração da cena em s (troque pela real)\n\n// items = [palavra (wrapper com mask-image do texto), vídeo dentro dele]\nconst [word, video] = items;\ntl.fromTo(word, { scale: 1.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: \"power3.out\" }, t);\ntl.fromTo(video, { yPercent: -8 }, { yPercent: 8, duration: sceneDur, ease: \"none\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  }
+]

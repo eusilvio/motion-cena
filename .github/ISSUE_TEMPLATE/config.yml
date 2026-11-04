@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Guia de contribuição
+    url: https://github.com/eusilvio/motion-cena/blob/main/CONTRIBUTING.md
+    about: Como preparar a máquina, rodar os checks e o que nunca entra num PR.
+  - name: Frentes abertas
+    url: https://github.com/eusilvio/motion-cena/blob/main/ROADMAP.md
+    about: Onde ajuda é bem-vinda, com as boas primeiras contribuições marcadas.

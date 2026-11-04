@@ -1,0 +1,1041 @@
+[
+  {
+    "id": "bounce",
+    "nome": "bounce",
+    "nome_pt": "quicar antes de parar",
+    "aliases": [
+      "quicar",
+      "quique",
+      "bounce out",
+      "cair quicando"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento cai e quica no chão algumas vezes antes de parar.",
+    "como_funciona": "É o ease bounce.out aplicado a uma queda em y (origem em cima, destino no chão); elastic.out(1, 0.5) é a variante mais mole.",
+    "quando_usar": "Objetos físicos: bola, ícone, moeda, badge.",
+    "evitar": "Em transição de cena ou texto sério: fica amador. Bounce é para objeto.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "bounce.out",
+      "parametros": {
+        "alternativa": "elastic.out(1,0.5)",
+        "altura_px": 500
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "explicativo",
+      "motivacional"
+    ],
+    "combina_com": [
+      "drop-in",
+      "bounce-in"
+    ],
+    "gsap": "// bounce: queda que quica (origem em cima, destino no chão)\ntl.fromTo(el, { y: -500 }, { y: 0, duration: 1.0, ease: \"bounce.out\" }, t);",
+    "receita_hyperframes": "press-release-spring",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "overshoot",
+    "nome": "overshoot",
+    "nome_pt": "passar do ponto e voltar",
+    "aliases": [
+      "passar do ponto",
+      "back out",
+      "ultrapassar",
+      "chegar com folga"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento chega passando um pouco do destino e volta para o lugar, como algo com inércia.",
+    "como_funciona": "É o ease back.out(1.4 a 2) aplicado a um deslocamento; o parâmetro controla o quanto passa.",
+    "quando_usar": "Objetos físicos: botões, ícones, cards que chegam com energia.",
+    "evitar": "Em transição de cena ou em blocos grandes de texto: parece amador.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "back.out(1.8)",
+      "parametros": {
+        "forca": [
+          1.4,
+          2
+        ],
+        "distancia_px": 600
+      }
+    },
+    "propriedades": [
+      "x"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pop-in",
+      "slingshot",
+      "ease-in-out"
+    ],
+    "gsap": "// overshoot: chega passando do destino e volta\ntl.fromTo(el, { x: 0 }, { x: 600, duration: 0.7, ease: \"back.out(1.8)\" }, t);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "pop-in",
+    "nome": "pop in",
+    "nome_pt": "aparecer com um pulinho",
+    "aliases": [
+      "pop",
+      "pipocar",
+      "saltar para dentro",
+      "entrar com pulo"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento aparece com um pequeno salto de escala, passando um pouco do tamanho final e voltando.",
+    "como_funciona": "Anima scale de 0.6 a 1 e opacity 0 a 1 com back.out(1.7). Partir de 0.6, e não de 0, é o que mantém o salto pequeno.",
+    "quando_usar": "Ícones, botões, selos, CTAs e emojis de interface.",
+    "evitar": "Partir de scale 0 com back.out forte em texto grande: parece mola de desenho. Para texto, 0.6 a 1 com back.out(1.4).",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "back.out(1.7)",
+      "parametros": {
+        "escala_inicial": 0.6
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "stagger",
+      "overshoot",
+      "center-out-stagger"
+    ],
+    "gsap": "// pop in: pequeno salto, não de 0 (de 0 vira scale up)\ntl.fromTo(el, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: \"back.out(1.7)\" }, t);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "scale-up",
+    "nome": "scale up",
+    "nome_pt": "crescer até o tamanho final",
+    "aliases": [
+      "crescer",
+      "escalar",
+      "nascer do zero",
+      "grow"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento nasce de um ponto e cresce rápido até o tamanho final, freando no fim.",
+    "como_funciona": "Anima scale de 0 a 1 com expo.out: quase todo o crescimento acontece nos primeiros quadros.",
+    "quando_usar": "Números de destaque, logos, círculos e formas que precisam de peso.",
+    "evitar": "Em texto corrido: as letras ficam ilegíveis no começo. Com back.out forte vira desenho animado.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "expo.out",
+      "parametros": {}
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "dados",
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "count-up",
+      "punch-zoom",
+      "pop-in"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 0 }, { scale: 1, duration: 0.6, ease: \"expo.out\" }, t);",
+    "receita_hyperframes": "counting-dynamic-scale",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "stagger",
+    "nome": "stagger",
+    "nome_pt": "um depois do outro",
+    "aliases": [
+      "cascata",
+      "em sequência",
+      "escalonado",
+      "um por um"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "Vários elementos entram com o mesmo movimento, um depois do outro, com um pequeno atraso entre eles.",
+    "como_funciona": "Um único fromTo em items com stagger de 0.05 a 0.15 s; a cascata inteira deve caber em até 0.8 s.",
+    "quando_usar": "Listas de benefícios, tópicos, cards, ícones e palavras.",
+    "evitar": "Cascata longa (10 itens x 0.15 s = 1.5 s): corte o atraso para caber em 0.8 s.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.out",
+      "parametros": {
+        "stagger_s": 0.15,
+        "cascata_max_s": 0.8,
+        "distancia_px": 40
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "produto",
+      "dados",
+      "opiniao"
+    ],
+    "combina_com": [
+      "slide-in",
+      "pop-in",
+      "stagger-out"
+    ],
+    "gsap": "// stagger: itens x stagger <= ~0.8s\ntl.fromTo(items, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: \"power3.out\", stagger: 0.15 }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "dicionario-atual"
+  },
+  {
+    "id": "assemble-in",
+    "nome": "assemble",
+    "nome_pt": "montar a partir das peças",
+    "aliases": [
+      "montar",
+      "peças se juntando",
+      "assemble",
+      "juntar fragmentos"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "As partes de um elemento chegam de posições espalhadas e se encaixam formando o todo.",
+    "como_funciona": "Cada peça parte de um deslocamento fixo derivado do índice (x, y, rotation) e vai a 0 com power3.out e stagger curto.",
+    "quando_usar": "Logo montando, ícone de quebra-cabeça, letras de título, peças de um produto.",
+    "evitar": "Peças demais com blur ao mesmo tempo pesam o render. Deslocamento aleatório com Math.random quebra o seek.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.out",
+      "parametros": {
+        "raio_px": 400,
+        "stagger_s": 0.03
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "tecnico",
+      "motivacional"
+    ],
+    "combina_com": [
+      "scatter-out",
+      "burst-in",
+      "glow"
+    ],
+    "gsap": "// deslocamento determinístico por índice (seed fixa)\nconst off = (i, k) => Math.sin(i * 12.9898 + k * 78.233) * 400;\ntl.fromTo(items, { x: (i) => off(i, 1), y: (i) => off(i, 2), rotation: (i) => off(i, 3) / 4, opacity: 0 }, { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.7, ease: \"power3.out\", stagger: 0.03 }, t);",
+    "receita_hyperframes": "depth-scatter-assemble",
+    "origem": "expansao"
+  },
+  {
+    "id": "bounce-in",
+    "nome": "bounce in",
+    "nome_pt": "crescer quicando",
+    "aliases": [
+      "bounce de escala",
+      "quicar crescendo",
+      "entrar quicando",
+      "boing in"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento cresce em pulos de escala: passa do tamanho, encolhe um pouco, passa de novo menos e para.",
+    "como_funciona": "Keyframes de scale 0, 1.15, 0.92, 1.04, 1 com opacity; é o bounce in clássico. Diferente do bounce, que é uma queda em y.",
+    "quando_usar": "Botões, notificações, contadores e ícones que pedem alegria.",
+    "evitar": "Em elementos grandes que ocupam a tela: o 1.15 corta nas bordas.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "none",
+      "parametros": {
+        "escalas": [
+          0,
+          1.15,
+          0.92,
+          1.04,
+          1
+        ]
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "pop-in",
+      "elastic-in",
+      "stagger"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 0, opacity: 0 }, { keyframes: { scale: [0, 1.15, 0.92, 1.04, 1], opacity: [0, 1, 1, 1, 1], easeEach: \"power2.out\" }, duration: 0.6, ease: \"none\" }, t);",
+    "receita_hyperframes": "press-release-spring",
+    "origem": "expansao"
+  },
+  {
+    "id": "burst-in",
+    "nome": "burst in",
+    "nome_pt": "explodir do centro para o lugar",
+    "aliases": [
+      "explosão de entrada",
+      "sair do centro",
+      "radiar",
+      "abrir em leque"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "Os itens começam empilhados num ponto central e se espalham ao mesmo tempo até suas posições finais.",
+    "como_funciona": "Cada item parte do centro comum (x/y = centro do pai menos a posição dele, calculado no setup) e scale 0.4, indo a 0/1 com expo.out.",
+    "quando_usar": "Ícones em volta de um produto, recursos ao redor de um logo, avatares em volta de um centro.",
+    "evitar": "Sem calcular o deslocamento até o centro de cada item, eles vêm de lugares errados. Mais de 10 itens embola.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "expo.out",
+      "parametros": {
+        "escala_inicial": 0.4
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "center-out-stagger",
+      "assemble-in",
+      "glow"
+    ],
+    "gsap": "// dx/dy: distância de cada item até o centro do grupo (medida no setup)\nconst dx = items.map((it) => it.dataset.dx * 1 || 0), dy = items.map((it) => it.dataset.dy * 1 || 0);\ntl.fromTo(items, { x: (i) => dx[i], y: (i) => dy[i], scale: 0.4, opacity: 0 }, { x: 0, y: 0, scale: 1, opacity: 1, duration: 0.7, ease: \"expo.out\" }, t);",
+    "receita_hyperframes": "center-outward-expansion",
+    "origem": "expansao"
+  },
+  {
+    "id": "cascade",
+    "nome": "cascade",
+    "nome_pt": "cascata caindo",
+    "aliases": [
+      "chuva de itens",
+      "cair em cascata",
+      "cascade",
+      "despencar em sequência"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "Os itens caem de cima um depois do outro, cada um com uma leve rotação diferente, e se assentam.",
+    "como_funciona": "Stagger em y de -300 a 0 com power3.out e rotation inicial vinda de uma lista fixa de ângulos (função por índice), sem aleatoriedade.",
+    "quando_usar": "Fotos espalhadas, cartas, notas, post-its, produtos de um combo.",
+    "evitar": "Muitos itens (mais de 8): vira bagunça. Rotação grande demais dificulta a leitura.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "power3.out",
+      "parametros": {
+        "stagger_s": 0.08,
+        "altura_px": 300,
+        "angulos_graus": [
+          -6,
+          4,
+          -3,
+          7,
+          -5
+        ]
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "explicativo"
+    ],
+    "combina_com": [
+      "stagger",
+      "drop-in",
+      "scatter-out"
+    ],
+    "gsap": "const rot = [-6, 4, -3, 7, -5]; // ângulos fixos por índice\ntl.fromTo(items, { y: -300, opacity: 0, rotation: (i) => rot[i % rot.length] * 2 }, { y: 0, opacity: 1, rotation: (i) => rot[i % rot.length], duration: 0.5, ease: \"power3.out\", stagger: 0.08 }, t);",
+    "receita_hyperframes": "waterfall-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "domino",
+    "nome": "domino entrance",
+    "nome_pt": "entrada dominó",
+    "aliases": [
+      "dominó",
+      "levantar em sequência",
+      "efeito dominó",
+      "tombar para cima"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "Os itens se levantam um depois do outro, cada um girando a partir da base, como peças de dominó em pé.",
+    "como_funciona": "Com perspectiva, stagger de rotationX de 90 a 0 com transformOrigin na base; o atraso curto faz um empurrar o próximo.",
+    "quando_usar": "Passos de um processo, colunas de gráfico, cards em fila, letras de um título.",
+    "evitar": "Atraso longo: perde a sensação de corrente. Sem perspectiva vira só um achatamento.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "back.out(1.4)",
+      "parametros": {
+        "stagger_s": 0.07,
+        "perspectiva_px": 1000
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "tecnico",
+      "dados"
+    ],
+    "combina_com": [
+      "unfold",
+      "stagger",
+      "flip-in"
+    ],
+    "gsap": "tl.set(items, { transformPerspective: 1000, transformOrigin: \"50% 100%\" }, t);\ntl.fromTo(items, { rotationX: 90, opacity: 0 }, { rotationX: 0, opacity: 1, duration: 0.45, ease: \"back.out(1.4)\", stagger: 0.07 }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "drop-in",
+    "nome": "drop in",
+    "nome_pt": "cair e assentar",
+    "aliases": [
+      "cair do alto",
+      "despencar",
+      "drop",
+      "cair na tela"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento cai de cima, um pouco maior, e aterrissa seco no lugar, sem quicar.",
+    "como_funciona": "Anima y de -260 a 0, scale 1.15 a 1 e opacity 0 a 1 com power4.out: chega rápido e trava. Diferente do bounce, que quica.",
+    "quando_usar": "Selos, preços, cartas de baralho, palavras-chave e badges.",
+    "evitar": "Altura grande com ease lento: parece que flutua em vez de cair.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "power4.out",
+      "parametros": {
+        "altura_px": 260,
+        "escala_inicial": 1.15
+      }
+    },
+    "propriedades": [
+      "y",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "dados",
+      "opiniao"
+    ],
+    "combina_com": [
+      "stamp",
+      "bounce",
+      "drop-out"
+    ],
+    "gsap": "tl.fromTo(el, { y: -260, scale: 1.15, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.35, ease: \"power4.out\" }, t);",
+    "receita_hyperframes": "kinetic-beat-slam",
+    "origem": "expansao"
+  },
+  {
+    "id": "elastic-in",
+    "nome": "elastic in",
+    "nome_pt": "entrada elástica",
+    "aliases": [
+      "elástico",
+      "mola",
+      "boing",
+      "elastic"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento cresce como uma mola, passa do tamanho, encolhe, passa de novo e se acomoda, várias vezes e cada vez menos.",
+    "como_funciona": "Anima scale de 0 a 1 com elastic.out(1, 0.4): o ease oscila em torno do valor final. Diferente do pop in, que passa do ponto uma vez só.",
+    "quando_usar": "Ícones de app, adesivos, reações e elementos lúdicos.",
+    "evitar": "Em marca séria ou texto: parece desenho animado. Evite em mais de um elemento ao mesmo tempo.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "elastic.out(1, 0.4)",
+      "parametros": {
+        "amplitude": 1,
+        "periodo": 0.4
+      }
+    },
+    "propriedades": [
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "jelly-in",
+      "pop-in"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 0 }, { scale: 1, duration: 0.9, ease: \"elastic.out(1, 0.4)\" }, t);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "flip-in",
+    "nome": "flip in",
+    "nome_pt": "virar entrando (3D)",
+    "aliases": [
+      "flip",
+      "virar carta",
+      "girar em 3D",
+      "flip horizontal",
+      "flip vertical"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento gira em 3D sobre o próprio eixo, de perfil até ficar de frente, como uma carta sendo virada.",
+    "como_funciona": "Com perspectiva, anima rotationY de 90 a 0 (ou rotationX para flip vertical) com opacity; backface-visibility hidden evita espelhar.",
+    "quando_usar": "Cards, fotos, números de antes e depois, revelação de resposta.",
+    "evitar": "Sem perspectiva vira um achatamento. Em sequência longa de cards cansa.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power3.out",
+      "parametros": {
+        "perspectiva_px": 1000,
+        "eixo": [
+          "Y",
+          "X"
+        ],
+        "angulo_graus": 90
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo",
+      "dados"
+    ],
+    "combina_com": [
+      "stagger",
+      "flip-out",
+      "unfold"
+    ],
+    "gsap": "tl.set(el, { transformPerspective: 1000, backfaceVisibility: \"hidden\" }, t);\ntl.fromTo(el, { rotationY: 90, opacity: 0 }, { rotationY: 0, opacity: 1, duration: 0.6, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": "orbit-3d-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "fly-in",
+    "nome": "fly in",
+    "nome_pt": "vir da frente da câmera",
+    "aliases": [
+      "voar para a tela",
+      "vir da câmera",
+      "fly in",
+      "zoom de chegada"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento vem enorme e desfocado da frente da câmera e pousa no lugar, nítido e no tamanho certo.",
+    "como_funciona": "Anima scale de 2.6 a 1, filter blur de 20 a 0 px e opacity 0 a 1 com power4.out.",
+    "quando_usar": "Títulos de abertura, números grandes, logos e frases de impacto.",
+    "evitar": "Com vários elementos ao mesmo tempo: pesa o render pelo blur. Em texto miúdo some no meio.",
+    "padrao": {
+      "duracao_s": 0.55,
+      "ease": "power4.out",
+      "parametros": {
+        "escala_inicial": 2.6,
+        "blur_px": 20
+      }
+    },
+    "propriedades": [
+      "scale",
+      "filter",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "motivacional",
+      "produto",
+      "historia"
+    ],
+    "combina_com": [
+      "punch-zoom",
+      "zoom-past"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 2.6, filter: \"blur(20px)\", opacity: 0 }, { scale: 1, filter: \"blur(0px)\", opacity: 1, duration: 0.55, ease: \"power4.out\" }, t);",
+    "receita_hyperframes": "motion-blur-streak",
+    "origem": "expansao"
+  },
+  {
+    "id": "jelly-in",
+    "nome": "jelly in",
+    "nome_pt": "entrada gelatina",
+    "aliases": [
+      "gelatina",
+      "jelly",
+      "rubber band",
+      "borrachinha"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento entra se esticando para os lados e para cima alternadamente, como uma gelatina que tremeu.",
+    "como_funciona": "Keyframes que trocam scaleX e scaleY em oposição (1.25/0.75, 0.75/1.25, 1.15/0.85...) até 1/1, com opacity no início.",
+    "quando_usar": "Botões, adesivos, personagens simples e elementos fofos.",
+    "evitar": "Em texto ou foto: deforma e fica feio. Em vídeo técnico tira a seriedade.",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "none",
+      "parametros": {
+        "scaleX": [
+          0.3,
+          1.25,
+          0.75,
+          1.15,
+          0.95,
+          1
+        ],
+        "scaleY": [
+          0.3,
+          0.75,
+          1.25,
+          0.85,
+          1.05,
+          1
+        ]
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "elastic-in",
+      "squeeze-out"
+    ],
+    "gsap": "tl.fromTo(el, { scaleX: 0.3, scaleY: 0.3, opacity: 0 }, { keyframes: { scaleX: [0.3, 1.25, 0.75, 1.15, 0.95, 1], scaleY: [0.3, 0.75, 1.25, 0.85, 1.05, 1], opacity: [0, 1, 1, 1, 1, 1], easeEach: \"sine.inOut\" }, duration: 0.7, ease: \"none\" }, t);",
+    "receita_hyperframes": "physics-press-reaction",
+    "origem": "expansao"
+  },
+  {
+    "id": "roll-in",
+    "nome": "roll in",
+    "nome_pt": "entrar rolando",
+    "aliases": [
+      "rolar",
+      "rodinha",
+      "roll",
+      "entrar rodando de lado"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento entra rolando pelo chão, girando na medida certa da distância percorrida, como uma roda.",
+    "como_funciona": "Anima x de -600 a 0 e rotation de -270 a 0 juntos; a rotação acompanha a distância (aprox. distância / raio em radianos) para parecer que rola de verdade.",
+    "quando_usar": "Ícones redondos, moedas, bolas, rodas, avatares circulares.",
+    "evitar": "Em elementos quadrados ou texto: parece erro. Rotação desproporcional à distância vira patinação.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "power3.out",
+      "parametros": {
+        "distancia_px": 600,
+        "rotacao_graus": -270
+      }
+    },
+    "propriedades": [
+      "x",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "bounce",
+      "fade-in"
+    ],
+    "gsap": "tl.fromTo(el, { x: -600, rotation: -270, opacity: 0 }, { x: 0, rotation: 0, opacity: 1, duration: 0.8, ease: \"power3.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "rotate-in",
+    "nome": "rotate in",
+    "nome_pt": "girar entrando por um canto",
+    "aliases": [
+      "girar entrando",
+      "rotacionar para dentro",
+      "pivotar",
+      "rotate"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento gira um quarto de volta em torno de um canto, como uma porta de vaivém, e encaixa no lugar.",
+    "como_funciona": "Anima rotation de -90 a 0 com transformOrigin num canto (0% 100%) e opacity; o pivô no canto é o que diferencia do spin in.",
+    "quando_usar": "Cards laterais, etiquetas, faixas de texto que entram da borda.",
+    "evitar": "Pivô no centro: aí é spin in. Em elementos muito largos o canto oposto varre a tela inteira.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "back.out(1.4)",
+      "parametros": {
+        "angulo_graus": -90,
+        "pivo": "0% 100%"
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "opiniao",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "swing-in",
+      "tilt-in"
+    ],
+    "gsap": "tl.fromTo(el, { rotation: -90, opacity: 0, transformOrigin: \"0% 100%\" }, { rotation: 0, opacity: 1, duration: 0.6, ease: \"back.out(1.4)\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "skew-in",
+    "nome": "skew in",
+    "nome_pt": "entrar inclinado pela velocidade",
+    "aliases": [
+      "skew",
+      "entrar enviesado",
+      "velocidade inclinada",
+      "speed skew"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento entra de lado inclinado pela velocidade e se endireita quando freia, como se estivesse correndo.",
+    "como_funciona": "Anima x de 400 a 0 e skewX de -25° a 0 com opacity e power4.out; a inclinação some junto com a velocidade.",
+    "quando_usar": "Títulos esportivos, promoções, frases de urgência, entradas em vídeos de ritmo rápido.",
+    "evitar": "Em vídeo calmo ou elegante. Skew acima de 30° fica ilegível.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "power4.out",
+      "parametros": {
+        "distancia_px": 400,
+        "skew_graus": -25
+      }
+    },
+    "propriedades": [
+      "x",
+      "skewX",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "motivacional",
+      "produto",
+      "opiniao"
+    ],
+    "combina_com": [
+      "whip-in",
+      "slide-in"
+    ],
+    "gsap": "tl.fromTo(el, { x: 400, skewX: -25, opacity: 0 }, { x: 0, skewX: 0, opacity: 1, duration: 0.45, ease: \"power4.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "slingshot",
+    "nome": "slingshot",
+    "nome_pt": "estilingue",
+    "aliases": [
+      "estilingue",
+      "disparar e voltar",
+      "lançado",
+      "atirar para dentro"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento é disparado de fora da tela, esticado pela velocidade, passa bem do ponto e volta para o lugar.",
+    "como_funciona": "Anima x de -900 a 0 com back.out(3) e um scaleX que começa esticado (1.4) e volta a 1 no mesmo tempo.",
+    "quando_usar": "Cards, setas, ícones de ação e elementos que chegam com urgência.",
+    "evitar": "Em texto longo: o esticamento atrapalha a leitura. Força acima de 3 parece glitch.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "back.out(3)",
+      "parametros": {
+        "distancia_px": 900,
+        "esticamento": 1.4,
+        "direcoes": [
+          "esquerda",
+          "direita",
+          "cima",
+          "baixo"
+        ]
+      }
+    },
+    "propriedades": [
+      "x",
+      "scaleX"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "overshoot",
+      "whip-in"
+    ],
+    "gsap": "tl.fromTo(el, { x: -900, scaleX: 1.4, transformOrigin: \"100% 50%\" }, { x: 0, scaleX: 1, duration: 0.6, ease: \"back.out(3)\" }, t);",
+    "receita_hyperframes": "reactive-displacement",
+    "origem": "expansao"
+  },
+  {
+    "id": "spin-in",
+    "nome": "spin in",
+    "nome_pt": "girar crescendo",
+    "aliases": [
+      "rodopiar",
+      "spin",
+      "girando e crescendo",
+      "entrar rodando"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento nasce pequeno girando em torno do próprio centro e para de frente no tamanho final.",
+    "como_funciona": "Anima rotation de -360 a 0 e scale de 0 a 1 juntos com expo.out; para mais de uma volta use -720.",
+    "quando_usar": "Logos, moedas, ícones redondos, selos de garantia.",
+    "evitar": "Em texto: fica ilegível durante o giro. Mais de duas voltas parece descontrole.",
+    "padrao": {
+      "duracao_s": 0.8,
+      "ease": "expo.out",
+      "parametros": {
+        "voltas": 1,
+        "escala_inicial": 0
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "scale"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "glow",
+      "black-hole",
+      "pop-in"
+    ],
+    "gsap": "tl.fromTo(el, { rotation: -360, scale: 0, transformOrigin: \"50% 50%\" }, { rotation: 0, scale: 1, duration: 0.8, ease: \"expo.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "stamp",
+    "nome": "stamp",
+    "nome_pt": "carimbar",
+    "aliases": [
+      "carimbo",
+      "selo batendo",
+      "stamp in",
+      "bater na tela"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento desce grande e torto sobre a tela e bate no lugar como um carimbo, ficando com uma leve inclinação.",
+    "como_funciona": "Anima scale de 2.2 a 1 e opacity 0 a 1 em 0.18 s com power4.in (acelera até o impacto), mantém rotation fixa de -8°, depois um mini recuo de escala 0.96 a 1.",
+    "quando_usar": "Selos de \"aprovado\", \"esgotado\", \"grátis\", preços promocionais e veredictos.",
+    "evitar": "Em palavras de texto corrido (isso é slam, da família texto). Mais de um carimbo por cena tira o peso.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "power4.in",
+      "parametros": {
+        "escala_inicial": 2.2,
+        "angulo_graus": -8
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "rotation"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "opiniao",
+      "dados"
+    ],
+    "combina_com": [
+      "shake",
+      "drop-in"
+    ],
+    "gsap": "tl.fromTo(el, { scale: 2.2, opacity: 0, rotation: -8 }, { scale: 1, opacity: 1, duration: 0.18, ease: \"power4.in\" }, t);\ntl.fromTo(el, { scale: 0.96 }, { scale: 1, duration: 0.12, ease: \"power2.out\", immediateRender: false }, t + 0.18);",
+    "receita_hyperframes": "kinetic-beat-slam",
+    "origem": "expansao"
+  },
+  {
+    "id": "stretch-in",
+    "nome": "stretch in",
+    "nome_pt": "entrar esticado",
+    "aliases": [
+      "esticar",
+      "stretch",
+      "chegar esticado",
+      "estica e encaixa"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento aparece alongado na horizontal e fino na vertical, e se recompõe na forma certa ao chegar.",
+    "como_funciona": "Anima scaleX de 1.8 a 1 e scaleY de 0.2 a 1 com opacity, expo.out; a deformação some rápido.",
+    "quando_usar": "Faixas, títulos curtos em caixa alta, barras de destaque e logotipos horizontais.",
+    "evitar": "Em fotos de pessoas: a deformação é desconfortável. Em texto pequeno vira um risco.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "expo.out",
+      "parametros": {
+        "scaleX_inicial": 1.8,
+        "scaleY_inicial": 0.2
+      }
+    },
+    "propriedades": [
+      "scaleX",
+      "scaleY",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "squeeze-out",
+      "grow-from-line"
+    ],
+    "gsap": "tl.fromTo(el, { scaleX: 1.8, scaleY: 0.2, opacity: 0 }, { scaleX: 1, scaleY: 1, opacity: 1, duration: 0.5, ease: \"expo.out\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "swing-in",
+    "nome": "swing in",
+    "nome_pt": "balançar pendurado",
+    "aliases": [
+      "pendurar",
+      "placa balançando",
+      "swing",
+      "dobradiça"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento cai de uma dobradiça no topo e balança para frente e para trás até parar, como uma placa pendurada.",
+    "como_funciona": "Com perspectiva, anima rotationX de -100 a 0 com transformOrigin no topo e elastic.out, que produz o vaivém amortecido.",
+    "quando_usar": "Placas de \"aberto\", etiquetas de preço, avisos e banners.",
+    "evitar": "Elastic muito mole (amplitude baixa): balança por tempo demais e atrasa a cena.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "elastic.out(1, 0.45)",
+      "parametros": {
+        "perspectiva_px": 1000,
+        "angulo_graus": -100
+      }
+    },
+    "propriedades": [
+      "rotationX",
+      "opacity"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "rotate-in",
+      "unfold"
+    ],
+    "gsap": "tl.set(el, { transformPerspective: 1000, transformOrigin: \"50% 0%\" }, t);\ntl.fromTo(el, { rotationX: -100, opacity: 0 }, { rotationX: 0, opacity: 1, duration: 1.0, ease: \"elastic.out(1, 0.45)\" }, t);",
+    "receita_hyperframes": null,
+    "origem": "expansao"
+  },
+  {
+    "id": "whip-in",
+    "nome": "whip in",
+    "nome_pt": "entrada chicote com borrão",
+    "aliases": [
+      "whip",
+      "chicote",
+      "entrar com motion blur",
+      "zap"
+    ],
+    "familia": "entradas-impacto",
+    "descricao": "O elemento entra num tranco rapidíssimo com rastro de borrão e trava nítido no lugar.",
+    "como_funciona": "Anima x de -700 a 0 com expo.out e, em paralelo, filter blur com keyframes 24, 8, 0 px (o borrão é maior no começo, quando a velocidade é maior).",
+    "quando_usar": "Palavras-chave, produtos, ícones que chegam com energia no corte.",
+    "evitar": "Sem o borrão é só um slide rápido. Em toda entrada do vídeo cansa.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "expo.out",
+      "parametros": {
+        "distancia_px": 700,
+        "blur_pico_px": 24
+      }
+    },
+    "propriedades": [
+      "x",
+      "filter"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional",
+      "opiniao"
+    ],
+    "combina_com": [
+      "skew-in",
+      "slingshot",
+      "whip-out"
+    ],
+    "gsap": "tl.fromTo(el, { x: -700 }, { x: 0, duration: 0.4, ease: \"expo.out\" }, t);\ntl.fromTo(el, { filter: \"blur(24px)\" }, { keyframes: { filter: [\"blur(24px)\", \"blur(8px)\", \"blur(0px)\"] }, duration: 0.35, ease: \"none\" }, t);",
+    "receita_hyperframes": "motion-blur-streak",
+    "origem": "expansao"
+  }
+]

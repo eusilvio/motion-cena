@@ -16,7 +16,7 @@ Storyboard = a scene-by-scene visual script. Without it, the animation improvise
 
 ## Motion vocabulary (use in the `motion` fields)
 
-Canonical vocabulary with defaults and recipes: `references/motion-dictionary.md` (fade in, slide in, blur in, pop in, scale up, stagger, ease in-out, overshoot, bounce, typewriter, word reveal, text swap, draw-on, morph, bar grow, mask reveal, wipe, punch zoom). Write each movement as **effect + duration + ease + target** ("title: slide in 0.4s ease out"). The extra terms below remain valid:
+Canonical vocabulary with defaults and recipes: `references/motion-dictionary.md`, plus 388 effects searchable with `scripts/motion_lookup.py <term>` (fade in, slide in, blur in, pop in, scale up, stagger, ease in-out, overshoot, bounce, typewriter, word reveal, text swap, draw-on, morph, bar grow, mask reveal, wipe, punch zoom). Write each movement as **effect + duration + ease + target** ("title: slide in 0.4s ease out"). The extra terms below remain valid:
 
 
 Entrances: `pop` (scale 0→1.1→1 spring), `slide-up`, `mask-reveal` (mask wipe), `type-on` (letter by letter), `draw-on` (SVG stroke), `stagger` (items cascading 30–60ms), `count-up`, `zoom-through` (the camera passes through).

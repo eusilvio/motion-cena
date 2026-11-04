@@ -10,7 +10,7 @@ export LC_ALL=C  # decimal point, not comma, in printf/awk
 VIDEO="${1:?usage: qa_video.sh video.mp4 [w h fps]}"
 MAX_DUR=""
 if [ -n "${2:-}" ] && ! [[ "$2" =~ ^[0-9]+$ ]]; then
-  PRESET_ENV=$(python3 "$(dirname "$0")/platform_preset.py" "$2" --shell) || exit 2
+  PRESET_ENV=$(uv run -q "$(dirname "$0")/platform_preset.py" "$2" --shell) || exit 2
   eval "$PRESET_ENV"
   EXP_W=$W; EXP_H=$H; EXP_FPS=$FPS; MAX_DUR=$MAX
 else
@@ -52,16 +52,23 @@ fi
 
 # Contact sheet: 12 evenly spaced frames, plus first frame (hook check).
 # With a preset, the platform UI zones are tinted red: nothing that matters may sit there.
+# 240 px per frame: a model downsizes a 6x2 sheet of wider frames to about this size anyway, so
+# wider frames only cost tokens (at 200 px the small captions start to blur).
 ZONES=""
 if [ -n "${ST:-}" ]; then
   ZONES="drawbox=x=0:y=0:w=iw:h=${ST}:color=red@0.16:t=fill,drawbox=x=0:y=ih-${SB}:w=iw:h=${SB}:color=red@0.16:t=fill,"
   ZONES+="drawbox=x=0:y=${ST}:w=${SL}:h=ih-${ST}-${SB}:color=red@0.16:t=fill,drawbox=x=iw-${SR}:y=${ST}:w=${SR}:h=ih-${ST}-${SB}:color=red@0.16:t=fill,"
-  ZONES+="drawbox=x=${SL}:y=${ST}:w=iw-${SL}-${SR}:h=ih-${ST}-${SB}:color=red@0.9:t=4,"
+  ZONES+="drawbox=x=${SL}:y=${ST}:w=iw-${SL}-${SR}:h=ih-${ST}-${SB}:color=red@0.9:t=6,"
 fi
 ffmpeg -hide_banner -loglevel error -y -i "$VIDEO" \
-  -vf "fps=12/${DUR},${ZONES}scale=360:-1,drawtext=text='%{pts\:hms}':x=10:y=10:fontsize=28:fontcolor=white:box=1:boxcolor=black@0.6,tile=6x2" \
+  -vf "fps=12/${DUR},${ZONES}scale=240:-1,drawtext=text='%{pts\:hms}':x=6:y=6:fontsize=18:fontcolor=white:box=1:boxcolor=black@0.6,tile=6x2" \
   -frames:v 1 "${BASE}_contact.jpg"
 ffmpeg -hide_banner -loglevel error -y -i "$VIDEO" -frames:v 1 -vf scale=540:-1 "${BASE}_frame0.jpg"
 echo "  contact sheet: ${BASE}_contact.jpg  first frame: ${BASE}_frame0.jpg"
 
-[ "$FAIL" = "0" ] && echo "RESULT: PASS (now review the images)" || { echo "RESULT: FAIL"; exit 1; }
+if [ "$FAIL" = "0" ]; then
+  echo "RESULT: PASS (now review the images)"
+else
+  echo "RESULT: FAIL"
+  exit 1
+fi

@@ -1,0 +1,55 @@
+# Fim de linha LF no repositório e na cópia de trabalho, em qualquer sistema. Sem isso, um clone
+# feito no Windows (core.autocrlf=true) e usado no WSL quebra os scripts com "bash\r".
+* text=auto eol=lf
+
+# Scripts e código: texto com LF mesmo se a detecção automática errar.
+*.sh    text eol=lf
+*.bash  text eol=lf
+*.py    text eol=lf
+*.mjs   text eol=lf
+*.cjs   text eol=lf
+*.js    text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.json  text eol=lf
+*.html  text eol=lf
+*.css   text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.svg   text eol=lf
+# PowerShell 5.1 e 7 leem LF. O setup.ps1 vai em UTF-8 com BOM para o 5.1 ler os acentos.
+*.ps1   text eol=lf
+# Só o cmd.exe exige CRLF.
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+
+# Licença de fonte copiada como veio do autor (fim de linha misto): fica byte a byte.
+OFL.txt -text
+
+# Binários: sem conversão de fim de linha e sem diff de texto.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.mp4   binary
+*.mov   binary
+*.webm  binary
+*.mkv   binary
+*.mp3   binary
+*.wav   binary
+*.m4a   binary
+*.aac   binary
+*.ogg   binary
+*.opus  binary
+*.flac  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.pdf   binary
+*.zip   binary
+*.lottie binary

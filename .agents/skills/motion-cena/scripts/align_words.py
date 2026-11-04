@@ -64,7 +64,7 @@ def main() -> None:
     if args.script:
         words = apply_script_spelling(words, args.script.read_text(encoding="utf-8"))
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(words, ensure_ascii=False, indent=1))
+    args.out.write_text(json.dumps(words, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(words)} words -> {args.out}")
 
 

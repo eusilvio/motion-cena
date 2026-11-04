@@ -1,0 +1,874 @@
+[
+  {
+    "id": "button-press",
+    "nome": "button press",
+    "nome_pt": "botão sendo apertado",
+    "aliases": [
+      "apertar botão",
+      "press",
+      "clique físico",
+      "botão afundando"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O botão afunda rápido, a sombra encolhe, e ele volta com uma mola elástica, como uma tecla de verdade.",
+    "como_funciona": "Compressão linear curta (scale 0,94 e y 4 em 0,1 s) com sombra diminuindo; o retorno usa elastic.out para o botão e power2.out para a sombra.",
+    "quando_usar": "CTA, 'comprar', 'inscrever-se', qualquer momento de decisão do usuário.",
+    "evitar": "Elastic exagerado em interface séria ou apertar sem cursor ou dedo que justifique.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "elastic.out(1, 0.45)",
+      "parametros": {
+        "compressao": 0.94,
+        "afundamento_px": 4
+      }
+    },
+    "propriedades": [
+      "scale",
+      "y",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "motivacional",
+      "explicativo"
+    ],
+    "combina_com": [
+      "cursor-click",
+      "tap-ripple",
+      "like-burst"
+    ],
+    "gsap": "// el = botão, a = sombra separada\nconst btn = el, shadow = a;\ntl.fromTo(btn, { scale: 1, y: 0 }, { scale: 0.94, y: 4, duration: 0.1, ease: \"none\" }, t);\ntl.fromTo(shadow, { opacity: 0.35, scale: 1 }, { opacity: 0.12, scale: 0.9, duration: 0.1, ease: \"none\" }, t);\ntl.to(btn, { scale: 1, y: 0, duration: 0.5, ease: \"elastic.out(1, 0.45)\" }, t + 0.1);\ntl.to(shadow, { opacity: 0.35, scale: 1, duration: 0.4, ease: \"power2.out\" }, t + 0.1);",
+    "receita_hyperframes": "press-release-spring",
+    "origem": "expansao"
+  },
+  {
+    "id": "card-flip",
+    "nome": "card flip",
+    "nome_pt": "cartão virando",
+    "aliases": [
+      "virar o card",
+      "flip",
+      "carta virando",
+      "frente e verso"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Um cartão gira no eixo vertical e mostra o verso, crescendo um pouco no meio do giro.",
+    "como_funciona": "rotationY 0 → 180 com transformPerspective no próprio card (preserve-3d); frente e verso com backface-visibility hidden, verso pré-girado 180°; keyframes de scale dão a sensação de levantar o card.",
+    "quando_usar": "Pergunta e resposta, mito e verdade, revelar preço ou resultado escondido.",
+    "evitar": "Giros em sequência rápida ou perspectiva pequena demais (deforma o card).",
+    "padrao": {
+      "duracao_s": 0.7,
+      "ease": "power3.inOut",
+      "parametros": {
+        "perspectiva_px": 1600,
+        "escala_pico": 1.08
+      }
+    },
+    "propriedades": [
+      "rotationY",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "explicativo",
+      "opiniao",
+      "produto"
+    ],
+    "combina_com": [
+      "card-stack-swipe",
+      "x-mark-draw",
+      "check-mark-draw"
+    ],
+    "gsap": "// el = .card (transform-style: preserve-3d); frente e verso com backface-visibility: hidden\ntl.fromTo(el, { rotationY: 0, transformPerspective: 1600 }, { rotationY: 180, duration: 0.7, ease: \"power3.inOut\" }, t);\ntl.fromTo(el, { scale: 1 }, { keyframes: { scale: [1, 1.08, 1] }, duration: 0.7, ease: \"none\", immediateRender: false }, t);",
+    "receita_hyperframes": "css-3d",
+    "origem": "expansao"
+  },
+  {
+    "id": "card-stack-swipe",
+    "nome": "card stack swipe",
+    "nome_pt": "deslizar pilha de cartas",
+    "aliases": [
+      "swipe",
+      "estilo Tinder",
+      "deslizar card",
+      "pilha de cards"
+    ],
+    "familia": "interface-ui",
+    "descricao": "A carta do topo é arrastada para o lado girando e some, e as de baixo sobem um degrau com uma leve mola.",
+    "como_funciona": "Carta do topo: x até 900 e rotation 18° com origem abaixo do card (como se o dedo arrastasse) e power2.in; as demais sobem de y e scale do degrau anterior para o próprio com back.out.",
+    "quando_usar": "Mostrar opções sendo descartadas, galeria de produtos, 'próximo', escolhas rápidas.",
+    "evitar": "Mais de 4 cartas visíveis na pilha ou swipe sem rotação (parece slide de apresentação).",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "power2.in",
+      "parametros": {
+        "distancia_px": 900,
+        "rotacao_graus": 18,
+        "degrau_px": 30
+      }
+    },
+    "propriedades": [
+      "x",
+      "rotation",
+      "opacity",
+      "y",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "opiniao",
+      "explicativo"
+    ],
+    "combina_com": [
+      "card-flip",
+      "cursor-drag",
+      "tap-ripple"
+    ],
+    "gsap": "// items = cartas de cima para baixo\nconst [top, ...rest] = items;\ntl.fromTo(top, { x: 0, rotation: 0, opacity: 1 }, { x: 900, rotation: 18, opacity: 0, duration: 0.5, ease: \"power2.in\", transformOrigin: \"50% 120%\" }, t);\nrest.forEach((c, i) => tl.fromTo(c, { y: (i + 1) * 30, scale: 1 - (i + 1) * 0.05 }, { y: i * 30, scale: 1 - i * 0.05, duration: 0.4, ease: \"back.out(1.4)\" }, t + 0.2));",
+    "receita_hyperframes": "reactive-displacement",
+    "origem": "expansao"
+  },
+  {
+    "id": "chat-bubbles",
+    "nome": "chat bubbles",
+    "nome_pt": "mensagens de chat chegando",
+    "aliases": [
+      "conversa",
+      "balões de mensagem",
+      "digitando...",
+      "chat do WhatsApp",
+      "typing indicator"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Três pontinhos de 'digitando' pulam, somem, a conversa sobe um degrau e o balão novo surge do canto com mola.",
+    "como_funciona": "Indicador com pontos em yoyo finito e stagger; ao fim, a lista anima y uma altura de linha para cima e o balão faz scale 0 → 1 com origem no canto da cauda (back.out).",
+    "quando_usar": "Diálogo entre personagens, atendimento, conversa com IA, depoimento em formato de print.",
+    "evitar": "Mensagens longas que não dão tempo de ler ou balões entrando sem a lista subir.",
+    "padrao": {
+      "duracao_s": 1.35,
+      "ease": "back.out(1.7)",
+      "parametros": {
+        "pulos_pontos": 2,
+        "altura_linha_px": 140
+      }
+    },
+    "propriedades": [
+      "y",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "historia",
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "input-typing",
+      "phone-mockup-reveal",
+      "word-reveal"
+    ],
+    "gsap": "// el = balão novo, a = indicador 'digitando', b = lista de mensagens, items = 3 pontinhos\nconst bubble = el, typing = a, list = b, dots = items, rowH = 140;\ntl.fromTo(typing, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.2, ease: \"power2.out\" }, t);\ntl.fromTo(dots, { y: 0 }, { y: -10, duration: 0.2, ease: \"sine.inOut\", yoyo: true, repeat: 3, stagger: 0.1 }, t + 0.1);\ntl.fromTo(typing, { opacity: 1 }, { opacity: 0, duration: 0.1, immediateRender: false }, t + 1.0);\ntl.fromTo(list, { y: 0 }, { y: -rowH, duration: 0.35, ease: \"power3.out\" }, t + 1.0);\ntl.fromTo(bubble, { scale: 0, opacity: 0, transformOrigin: \"0% 100%\" }, { scale: 1, opacity: 1, duration: 0.35, ease: \"back.out(1.7)\" }, t + 1.0);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "cursor-click",
+    "nome": "cursor click",
+    "nome_pt": "cursor clicando",
+    "aliases": [
+      "clique do mouse",
+      "mouse clicando",
+      "click",
+      "ponteiro clicando"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O cursor do mouse viaja até um botão, afunda no clique, o botão reage e um anel de onda se espalha.",
+    "como_funciona": "x/y do cursor com ease in-out até o alvo; no clique, scale do cursor e do botão vai a ~0,9 e volta (yoyo, repeat 1); um anel faz scale 0,2 → 1,8 com opacity até 0.",
+    "quando_usar": "Tutoriais de software, demos de app e site, 'é só clicar aqui'.",
+    "evitar": "Cursor em linha reta e velocidade constante (parece robô) ou clicar antes de chegar.",
+    "padrao": {
+      "duracao_s": 1.2,
+      "ease": "power3.inOut",
+      "parametros": {
+        "viagem_s": 0.7,
+        "afundamento": 0.85
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "button-press",
+      "modal-pop",
+      "dropdown-open",
+      "punch-zoom"
+    ],
+    "gsap": "// el = cursor (x/y relativos ao alvo), a = botão, b = anel do clique\nconst cursor = el, target = a, ring = b;\ntl.fromTo(cursor, { x: 380, y: 520 }, { x: 0, y: 0, duration: 0.7, ease: \"power3.inOut\" }, t);\ntl.fromTo(cursor, { scale: 1 }, { scale: 0.85, duration: 0.08, ease: \"power2.in\", yoyo: true, repeat: 1, immediateRender: false }, t + 0.72);\ntl.fromTo(target, { scale: 1 }, { scale: 0.96, duration: 0.08, yoyo: true, repeat: 1, immediateRender: false }, t + 0.72);\ntl.fromTo(ring, { scale: 0.2, opacity: 0.6 }, { scale: 1.8, opacity: 0, duration: 0.45, ease: \"power2.out\" }, t + 0.74);",
+    "receita_hyperframes": "cursor-click-ripple",
+    "origem": "expansao"
+  },
+  {
+    "id": "cursor-drag",
+    "nome": "cursor drag",
+    "nome_pt": "arrastar com o cursor",
+    "aliases": [
+      "arrastar e soltar",
+      "drag and drop",
+      "arrastar",
+      "mover item"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O cursor agarra um item, que levanta e inclina, viaja junto com ele e encaixa no destino com uma mola.",
+    "como_funciona": "Cursor e item ganham scale de 'pegar'; os dois animam x/y juntos com o mesmo tween (sem descompasso); na soltura, o item volta à escala e rotação com back.out.",
+    "quando_usar": "Organizar tarefas, montar layout, kanban, upload, 'arraste aqui'.",
+    "evitar": "Item e cursor com eases diferentes (descolam) ou percursos longos demais.",
+    "padrao": {
+      "duracao_s": 1.25,
+      "ease": "power2.inOut",
+      "parametros": {
+        "deslocamento_px": [
+          420,
+          -300
+        ],
+        "inclinacao_graus": -3
+      }
+    },
+    "propriedades": [
+      "x",
+      "y",
+      "scale",
+      "rotation"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "cursor-click",
+      "card-stack-swipe",
+      "before-after-slider"
+    ],
+    "gsap": "// el = cursor, a = item arrastado\nconst cursor = el, chip = a, dx = 420, dy = -300;\ntl.fromTo(cursor, { scale: 1 }, { scale: 0.85, duration: 0.1, ease: \"power2.out\" }, t);\ntl.fromTo(chip, { scale: 1, rotation: 0 }, { scale: 1.06, rotation: -3, duration: 0.15, ease: \"power2.out\" }, t + 0.05);\ntl.fromTo([cursor, chip], { x: 0, y: 0 }, { x: dx, y: dy, duration: 0.7, ease: \"power2.inOut\" }, t + 0.2);\ntl.to(chip, { scale: 1, rotation: 0, duration: 0.35, ease: \"back.out(2)\" }, t + 0.9);\ntl.to(cursor, { scale: 1, duration: 0.1, ease: \"power2.out\" }, t + 0.9);",
+    "receita_hyperframes": "cursor-drag",
+    "origem": "expansao"
+  },
+  {
+    "id": "dropdown-open",
+    "nome": "dropdown open",
+    "nome_pt": "menu suspenso abrindo",
+    "aliases": [
+      "dropdown",
+      "menu abrindo",
+      "select",
+      "lista de opções"
+    ],
+    "familia": "interface-ui",
+    "descricao": "A seta gira, o menu se desenrola para baixo a partir do campo e as opções entram em cascata.",
+    "como_funciona": "Chevron com rotation 0 → 180; o menu é revelado por clip-path inset da borda de baixo (preso no topo), com cantos arredondados; opções com y curto e opacity em stagger de 0,04 s.",
+    "quando_usar": "Escolher plano, filtro, idioma, mostrar opções de configuração numa demo.",
+    "evitar": "Animar a altura com height (proibido, causa reflow) ou opções demais para caber no vertical.",
+    "padrao": {
+      "duracao_s": 0.4,
+      "ease": "power3.out",
+      "parametros": {
+        "stagger_opcoes_s": 0.04
+      }
+    },
+    "propriedades": [
+      "rotation",
+      "clipPath",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "cursor-click",
+      "tab-switch"
+    ],
+    "gsap": "// el = menu, a = chevron, items = opções\nconst menu = el, chevron = a;\ntl.fromTo(chevron, { rotation: 0 }, { rotation: 180, duration: 0.3, ease: \"power2.inOut\" }, t);\ntl.fromTo(menu, { clipPath: \"inset(0% 0% 100% 0% round 24px)\", opacity: 0.5 }, { clipPath: \"inset(0% 0% 0% 0% round 24px)\", opacity: 1, duration: 0.35, ease: \"power3.out\" }, t);\ntl.fromTo(items, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.25, ease: \"power2.out\", stagger: 0.04 }, t + 0.1);",
+    "receita_hyperframes": "anchored-layout-expand",
+    "origem": "expansao"
+  },
+  {
+    "id": "input-typing",
+    "nome": "typing in input",
+    "nome_pt": "digitando num campo",
+    "aliases": [
+      "campo de busca",
+      "digitar no input",
+      "barra de pesquisa",
+      "prompt sendo digitado"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O campo ganha foco com um anel, o placeholder some e o texto é digitado com o cursor de texto acompanhando; no fim o cursor pisca.",
+    "como_funciona": "Anel de foco com opacity e scale; placeholder com fade; o texto é revelado por contagem de caracteres (slice) num proxy linear; o caret fica logo após o span e pisca com tl.set finito depois que termina.",
+    "quando_usar": "Busca no Google, prompt de IA, login, formulário em demo de produto.",
+    "evitar": "Frases longas sem narração (use 25 a 40 caracteres) ou caret piscando durante a digitação.",
+    "padrao": {
+      "duracao_s": null,
+      "ease": "none",
+      "parametros": {
+        "segundos_por_letra": 0.05,
+        "piscadas": 3
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "scale",
+      "textContent"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "typewriter",
+      "cursor-click",
+      "chat-bubbles"
+    ],
+    "gsap": "// el = caret, a = placeholder, b = span do texto (data-text); .focus-ring no campo\nconst ring = scene.querySelector(\".focus-ring\"), caret = el, ph = a, txt = b;\nconst full = txt.dataset.text, p = { n: 0 }, speed = 0.05;\ntl.fromTo(ring, { opacity: 0, scale: 1.04 }, { opacity: 1, scale: 1, duration: 0.2, ease: \"power2.out\" }, t);\ntl.fromTo(ph, { opacity: 0.5 }, { opacity: 0, duration: 0.1 }, t + 0.25);\ntl.fromTo(p, { n: 0 }, { n: full.length, duration: full.length * speed, ease: \"none\", onUpdate: () => { txt.textContent = full.slice(0, Math.round(p.n)); } }, t + 0.25);\n// caret pisca só depois de terminar (finito)\nconst end = t + 0.25 + full.length * speed;\nfor (let k = 0; k < 6; k++) tl.set(caret, { opacity: k % 2 ? 1 : 0 }, end + k * 0.4);",
+    "receita_hyperframes": "context-sensitive-cursor",
+    "origem": "expansao"
+  },
+  {
+    "id": "like-burst",
+    "nome": "like/heart burst",
+    "nome_pt": "curtida com explosão",
+    "aliases": [
+      "curtir",
+      "coração",
+      "like",
+      "heart burst",
+      "favoritar"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O coração vazio vira cheio com um salto de escala, um anel se expande e pontinhos saem em volta, como a curtida do Twitter.",
+    "como_funciona": "Coração cheio por cima do vazio com keyframes de scale (0 → 1,3 → 0,9 → 1); anel com scale e strokeWidth caindo até 0; seis pontos em ângulos fixos voam para fora e encolhem.",
+    "quando_usar": "Engajamento, 'curte e salva', prova social, CTA de interação.",
+    "evitar": "Em toda cena ou junto com confete (exagero); fora de contexto de rede social parece infantil.",
+    "padrao": {
+      "duracao_s": 0.6,
+      "ease": "none",
+      "parametros": {
+        "pontos": 6,
+        "raio_pontos_px": 120
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "strokeWidth",
+      "x",
+      "y"
+    ],
+    "intensidade": "forte",
+    "generos": [
+      "produto",
+      "motivacional"
+    ],
+    "combina_com": [
+      "button-press",
+      "count-up",
+      "star-burst"
+    ],
+    "gsap": "// el = coração cheio (sobre o vazio), a = anel <circle>, items = 6 pontinhos\nconst heart = el, ring = a, dots = items;\ntl.fromTo(heart, { scale: 0 }, { keyframes: { scale: [0, 1.3, 0.9, 1] }, duration: 0.5, ease: \"none\" }, t + 0.08);\ntl.fromTo(ring, { scale: 0.2, opacity: 1, strokeWidth: 30 }, { scale: 1.4, opacity: 0, strokeWidth: 0, duration: 0.4, ease: \"power2.out\" }, t);\ndots.forEach((d, i) => {\n  const ang = (i / dots.length) * Math.PI * 2;\n  tl.fromTo(d, { x: 0, y: 0, scale: 1, opacity: 1 }, { x: Math.cos(ang) * 120, y: Math.sin(ang) * 120, scale: 0, opacity: 0, duration: 0.5, ease: \"power2.out\" }, t + 0.1);\n});",
+    "receita_hyperframes": "particle-burst",
+    "origem": "expansao"
+  },
+  {
+    "id": "modal-pop",
+    "nome": "modal pop",
+    "nome_pt": "janela modal abrindo",
+    "aliases": [
+      "modal",
+      "pop-up",
+      "janela abrindo",
+      "dialog",
+      "caixa de diálogo"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O fundo escurece e desfoca, e uma janela surge no centro crescendo de leve e subindo um pouco.",
+    "como_funciona": "Backdrop com opacity até 0,55 e a camada do app com blur(6px); o modal anima scale 0,88 → 1, y 40 → 0 e opacity com back.out(1.4).",
+    "quando_usar": "Confirmação, oferta, formulário, 'parabéns', qualquer conteúdo que interrompe o fluxo.",
+    "evitar": "Modal que cobre o conteúdo que a narração ainda está explicando ou blur em muitas camadas.",
+    "padrao": {
+      "duracao_s": 0.45,
+      "ease": "back.out(1.4)",
+      "parametros": {
+        "escala_inicial": 0.88,
+        "blur_fundo_px": 6
+      }
+    },
+    "propriedades": [
+      "opacity",
+      "filter",
+      "scale",
+      "y"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "explicativo"
+    ],
+    "combina_com": [
+      "cursor-click",
+      "button-press",
+      "blur-in"
+    ],
+    "gsap": "// el = modal, a = backdrop; .app = conteúdo por trás\ntl.fromTo(a, { opacity: 0 }, { opacity: 0.55, duration: 0.25, ease: \"power1.out\" }, t);\ntl.fromTo(scene.querySelector(\".app\"), { filter: \"blur(0px)\" }, { filter: \"blur(6px)\", duration: 0.3, ease: \"power1.out\" }, t);\ntl.fromTo(el, { scale: 0.88, y: 40, opacity: 0 }, { scale: 1, y: 0, opacity: 1, duration: 0.4, ease: \"back.out(1.4)\" }, t + 0.05);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "notification-slide",
+    "nome": "notification slide",
+    "nome_pt": "notificação descendo",
+    "aliases": [
+      "push notification",
+      "notificação",
+      "banner do iPhone",
+      "alerta no topo"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Um banner de notificação desce do topo da tela com mola leve, o conteúdo entra em cascata e ele sobe de volta depois de um tempo.",
+    "como_funciona": "y de -220 a 0 com back.out(1.2) e leve scale; ícone, título e texto em stagger curto; após o tempo de leitura, sai para cima com power3.in.",
+    "quando_usar": "'Chegou um Pix', 'novo pedido', mensagem do cliente, prova social.",
+    "evitar": "Notificação com texto longo demais para ler no tempo, ou várias empilhando sem ritmo.",
+    "padrao": {
+      "duracao_s": 0.5,
+      "ease": "back.out(1.2)",
+      "parametros": {
+        "permanencia_s": 2.0,
+        "distancia_px": 220
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity",
+      "scale"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "historia",
+      "motivacional"
+    ],
+    "combina_com": [
+      "phone-mockup-reveal",
+      "pulse",
+      "count-up"
+    ],
+    "gsap": "// el = banner, items = [ícone, título, texto]\ntl.fromTo(el, { y: -220, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: \"back.out(1.2)\" }, t);\ntl.fromTo(items, { opacity: 0, y: -6 }, { opacity: 1, y: 0, duration: 0.25, ease: \"power2.out\", stagger: 0.06 }, t + 0.2);\ntl.to(el, { y: -220, opacity: 0, duration: 0.35, ease: \"power3.in\" }, t + 2.5);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "phone-mockup-reveal",
+    "nome": "phone mockup reveal",
+    "nome_pt": "celular entrando em cena",
+    "aliases": [
+      "mockup de celular",
+      "iPhone aparecendo",
+      "device reveal",
+      "mostrar o app"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Um celular sobe de baixo da tela inclinado em 3D, endireita ao chegar e a tela acende mostrando o app.",
+    "como_funciona": "y de 900 a 0 com rotationX 35° → 0 e rotation -8° → 0 (transformPerspective no próprio elemento), power3.out; a tela do app sai de brightness(0) para brightness(1) no fim.",
+    "quando_usar": "Abertura de demo de app, lançamento, 'baixe agora', antes de qualquer interação de interface.",
+    "evitar": "Mockup minúsculo no vertical (use quase a largura toda) ou girar o celular em vários eixos.",
+    "padrao": {
+      "duracao_s": 0.9,
+      "ease": "power3.out",
+      "parametros": {
+        "distancia_px": 900,
+        "inclinacao_graus": 35
+      }
+    },
+    "propriedades": [
+      "y",
+      "rotationX",
+      "rotation",
+      "filter"
+    ],
+    "intensidade": "media",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "scroll-screen",
+      "notification-slide",
+      "tap-ripple",
+      "float"
+    ],
+    "gsap": "// el = mockup do celular, a = tela do app\nconst phone = el, screen = a;\ntl.fromTo(phone, { y: 900, rotationX: 35, rotation: -8, transformPerspective: 2000 }, { y: 0, rotationX: 0, rotation: 0, duration: 0.9, ease: \"power3.out\" }, t);\ntl.fromTo(screen, { filter: \"brightness(0)\" }, { filter: \"brightness(1)\", duration: 0.4, ease: \"power2.out\" }, t + 0.7);",
+    "receita_hyperframes": "orbit-3d-entry",
+    "origem": "expansao"
+  },
+  {
+    "id": "progress-steps",
+    "nome": "progress steps",
+    "nome_pt": "etapas sendo concluídas",
+    "aliases": [
+      "stepper",
+      "passo a passo",
+      "etapas",
+      "checklist de etapas",
+      "wizard"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Os círculos das etapas se preenchem um a um e a linha entre eles corre até a próxima, como um checkout avançando.",
+    "como_funciona": "Camada 'concluído' de cada círculo com scale e opacity em stagger igual ao passo; o preenchimento dos conectores cresce por scaleX nos intervalos, alternando com os círculos.",
+    "quando_usar": "Processos em N passos, onboarding, 'como funciona em 3 etapas', status de pedido.",
+    "evitar": "Mais de 5 etapas no vertical ou passo rápido demais para a narração acompanhar.",
+    "padrao": {
+      "duracao_s": 1.8,
+      "ease": "power2.inOut",
+      "parametros": {
+        "etapas": 3,
+        "passo_s": 0.6
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity",
+      "scaleX"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "explicativo",
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "check-mark-draw",
+      "progress-bar",
+      "word-reveal"
+    ],
+    "gsap": "// .step .done = camada preenchida de cada círculo; .step-line .fill = conector\nconst dots = scene.querySelectorAll(\".step .done\"), lines = scene.querySelectorAll(\".step-line .fill\"), step = 0.6;\ntl.fromTo(dots, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: \"back.out(2)\", stagger: step }, t);\ntl.fromTo(lines, { scaleX: 0, transformOrigin: \"0% 50%\" }, { scaleX: 1, duration: step - 0.25, ease: \"power2.inOut\", stagger: step }, t + 0.25);",
+    "receita_hyperframes": "stat-bars-and-fills",
+    "origem": "expansao"
+  },
+  {
+    "id": "scroll-screen",
+    "nome": "scroll screen",
+    "nome_pt": "rolagem de tela no mockup",
+    "aliases": [
+      "rolar a tela",
+      "scroll",
+      "navegar no app",
+      "scroll do site",
+      "feed rolando"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O conteúdo dentro de um mockup rola em arrancadas com parada, como um dedo de verdade navegando.",
+    "como_funciona": "Conteúdo longo dentro de uma máscara; uma sequência de fromTo em y entre paradas fixas, cada uma com power3.out (impulso e inércia) e intervalo de leitura entre elas.",
+    "quando_usar": "Mostrar landing page, feed, cardápio, lista de recursos dentro de um celular ou navegador.",
+    "evitar": "Rolagem linear contínua (parece gravação de tela travada) ou rápida demais para ler.",
+    "padrao": {
+      "duracao_s": 3.0,
+      "ease": "power3.out",
+      "parametros": {
+        "paradas_px": [
+          0,
+          -700,
+          -1500,
+          -2300
+        ],
+        "intervalo_s": 1.0
+      }
+    },
+    "propriedades": [
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "phone-mockup-reveal",
+      "tap-ripple",
+      "push-in"
+    ],
+    "gsap": "// el = conteúdo longo dentro da tela do mockup (overflow: hidden)\nconst stops = [0, -700, -1500, -2300];\nstops.slice(1).forEach((y, k) => tl.fromTo(el, { y: stops[k] }, { y, duration: 0.6, ease: \"power3.out\", immediateRender: k === 0 }, t + k * 1.0));",
+    "receita_hyperframes": "3d-page-scroll",
+    "origem": "expansao"
+  },
+  {
+    "id": "skeleton-shimmer",
+    "nome": "loading skeleton shimmer",
+    "nome_pt": "esqueleto de carregamento",
+    "aliases": [
+      "skeleton",
+      "shimmer",
+      "placeholder carregando",
+      "tela carregando"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Blocos cinza no formato do conteúdo ficam com um brilho passando por cima e, depois de algumas passadas, o conteúdo real aparece.",
+    "como_funciona": "Faixa de luz em degradê recortada pela máscara dos blocos anima xPercent -100 → 100 com repeat finito; no fim, os blocos somem e o conteúdo real entra com fade e y curto.",
+    "quando_usar": "Simular app carregando antes da revelação, criar expectativa em demo, 'a IA está gerando'.",
+    "evitar": "Muitas passadas (vira espera morta) ou brilho forte demais.",
+    "padrao": {
+      "duracao_s": 2.1,
+      "ease": "power1.inOut",
+      "parametros": {
+        "passada_s": 0.9,
+        "passadas": 2
+      }
+    },
+    "propriedades": [
+      "xPercent",
+      "opacity",
+      "y"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "loading-spinner",
+      "fade-in",
+      "stagger"
+    ],
+    "gsap": "// el = faixa de brilho (mascarada pelos blocos), a = conteúdo real, b = blocos do esqueleto\nconst shine = el, real = a, skel = b, sweep = 0.9, n = 2;\ntl.fromTo(shine, { xPercent: -100 }, { xPercent: 100, duration: sweep, ease: \"power1.inOut\", repeat: n - 1 }, t);\ntl.fromTo(skel, { opacity: 1 }, { opacity: 0, duration: 0.25, ease: \"power1.out\" }, t + sweep * n);\ntl.fromTo(real, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: \"power2.out\" }, t + sweep * n);",
+    "receita_hyperframes": "gradient-text-sweep",
+    "origem": "expansao"
+  },
+  {
+    "id": "slider-scrub",
+    "nome": "slider scrub",
+    "nome_pt": "controle deslizante ajustando",
+    "aliases": [
+      "range slider",
+      "arrastar o slider",
+      "ajustar valor",
+      "controle de volume"
+    ],
+    "familia": "interface-ui",
+    "descricao": "A bolinha de um slider desliza, a trilha preenche junto e o valor exibido muda no mesmo instante, às vezes alterando outro elemento.",
+    "como_funciona": "Três tweens com a mesma duração e ease: x da bolinha, scaleX do preenchimento e um proxy que escreve o número; o alvo controlado (tamanho, brilho, preço) usa a mesma batida.",
+    "quando_usar": "Simuladores, calculadoras, 'quanto você economiza se...', ajustes de foto.",
+    "evitar": "Slider sem efeito visível em nada (gesto vazio) ou eases diferentes entre bolinha e trilha.",
+    "padrao": {
+      "duracao_s": 1.0,
+      "ease": "power2.inOut",
+      "parametros": {
+        "de_pct": 20,
+        "ate_pct": 85,
+        "largura_px": 700
+      }
+    },
+    "propriedades": [
+      "x",
+      "scaleX",
+      "textContent"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "dados",
+      "tecnico"
+    ],
+    "combina_com": [
+      "cursor-drag",
+      "count-up",
+      "progress-bar"
+    ],
+    "gsap": "// el = bolinha, a = preenchimento da trilha, b = número exibido\nconst knob = el, fill = a, readout = b, W = 700, from = 0.2, to = 0.85, c = { v: from };\ntl.fromTo(knob, { x: W * from }, { x: W * to, duration: 1.0, ease: \"power2.inOut\" }, t);\ntl.fromTo(fill, { scaleX: from, transformOrigin: \"0% 50%\" }, { scaleX: to, duration: 1.0, ease: \"power2.inOut\" }, t);\ntl.fromTo(c, { v: from }, { v: to, duration: 1.0, ease: \"power2.inOut\", onUpdate: () => (readout.textContent = Math.round(c.v * 100)) }, t);",
+    "receita_hyperframes": "control-target-sync",
+    "origem": "expansao"
+  },
+  {
+    "id": "tab-switch",
+    "nome": "tab switch",
+    "nome_pt": "troca de aba",
+    "aliases": [
+      "aba",
+      "tabs",
+      "segmented control",
+      "trocar de aba"
+    ],
+    "familia": "interface-ui",
+    "descricao": "O indicador desliza até a nova aba, esticando no meio do caminho, enquanto o conteúdo antigo sai para um lado e o novo entra do outro.",
+    "como_funciona": "x do indicador com power3.inOut e keyframes de scaleX (1 → 1,4 → 1) no mesmo tempo; painéis cruzam com x ±80 e opacity, o novo com 0,2 s de atraso.",
+    "quando_usar": "Comparar planos, alternar entre recursos, 'mensal ou anual', demos de navegação.",
+    "evitar": "Indicador que pula sem deslizar ou conteúdo trocando sem direção coerente com a aba.",
+    "padrao": {
+      "duracao_s": 0.55,
+      "ease": "power3.inOut",
+      "parametros": {
+        "deslocamento_px": 360,
+        "esticao": 1.4
+      }
+    },
+    "propriedades": [
+      "x",
+      "scaleX",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "cursor-click",
+      "dropdown-open",
+      "text-swap"
+    ],
+    "gsap": "// el = indicador, a = painel antigo, b = painel novo\nconst pill = el, oldP = a, newP = b, dx = 360;\ntl.fromTo(pill, { x: 0 }, { x: dx, duration: 0.4, ease: \"power3.inOut\" }, t);\ntl.fromTo(pill, { scaleX: 1 }, { keyframes: { scaleX: [1, 1.4, 1] }, duration: 0.4, ease: \"none\", immediateRender: false }, t);\ntl.fromTo(oldP, { x: 0, opacity: 1 }, { x: -80, opacity: 0, duration: 0.3, ease: \"power2.in\" }, t);\ntl.fromTo(newP, { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: \"power2.out\" }, t + 0.2);",
+    "receita_hyperframes": "nudge-curve",
+    "origem": "expansao"
+  },
+  {
+    "id": "tap-ripple",
+    "nome": "tap ripple",
+    "nome_pt": "toque com ondulação",
+    "aliases": [
+      "toque na tela",
+      "tap",
+      "ripple",
+      "dedo tocando",
+      "material ripple"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Sem cursor: uma marca de dedo aparece no ponto do toque e uma ondulação clara se espalha dentro do botão.",
+    "como_funciona": "Círculo grande dentro do botão (overflow hidden), centrado no toque, vai de scale 0 a 1 com opacity fixa e depois some; a marca do dedo faz um pop curto e se dissolve.",
+    "quando_usar": "Demos de app no celular, onde cursor de mouse não faz sentido.",
+    "evitar": "Ripple que vaza do botão ou toques sem alvo claro.",
+    "padrao": {
+      "duracao_s": 0.65,
+      "ease": "power2.out",
+      "parametros": {
+        "opacidade_ripple": 0.35
+      }
+    },
+    "propriedades": [
+      "scale",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico",
+      "explicativo"
+    ],
+    "combina_com": [
+      "phone-mockup-reveal",
+      "button-press",
+      "toggle-switch"
+    ],
+    "gsap": "// el = ripple dentro do botão (overflow: hidden), a = marca do dedo\ntl.fromTo(el, { scale: 0, opacity: 0.35 }, { scale: 1, duration: 0.35, ease: \"power2.out\" }, t);\ntl.fromTo(el, { opacity: 0.35 }, { opacity: 0, duration: 0.3, ease: \"power1.out\", immediateRender: false }, t + 0.35);\ntl.fromTo(a, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 0.5, duration: 0.12, ease: \"power2.out\" }, t);\ntl.fromTo(a, { scale: 1, opacity: 0.5 }, { scale: 1.3, opacity: 0, duration: 0.3, ease: \"power2.out\", immediateRender: false }, t + 0.2);",
+    "receita_hyperframes": "cursor-click-ripple",
+    "origem": "expansao"
+  },
+  {
+    "id": "toast",
+    "nome": "toast",
+    "nome_pt": "aviso rápido na base",
+    "aliases": [
+      "snackbar",
+      "aviso de sucesso",
+      "mensagem rápida",
+      "toast notification"
+    ],
+    "familia": "interface-ui",
+    "descricao": "Uma pílula pequena sobe na parte de baixo da tela com o ícone dando um estalo, fica pouco tempo e desce sozinha.",
+    "como_funciona": "y 120 → 0, scale e opacity com back.out(1.6); o ícone gira e escala com atraso curto; após a permanência, sai com y e opacity em power2.in. Diferente da notificação, é feedback da própria interface, sem app de origem.",
+    "quando_usar": "Confirmar ação: 'link copiado', 'salvo', 'enviado', 'adicionado ao carrinho'.",
+    "evitar": "Texto longo ou toast cobrindo a legenda na área inferior do vertical.",
+    "padrao": {
+      "duracao_s": 0.35,
+      "ease": "back.out(1.6)",
+      "parametros": {
+        "permanencia_s": 1.6,
+        "distancia_px": 120
+      }
+    },
+    "propriedades": [
+      "y",
+      "opacity",
+      "scale",
+      "rotation"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "check-mark-draw",
+      "button-press",
+      "cursor-click"
+    ],
+    "gsap": "// el = pílula do toast, a = ícone\ntl.fromTo(el, { y: 120, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.35, ease: \"back.out(1.6)\" }, t);\ntl.fromTo(a, { scale: 0, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.3, ease: \"back.out(2.5)\" }, t + 0.15);\ntl.to(el, { y: 40, opacity: 0, duration: 0.3, ease: \"power2.in\" }, t + 0.35 + 1.6);",
+    "receita_hyperframes": "spring-pop-entrance",
+    "origem": "expansao"
+  },
+  {
+    "id": "toggle-switch",
+    "nome": "toggle switch",
+    "nome_pt": "interruptor ligando",
+    "aliases": [
+      "switch",
+      "liga e desliga",
+      "toggle",
+      "chave on/off"
+    ],
+    "familia": "interface-ui",
+    "descricao": "A bolinha do interruptor corre para o outro lado, estica no meio do caminho, e o trilho troca de cor.",
+    "como_funciona": "x da bolinha com back.out leve; keyframes de scaleX (1 → 1,25 → 1) no mesmo tempo dão o esticão; uma camada 'ligado' sobre o trilho cruza opacity 0 → 1.",
+    "quando_usar": "Ativar recurso, modo escuro, 'ligar notificações', antes e depois de uma configuração.",
+    "evitar": "Interruptor pequeno demais para o vertical ou trilho que muda de cor sem a bolinha se mexer.",
+    "padrao": {
+      "duracao_s": 0.3,
+      "ease": "back.out(1.6)",
+      "parametros": {
+        "curso_px": 64
+      }
+    },
+    "propriedades": [
+      "x",
+      "scaleX",
+      "opacity"
+    ],
+    "intensidade": "sutil",
+    "generos": [
+      "produto",
+      "tecnico"
+    ],
+    "combina_com": [
+      "tap-ripple",
+      "cursor-click",
+      "pulse"
+    ],
+    "gsap": "// el = bolinha, a = camada 'ligado' do trilho\nconst knob = el, onLayer = a, travel = 64;\ntl.fromTo(knob, { x: 0 }, { x: travel, duration: 0.3, ease: \"back.out(1.6)\" }, t);\ntl.fromTo(knob, { scaleX: 1 }, { keyframes: { scaleX: [1, 1.25, 1] }, duration: 0.3, ease: \"none\", transformOrigin: \"50% 50%\", immediateRender: false }, t);\ntl.fromTo(onLayer, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: \"power2.out\" }, t);",
+    "receita_hyperframes": "control-target-sync",
+    "origem": "expansao"
+  }
+]
