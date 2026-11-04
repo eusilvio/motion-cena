@@ -5,7 +5,7 @@
 """Offline synthesized SFX kit (free, no network). Good enough for v1; swap for library/AI sounds later.
 
 Usage: uv run synth_sfx.py --out audio/sfx [--only whoosh,pop]
-Writes <type>.wav for: whoosh, pop, tick, click, impact, riser, glitch, ding.
+Writes <type>.wav for: whoosh, pop, tick, click, impact, riser, glitch, ding, beep.
 """
 import argparse
 import wave

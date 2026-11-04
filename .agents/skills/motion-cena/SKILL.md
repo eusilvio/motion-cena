@@ -112,7 +112,7 @@ Collect the rest (ask only what cannot be inferred; a sensible default when reve
 |---|---|
 | Input mode | inferred from what arrived; user text = `roteiro` (adapt), unless verbatim is explicitly requested |
 | Genre | inferred from the text/request |
-| Platform | `ig-reels` |
+| Platform | `vertical` (Reels + TikTok + Shorts in one render); `ig-stories` for a story, `yt-long` for YouTube without Shorts |
 | Audience and tone of voice | whatever comes in the request, the product's code or the recorded speech; otherwise the natural tone of the genre and platform (do not look for a persona in other projects) |
 | Brand | see "Brand, voice and tone"; source recorded in `brief.md`; no brand → palette and typography come from the central idea |
 | Target duration | the request's; otherwise the preset's `default_duration` (`narracao-literal`: whatever the text takes) |

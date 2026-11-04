@@ -494,10 +494,10 @@ Each platform is a preset in `assets/platforms.json`, taken from the official do
 | `vertical` | Reels + TikTok + Shorts | 1080×1920 | 3 min | 15–60 s | 288 / 672 / 65 left · 192 right |
 | `tiktok` | TikTok | 1080×1920 | 10 min | 15–60 s | 160 / 480 / 60 left · 140 right |
 | `yt-shorts` | YouTube Shorts | 1080×1920 | 3 min | 20–60 s | 288 / 672 / 48 left · 192 right |
-| `yt-long` | Horizontal YouTube | 1920×1080 | no limit | 1–15 min | 54 / 140 / 96 |
-| `yt-long-4k` | YouTube 4K | 3840×2160 | no limit | 1–15 min | 108 / 280 / 192 |
+| `yt-long` | Horizontal YouTube | 1920×1080 | 12 h | 1–15 min | 54 / 140 / 96 |
+| `yt-long-4k` | YouTube 4K | 3840×2160 | 12 h | 1–15 min | 108 / 280 / 192 |
 | `linkedin` | LinkedIn | 1080×1350 | 15 min | 30–90 s | 60 |
-| `square` | Generic feed / X | 1080×1080 | no limit | 15–60 s | 60 |
+| `square` | Generic feed / X | 1080×1080 | 10 min | 15–60 s | 60 |
 
 Shared output: MP4 H.264 `yuv420p`, constant frame rate, AAC 48 kHz, `+faststart`, −14 LUFS. One narration and one timeline produce every version; only the layout is recomposed.
 </details>
@@ -580,6 +580,9 @@ In `.agents/skills/motion-cena/scripts/`, all run with `uv run` (dependencies de
 | `align_words.py` | per-word timestamps for any audio (faster-whisper) |
 | `build_timeline.py` | anchors scenes and emphases to the spoken words → `timeline.json` |
 | `motion_lookup.py` | searches the 388-effect catalog by term, alias, family, genre or intensity |
+| `find_words.py` | when each phrase is said (seconds and frames), words around a moment and pauses for cuts |
+| `registro.py` | summary of delivered pieces, to avoid repeating an idea without reading the whole log |
+| `snapshot_sheet.py` | key frames of the composition in one small image with timestamps |
 | `synth_sfx.py` · `mix_audio.py` | a kit of 9 synthesized sound effects and a mix with ducking at −14 LUFS; ElevenLabs prompts that already worked in `assets/sfx-prompts.json` |
 | `fetch_icon.py` · `asset_library.py` | licensed real symbols and a library of what has already been produced |
 | `analyze_reference.sh` | contact sheets, keyframes, speech and loudness from a reference video |

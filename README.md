@@ -492,10 +492,10 @@ Cada plataforma é um preset em `assets/platforms.json`, tirado das documentaç�
 | `vertical` | Reels + TikTok + Shorts | 1080×1920 | 3 min | 15–60 s | 288 / 672 / 65 esq. · 192 dir. |
 | `tiktok` | TikTok | 1080×1920 | 10 min | 15–60 s | 160 / 480 / 60 esq. · 140 dir. |
 | `yt-shorts` | YouTube Shorts | 1080×1920 | 3 min | 20–60 s | 288 / 672 / 48 esq. · 192 dir. |
-| `yt-long` | YouTube horizontal | 1920×1080 | sem limite | 1–15 min | 54 / 140 / 96 |
-| `yt-long-4k` | YouTube 4K | 3840×2160 | sem limite | 1–15 min | 108 / 280 / 192 |
+| `yt-long` | YouTube horizontal | 1920×1080 | 12 h | 1–15 min | 54 / 140 / 96 |
+| `yt-long-4k` | YouTube 4K | 3840×2160 | 12 h | 1–15 min | 108 / 280 / 192 |
 | `linkedin` | LinkedIn | 1080×1350 | 15 min | 30–90 s | 60 |
-| `square` | Feed genérico / X | 1080×1080 | sem limite | 15–60 s | 60 |
+| `square` | Feed genérico / X | 1080×1080 | 10 min | 15–60 s | 60 |
 
 Saída comum: MP4 H.264 `yuv420p`, frame rate constante, AAC 48 kHz, `+faststart`, −14 LUFS. Uma narração e uma timeline geram todas as versões; só o layout é recomposto.
 </details>
@@ -574,10 +574,13 @@ Em `.agents/skills/motion-cena/scripts/`, todos com `uv run` (dependências decl
 | Script | Faz |
 |---|---|
 | `platform_preset.py` | mostra presets (`--list`, `--css` com as variáveis de zona segura) |
-| `tts_edge.py` · `tts_elevenlabs.py` | locução com timestamp por palavra (grátis ou ElevenLabs, com clonagem de voz) |
+| `tts_edge.py` · `tts_elevenlabs.py` · `tts_chatterbox.py` | locução com timestamp por palavra (grátis, ElevenLabs com clonagem de voz, ou Chatterbox local) |
 | `align_words.py` | timestamps por palavra de qualquer áudio (faster-whisper) |
 | `build_timeline.py` | ancora cenas e ênfases nas palavras faladas → `timeline.json` |
 | `motion_lookup.py` | busca no catálogo de 388 efeitos por termo, apelido, família, gênero ou intensidade |
+| `find_words.py` | em que segundo e quadro cada frase é dita, palavras em volta de um instante e pausas para corte |
+| `registro.py` | resumo das peças já entregues, para não repetir ideia (sem ler o registro inteiro) |
+| `snapshot_sheet.py` | quadros-chave da composição numa imagem só, pequena e com timestamp |
 | `synth_sfx.py` · `mix_audio.py` | kit de 9 efeitos sintetizados e mix com ducking a −14 LUFS; prompts que já funcionaram na ElevenLabs em `assets/sfx-prompts.json` |
 | `fetch_icon.py` · `asset_library.py` | símbolos reais com licença e biblioteca do que já foi produzido |
 | `analyze_reference.sh` | pranchas, frames-chave, fala e loudness de um vídeo de referência |

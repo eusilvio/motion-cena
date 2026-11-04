@@ -18,7 +18,7 @@ cd motion-cena
 
 No Windows, em PowerShell: `.\setup.ps1`.
 
-O setup confere Node 22+, FFmpeg, uv e o agente de código, cria as pastas locais (fora do git) e o `.env.local`. Para rodar os checks você também precisa do [shellcheck](https://www.shellcheck.net/) (`apt install shellcheck` ou `brew install shellcheck`).
+O setup confere Node 22+, FFmpeg, uv e o agente de código, cria as pastas locais (fora do git) e o `.env.local`.
 
 Trabalhe numa branch a partir de `main` (`git switch -c feat/nome-curto`) e abra o PR para `main`.
 
@@ -28,7 +28,7 @@ Trabalhe numa branch a partir de `main` (`git switch -c feat/nome-curto`) e abra
 ./tools/check.sh
 ```
 
-Ele roda na sua máquina os mesmos checks que o CI (`.github/workflows/ci.yml`) roda em cada PR: os testes de `tests/` com pytest, o `lint_copy.py` nos documentos em pt-BR e o shellcheck nos scripts `.sh`. O `check.sh` é bash; no Windows, rode pelo Git Bash ou pelo WSL.
+Ele roda na sua máquina os mesmos checks que o CI (`.github/workflows/ci.yml`) roda em cada PR: os testes de `tests/` com pytest (inclusive os 388 efeitos do dicionário num Chromium, quando ele está instalado), o `lint_copy.py` nos documentos em pt-BR da raiz e de `docs/`, o shellcheck nos scripts `.sh`, o actionlint no workflow, a checagem de fim de linha e os testes das skills do HyperFrames. Shellcheck e actionlint vêm pelo `uv`, sem instalar nada. O `check.sh` é bash; no Windows, rode pelo Git Bash ou pelo WSL.
 
 ## O que nunca entra num PR
 

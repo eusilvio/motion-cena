@@ -75,20 +75,22 @@ else
   failed "testes Python (uv run --with pytest pytest -c tests/pytest.ini tests)"
 fi
 
-# 3. Texto das docs em pt-BR na raiz: erro reprova, aviso só aparece.
-#    Ficam de fora o que está em inglês: as instruções dos agentes e as traduções (*.en.md).
+# 3. Texto das docs em pt-BR (raiz e site em docs/): erro reprova, aviso só aparece.
+#    Ficam de fora o que está em inglês: as instruções dos agentes, as traduções (*.en.md)
+#    e as páginas em inglês do site (docs/en/).
 docs=()
 for f in *.md; do
   case "$f" in AGENTS.md | CLAUDE.md | GEMINI.md | *.en.md) continue ;; esac
   [ -f "$f" ] && docs+=("$f")
 done
+while IFS= read -r f; do docs+=("$f"); done < <(git ls-files -co --exclude-standard -- 'docs/*.md' ':!docs/en/*' ':!docs/node_modules/*')
 if [ "${#docs[@]}" -eq 0 ]; then
-  ok "texto das docs: nenhum .md na raiz"
+  ok "texto das docs: nenhum .md em pt-BR"
 elif uv run -q .agents/skills/motion-cena/scripts/lint_copy.py "${docs[@]}" >"$log" 2>&1; then
-  ok "texto das docs (${docs[*]}): $(tail -1 "$log")"
+  ok "texto das docs (${#docs[@]} arquivos): $(tail -1 "$log")"
   grep ': aviso: ' "$log" | indent
 else
-  failed "texto das docs (${docs[*]})"
+  failed "texto das docs (${#docs[@]} arquivos)"
 fi
 
 # 4. shellcheck nos scripts do projeto (os do HyperFrames em .agents/skills/ vêm de fora, como estão).
