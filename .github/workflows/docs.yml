@@ -1,0 +1,71 @@
+name: Docs
+
+# Builds the documentation site (VitePress, docs/) on every PR that touches it and publishes
+# it to GitHub Pages from main. The site reads the skill's own data (effects dictionary,
+# platform presets) and the demo video, so those paths trigger it too.
+on:
+  push:
+    branches: [main]
+    paths: &site-paths
+      - "docs/**"
+      - ".agents/skills/motion-cena/references/motion-dictionary/**"
+      - ".agents/skills/motion-cena/assets/platforms.json"
+      - "creatives/demos/**"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths: *site-paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build do site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # lastUpdated reads the git history
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+
+      - name: Instala as dependências
+        run: npm ci --no-fund --no-audit
+
+      - name: Build
+        run: npm run build
+
+      - name: Envia o site para o Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    name: Publica no GitHub Pages
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Publica
+        id: deployment
+        uses: actions/deploy-pages@v4

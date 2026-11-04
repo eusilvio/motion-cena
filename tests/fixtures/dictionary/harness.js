@@ -182,7 +182,7 @@
     });
   }
 
-  function words(c, sp, list = ["isso", "muda", "tudo", "agora"], opts = {}) {
+  function words(c, sp, list = ["cada", "palavra", "no", "tempo"], opts = {}) {
     const wrap = div(c.scene, box(90, opts.y ?? 760, 900, 420) + "display:flex;flex-wrap:wrap;align-content:center;"
       + "justify-content:center;gap:24px 32px;z-index:3;", null, "words");
     return list.map((w) => span(wrap, "display:inline-block;position:relative;" + font(96), w, "w"));
@@ -890,7 +890,7 @@
     } },
     "blur-focus-words": { items: "words" },
     "caption-chunks": { custom: (c) => ({ items: [0, 1, 2, 3].map((i) => {
-      const e = div(c.scene, box(90, 1400, 900, 160) + ctr + font(80) + "opacity:0;z-index:4;", ["isso muda", "tudo que", "você sabe", "sobre vídeo"][i], "chunk");
+      const e = div(c.scene, box(90, 1400, 900, 160) + ctr + font(80) + "opacity:0;z-index:4;", ["a voz", "marca", "o tempo", "de cada cena"][i], "chunk");
       e.dataset.start = String(T0 + i * 0.6);
       e.dataset.end = String(T0 + i * 0.6 + 0.55);
       return e;
@@ -900,7 +900,7 @@
       const c0 = T0 + i * 0.8;
       chunk.dataset.start = String(c0);
       chunk.dataset.end = String(c0 + 0.75);
-      [["isso", "muda"], ["tudo", "agora"], ["de", "verdade"]][i].forEach((w, k) => {
+      [["a", "voz"], ["marca", "o"], ["tempo", "certo"]][i].forEach((w, k) => {
         const ws = span(chunk, "display:inline-block;position:relative;" + font(90), w, "w");
         ws.dataset.start = String(c0 + k * 0.35);
         ws.dataset.end = String(c0 + k * 0.35 + 0.35);
@@ -928,7 +928,7 @@
     "highlight-follow": { custom: (c) => {
       const row = div(c.scene, box(90, 860, 900, 160) + "z-index:3;", null, "row");
       const el = div(row, box(0, 10, 100, 140) + `background:${COL.accent};border-radius:16px;`, null, "hl-box");
-      const items = ["isso", "muda", "tudo"].map((w, i) => span(row, `position:absolute;left:${40 + i * 300}px;top:20px;` + font(96), w, "w"));
+      const items = ["voz", "cena", "efeito"].map((w, i) => span(row, `position:absolute;left:${40 + i * 300}px;top:20px;` + font(96), w, "w"));
       return { el, items };
     } },
     "ink-bleed": { custom: (c) => {
@@ -1145,7 +1145,7 @@
       if (sp.abStyle) refs.b.style.cssText += sp.abStyle;
     }
     if (refs.el instanceof HTMLElement) {
-      refs.el.dataset.text = refs.el.dataset.text || "Edite vídeos com IA";
+      refs.el.dataset.text = refs.el.dataset.text || "Do texto ao MP4";
       refs.el.dataset.char = refs.el.dataset.char || "A";
     }
     c.refs = refs;

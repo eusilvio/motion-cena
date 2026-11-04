@@ -1,0 +1,117 @@
+/*
+ * motion-cena design tokens. The site borrows the language of an edit suite:
+ * graphite surfaces, tungsten amber only for time (playhead, active clip, links),
+ * safe-zone red only for "this is under the app's buttons", paper white for text.
+ * Components use the --mc-* tokens; the --vp-* overrides map VitePress onto them.
+ */
+:root {
+  --mc-graphite: #0f1012;
+  --mc-graphite-2: #17191c;
+  --mc-graphite-3: #22252a;
+  --mc-rule: #2e3238;
+  --mc-paper: #f2efe8;
+  --mc-paper-dim: #a9a49a;
+  --mc-tungsten: #f2b33d;
+  --mc-tungsten-deep: #9a6a12;
+  --mc-zone: #e5484d;
+  --mc-ok: #6fbf73;
+
+  --mc-font-display: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --mc-font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mc-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* type scale (minor third, 16 px base) */
+  --mc-step--1: 0.833rem;
+  --mc-step-0: 1rem;
+  --mc-step-1: 1.2rem;
+  --mc-step-2: 1.44rem;
+  --mc-step-3: 1.728rem;
+  --mc-step-4: 2.488rem;
+  --mc-step-5: clamp(3rem, 8vw, 6.2rem);
+
+  --mc-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --mc-radius-clip: 3px; /* timeline clips */
+  --mc-radius-frame: 14px; /* phone frames, stages */
+
+  --vp-font-family-base: var(--mc-font-body);
+  --vp-font-family-mono: var(--mc-font-mono);
+}
+
+/* light = the printed script: cool white, ink, amber darkened for contrast */
+:root {
+  --vp-c-bg: #fbfaf8;
+  --vp-c-bg-alt: #f1efea;
+  --vp-c-bg-soft: #ebe8e1;
+  --vp-c-text-1: #16171a;
+  --vp-c-text-2: #4a4c52;
+  --vp-c-brand-1: #8a5a08;
+  --vp-c-brand-2: #a86e0c;
+  --vp-c-brand-3: #c9861a;
+  --vp-c-brand-soft: rgba(242, 179, 61, 0.18);
+  --vp-c-divider: #dedad2;
+}
+
+.dark {
+  --vp-c-bg: var(--mc-graphite);
+  --vp-c-bg-alt: #0b0c0d;
+  --vp-c-bg-soft: var(--mc-graphite-2);
+  --vp-c-bg-elv: var(--mc-graphite-2);
+  --vp-c-text-1: var(--mc-paper);
+  --vp-c-text-2: var(--mc-paper-dim);
+  --vp-c-text-3: #6f6b64;
+  --vp-c-brand-1: var(--mc-tungsten);
+  --vp-c-brand-2: #f5c463;
+  --vp-c-brand-3: var(--mc-tungsten-deep);
+  --vp-c-brand-soft: rgba(242, 179, 61, 0.14);
+  --vp-c-divider: var(--mc-rule);
+  --vp-c-gutter: #08090a;
+  --vp-code-block-bg: #121417;
+}
+
+/* headings: title-card condensed display, sentence case, no tracking tricks */
+.vp-doc h1,
+.vp-doc h2 {
+  font-family: var(--mc-font-display);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 1.05;
+}
+.vp-doc h1 {
+  font-size: var(--mc-step-4);
+}
+.vp-doc h2 {
+  font-size: var(--mc-step-3);
+  border-top: 0;
+  margin-top: 3rem;
+}
+.vp-doc h3 {
+  font-weight: 650;
+}
+.vp-doc p,
+.vp-doc li {
+  max-width: 72ch;
+}
+
+.VPNavBarTitle .title {
+  font-family: var(--mc-font-display);
+  font-weight: 400;
+  font-size: 1.35rem;
+  letter-spacing: 0.01em;
+}
+
+/* visible keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
