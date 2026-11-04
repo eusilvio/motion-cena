@@ -36,7 +36,7 @@ Run `QA_DIR=projects/<slug>/out scripts/qa_video.sh creatives/reels/<slug>-<pres
 ## Creativity
 - [ ] Passes the bar in `references/quality-bar.md`
 - [ ] Central idea recorded in `plan.md`, with the 2 discarded ones
-- [ ] Does not repeat the device or 3+ axes of any of the last 3 videos in `creatives/registro.md`; new row added to the log
+- [ ] Does not repeat the device or 3+ axes of any of the last 3 videos (`scripts/registro.py --recent 3`); new row added to the log
 
 Something failed → fix it and re-render. In the delivery, list what could not be fixed.
 

@@ -48,20 +48,61 @@ copy() {
 }
 
 echo
-echo "Skills para o Claude Code (.claude/skills/ -> .agents/skills/):"
+# Só as skills da lista viram skill nativa do Claude Code: cada uma manda a descrição em toda
+# chamada. As outras ficam em .agents/skills/ e são lidas como documento quando o motion-cena pede.
+LIST=.agents/skills/claude-links.txt
+echo "Skills para o Claude Code (.claude/skills/ -> .agents/skills/, lista em $LIST):"
 mkdir -p .claude/skills
+wanted=" "
+if [ -f "$LIST" ]; then
+  while IFS= read -r line || [ -n "$line" ]; do
+    line=${line%%#*}
+    line=$(printf '%s' "$line" | tr -d '[:space:]')
+    [ -n "$line" ] && wanted="$wanted$line "
+  done <"$LIST"
+else
+  printf '  FALTA   %s: nenhum link criado\n' "$LIST"
+  ok=0
+fi
+# Tira só o que este script criaria: link para .agents/skills/ que sumiu ou saiu da lista.
+# Skill sua, pasta de verdade e link para outro lugar ficam como estão.
+r=0
+here=$(pwd -P)
 for l in .claude/skills/*; do
-  [ -L "$l" ] && [ ! -e "$l" ] && rm "$l"   # link de skill que não existe mais
+  [ -L "$l" ] || continue
+  target=$(readlink "$l")
+  case "$target" in
+    ../../.agents/skills/* | "$PWD/.agents/skills/"* | "$here/.agents/skills/"*) ;;
+    *) continue ;;
+  esac
+  name=$(basename "$l")
+  if [ ! -e "$l" ] || { [ -f "$LIST" ] && [ "${wanted#* "$name" }" = "$wanted" ]; }; then
+    rm -f "$l"   # só o link: rm sem -r nunca entra no destino
+    r=$((r + 1))
+  fi
 done
 n=0
-for d in .agents/skills/*/; do
-  name=$(basename "$d")
+for name in $wanted; do
+  d=".agents/skills/$name"
   link=".claude/skills/$name"
+  if [ ! -d "$d" ]; then
+    printf '  aviso   %s está na lista, mas %s não existe\n' "$name" "$d"
+    continue
+  fi
   { [ -e "$link" ] || [ -L "$link" ]; } && continue
   ln -s "../../.agents/skills/$name" "$link" 2>/dev/null || cp -R "$d" "$link"
   n=$((n + 1))
 done
 echo "  $n criado(s). Outros agentes leem .agents/skills/ direto."
+[ "$r" -eq 0 ] || echo "  $r removido(s): link para skill fora da lista ou que não existe mais."
+for d in .claude/skills/*/; do
+  name=$(basename "$d")
+  link=".claude/skills/$name"
+  # cópia (feita quando o link falhou) de skill que saiu da lista: avisa, não apaga
+  if [ ! -L "$link" ] && [ -f "$LIST" ] && [ -d ".agents/skills/$name" ] && [ "${wanted#* "$name" }" = "$wanted" ]; then
+    printf '  aviso   %s é uma cópia de skill fora da lista; apague à mão se não quiser carregá-la\n' "$link"
+  fi
+done
 
 echo
 echo "Arquivos locais:"

@@ -1,6 +1,6 @@
 ---
 name: motion-cena
-description: Complete framework to create motion-design videos from any input - the user's script or text (always adapted for video; verbatim only when asked), notes, a loose topic, PDF, article, URL, data, recorded audio, a talking-head video or a product's code repository. Works for any genre (story, motivational, technical, explainer, data, product, opinion) and outputs each platform's format (Instagram Stories, Reels, Feed, TikTok, YouTube Shorts, horizontal YouTube, LinkedIn), or, with the carousel flag, a static slide carousel for Instagram/LinkedIn without narration (Claude Design or local PNG). Takes duration as a parameter (otherwise the platform default). Runs narrative format → script with 3 hooks at the requested length → central idea (3 concepts, vetoes repeats of past videos) → storyboard → visual identity → TTS voiceover with word timestamps → speech-synced animation (HyperFrames or Remotion) → sound design → render and QA. Understands requests in any language (users often write in Brazilian Portuguese) and delivers in the user's language. Use whenever the user asks "make a video", "faz um vídeo", "faz um carrossel", "narra esse texto", "transforma esse texto em vídeo", "story", "reels", "vídeo pro YouTube", "vídeo motivacional", "reels sobre esse PDF", "motion design", "vídeo animado", "explainer", "vídeo com locução", "storyboard", "roteiro de reels", or mentions Remotion, HyperFrames, GSAP, Higgsfield, ElevenLabs or synced narration, even if they only ask for one of the steps.
+description: Motion-design video pipeline. Turns any input (the user's script or text, adapted for video unless verbatim is asked; notes, a topic, PDF, URL, data, recorded audio, a talking-head video, a product's code repository) into a narrated MP4 per platform (Reels, Stories, TikTok, Shorts, YouTube, LinkedIn) or, with the carousel flag, a slide carousel without narration. Runs narrative format, script with 3 hooks, central idea, storyboard, visual identity, TTS voice with word timestamps, speech-synced HyperFrames animation, sound, render and QA. Understands any language and delivers in the user's. Use for "faz um vídeo", "faz um reels", "faz um carrossel", "narra esse texto", "transforma esse texto em vídeo", "vídeo motivacional", "explainer", "motion design", "storyboard", "roteiro de reels", or mentions of HyperFrames, Remotion, GSAP, ElevenLabs or synced narration, even for a single step.
 ---
 
 # Motion Cena: from content to MP4
@@ -16,6 +16,19 @@ The heavy lifting is **direction**: which story, which format, which visual idea
 **Copy that does not sound like AI** (`references/writing-style.md`): no symmetric "it's not X, it's Y" lines, bait questions, clichés or dramatic dashes (the pt-BR list: "não é X, é Y", "o segredo?", "mergulhar", "jornada", "isso muda tudo", travessão de efeito). Concrete, direct, in the user's vocabulary. Run `uv run scripts/lint_copy.py` on the script, on-screen text, slides and caption before the review gate and before delivering; an error means rewrite (in `narracao-literal`, point it out to the user instead of rewriting).
 
 **Emoji is forbidden in every piece** (art, on-screen text, captions, post caption, end card, slides). It looks amateur. No exceptions, even if the user's source text has emoji: remove it from the piece.
+
+## Token economy
+
+Every request re-reads the whole conversation, so whatever enters the context is paid again on every later call. Measured on real productions: a second piece in the same session cost 35–41% of that session, and images, full-file rewrites and whole-file reads came next.
+
+- **One piece per session.** At delivery, tell the user to open a new session (Claude Code: `/clear`) for the next piece; every step is on disk in `projects/<slug>/`, so a new session resumes from the files. Before a long round of revisions, compact (`/compact`).
+- **Read at the step, only what the step names.** References are listed in each step below; do not preload them. Do not read HyperFrames skills whole: step 6 lists the few files the pipeline needs.
+- **Ask a script instead of reading a big file:** effects `scripts/motion_lookup.py <term>`, past pieces `scripts/registro.py`, timing `scripts/find_words.py`, presets `scripts/platform_preset.py`. Never `cat` `words.json`, `timeline.json`, `_library.json` or the dictionary JSON.
+- **Images are the most expensive output you read.** Check frames with one tiled sheet (`scripts/snapshot_sheet.py`) and open each contact sheet once per render; full resolution only as a crop of the spot in doubt.
+- **Edit, do not rewrite.** After the first write of a composition, change it with small edits located by `grep`; never rewrite the whole `index.html` to fix one scene. More than ~8 scenes → one sub-composition per scene (`hyperframes-core/references/sub-compositions.md`).
+- **Long output goes to a log:** `> projects/<slug>/out/<step>.log 2>&1; tail -5` for render, check, installs and analyses; open the log only on failure.
+- **External sources once:** web pages, PDFs, connectors and research are fetched once (a subagent if your agent has one) into `projects/<slug>/source/` as an extract with the sources; afterwards read the extract, not the original.
+- **Batch independent commands** in one call; fewer calls means fewer re-reads.
 
 ## Language
 
@@ -74,15 +87,15 @@ uv run scripts/asset_library.py get <id|termo> --to projects/<slug>/video/assets
 uv run scripts/asset_library.py scan                              # after creating a new asset, and at the end of each project
 ```
 
-Only generate when the search finds nothing or what exists does not fit (style, duration, color). Logo: check it is still the current one. Voice: only reuse a take with the **same final text** (`find --kind voice` shows the text); a take with "tu" or an old script does not count. Only raw assets come in: composition, layout and storyboard of old projects stay out (they are not templates).
+Only generate when the search finds nothing or what exists does not fit (style, duration, color). Logo: check it is still the current one. Voice: only reuse a take with the **same final text** (`find --kind voice` shows the text); a take with different wording or an old script does not count. Only raw assets come in: composition, layout and storyboard of old projects stay out (they are not templates).
 
 ## Output: video or carousel (the flag)
 
-`output: video` (default) or `output: carrossel`. Turns the carousel on: "carrossel"/"carousel"/`--carrossel` in the request, a "Carrossel" format coming from the user's calendar, or "também em carrossel" (then both come from the same brief). Informative content, step by step, data or marketing campaign → recommend a carousel; story and motivational → video. **A carousel has no narration**: skip steps 5 (voiceover/timeline) and 7 (sound); step 6 becomes a static layout and step 8 becomes slide export. Everything is in `references/carousel.md`: **Claude Design** engine when the agent has it (Claude with Artifact, Design type, one artboard per slide), local engine (works in any agent) `scripts/dc_to_carousel.py` + `scripts/render_carousel.py` (PNG/PDF from the same `.dc.html`), presets `ig-carousel` / `ig-carousel-square` / `linkedin-carousel`, output in `creatives/carrossel/<slug>-<preset>/`. The cover follows `references/hooks.md`: 5 hooks with a trigger, the gap test, and each slide pulls the next.
+`output: video` (default) or `output: carrossel`, turned on by "carrossel"/"carousel"/`--carrossel`, a "Carrossel" format in the user's calendar, or "também em carrossel" (both from the same brief). Informative, step by step, data or campaign → recommend a carousel; story and motivational → video. **A carousel has no narration**: skip steps 5 and 7; step 6 is a static layout and step 8 is slide export, all in `references/carousel.md` (Claude Design when the agent has it, published once at the end after iterating on the local render; local engine in any agent). The cover follows `references/hooks.md`.
 
 ## Reference styles
 
-Reference video sent by the user → analyze it with `bash scripts/analyze_reference.sh <video> training/referencias/ref-NN <lang>`, **look** at the contact sheets and frames and write the recipe in `references/styles/<nome>.md` (catalog in `references/styles/README.md`). Request "no estilo X" → read the recipe and apply its grammar (structure, timing, components) with the user's brand, text and numbers. Saved styles: the `.md` files in `references/styles/` (except `README.md` and `_template.md`); the repository ships none, each person creates their own from their own references.
+Only when the user sends a reference video or asks "no estilo X": read `references/styles/README.md` (analysis with `scripts/analyze_reference.sh`, where recipes live, local vs `community/`) and the recipe itself; apply its grammar with the user's brand, text and numbers.
 
 ## Step 0: Brief (input, genre, platform)
 
@@ -101,15 +114,14 @@ Collect the rest (ask only what cannot be inferred; a sensible default when reve
 | Genre | inferred from the text/request |
 | Platform | `ig-reels` |
 | Audience and tone of voice | whatever comes in the request, the product's code or the recorded speech; otherwise the natural tone of the genre and platform (do not look for a persona in other projects) |
-| Brand | see "Brand, voice and tone"; source recorded in `brief.md` |
+| Brand | see "Brand, voice and tone"; source recorded in `brief.md`; no brand → palette and typography come from the central idea |
 | Target duration | the request's; otherwise the preset's `default_duration` (`narracao-literal`: whatever the text takes) |
 | Voiceover language | the request's language (see "Language"); pt-BR for a Portuguese request |
 | Voice provider | see step 5 |
-| Brand | only if the request brings it (site, brand kit, "na minha identidade"); no brand → palette and typography come from the central idea |
 
 User text much longer or shorter than the target duration? Adapt it (condense or develop) and show what changed. In `narracao-literal` that exceeds the platform maximum: warn and offer to split into parts or change platform; never cut silently.
 
-Long sources (a 90-page PDF): read everything and extract **takes** (surprising numbers, contrasts, trends, quotes) with the source page. Loose topic: research on the web (the agent's search tool) and record the sources. Wrong numbers destroy credibility.
+Long sources (a 90-page PDF): read everything once and write the **takes** (surprising numbers, contrasts, trends, quotes) with the source page to `source/takes.md`; later steps read the takes, not the PDF. Loose topic: research on the web (the agent's search tool; a subagent if available) and save facts and sources to `source/research.md`. Wrong numbers destroy credibility.
 
 ## Step 1: Narrative format (the step everybody skips)
 
@@ -136,15 +148,15 @@ Other modes: read `references/script-writing.md`. Core rules:
 
 ## Step 2.5: Central idea (what keeps the video from looking like all the others)
 
-Read `references/concept.md` and `references/quality-bar.md`. Find the script's mechanism (what the viewer should feel, where it turns, what is concrete), write **3 central ideas** that diverge on at least 4 axes (device, technique, camera, light and palette, role of the text, time structure, relationship with the viewer), read `creatives/registro.md` and veto the ones that repeat previous videos. Pick one, defend it in `plan.md` (section "Central idea") and only then do the storyboard. Do not ask the user which one they prefer: decide and explain at delivery.
+Read `references/concept.md` and `references/quality-bar.md`. Find the script's mechanism (what the viewer should feel, where it turns, what is concrete), write **3 central ideas** that diverge on at least 4 axes (device, technique, camera, light and palette, role of the text, time structure, relationship with the viewer), run `uv run scripts/registro.py --counts` (most used values per axis) and `--recent 12` (latest pieces) and veto the ones that repeat previous videos; open `creatives/registro.md` itself only if a veto is unclear. Pick one, defend it in `plan.md` (section "Central idea") and only then do the storyboard. Do not ask the user which one they prefer: decide and explain at delivery.
 
 ## Step 3: Storyboard
 
 Read `references/storyboard.md`. Break the script into scenes at the platform's pace (Reels/TikTok/Shorts: visual change every 1.5–3 s; Stories: one card per idea, 5–15 s; horizontal YouTube: 3–6 s), **all inside the central idea's device** (or a transformation of it). For each scene: the exact narration excerpt, visual, entrance/emphasis/exit motion, the anchor word that fires the emphasis, transition, SFX, on-screen text.
 
-Each scene's `motion` field uses the terms of `references/motion-dictionary.md` with duration and ease. Think like a motion designer: **the visual demonstrates what the voice says** (voice says "100 maiores empresas" → a grid of 100 squares lighting up). Never just "text + icon".
+Each scene's `motion` field uses the terms of `references/motion-dictionary.md` (44 curated effects) or of the 388-effect catalog queried with `uv run scripts/motion_lookup.py <term>`, with duration and ease. Think like a motion designer: **the visual demonstrates what the voice says** (voice says "100 maiores empresas" → a grid of 100 squares lighting up). Never just "text + icon".
 
-**Visual map (support, inside the central idea)**: read `references/visual-mapping.md`. It resolves the details of each sentence (which flag, which logo, which number), which enter as objects of the idea's world, not as a loose icon in the middle of the screen. Read each sentence in five layers (entities, concrete, number, idea, tone) and pick **one main visual** by the ladder: real symbol (flag, logo, medal) → concrete object (line icon or illustration/silhouette) → free photo → data visual → the piece's abstract metaphor → typography. Record the "Visual map" table in `plan.md` (excerpt, reading, visual, rung, command, why) and the items in each scene's `icons`. Test: without the audio, does the image still tell what the sentence says? Concept → icon lexicon in `assets/visual-lexicon.json`; search, style and licenses in `references/iconography.md`.
+**Visual map (inside the central idea)**: read `references/visual-mapping.md`. Each sentence gets **one main visual** by the ladder real symbol (flag, logo, medal) → concrete object → free photo → data visual → abstract metaphor → typography, entering as an object of the idea's world, not a loose icon. Record the "Visual map" table in `plan.md` and the items in each scene's `icons`. Test: without the audio, does the image still tell what the sentence says? Lexicon in `assets/visual-lexicon.json`; search and licenses in `references/iconography.md`.
 
 Deliver `plan.md` (structure in `assets/plan.template.md`: formats + choice, script, 3 hooks, storyboard), `narration.txt` (only the spoken text) and `storyboard.json` (schema in `assets/storyboard.schema.json`, example in `assets/storyboard.example.json`). `plan.md` must be self-sufficient: another agent can produce the video from it alone.
 
@@ -173,7 +185,7 @@ Then anchor the storyboard to the speech:
 ```bash
 uv run scripts/build_timeline.py projects/<slug>/storyboard.json projects/<slug>/audio/words.json --fps 30 --out projects/<slug>/timeline.json
 ```
-It matches each scene's narration excerpt to the words, generates `start/end` in seconds and frames, and resolves each emphasis's `anchor_word`. Review matching warnings (word not found = the script diverged from the speech).
+It matches each scene's narration excerpt to the words, generates `start/end` in seconds and frames, and resolves each emphasis's `anchor_word`. Review matching warnings (word not found = the script diverged from the speech). For any timing question (when a phrase is said, words around a time, pauses for cuts) use `uv run scripts/find_words.py projects/<slug>/audio/words.json "<frase>"` (`--around <s>`, `--gaps <s>`) instead of opening `words.json`.
 
 ## Step 6: Animation
 
@@ -185,32 +197,11 @@ Read `references/engines.md` and choose:
 | Existing React project, componentized data/charts, word-by-word captions, rendering at scale/Lambda | **Remotion** (`npx skills add remotion-dev/skills`) |
 | Technical/math explainer, procedural animation | Motion Canvas |
 
-If the engine's official skill is installed, **load it**: it has the up-to-date API rules. This skill gives direction; the engine's gives syntax.
+This skill gives direction; the engine gives syntax. For HyperFrames, read only what the pipeline needs, when you get to it: `hyperframes-core/references/minimal-composition.md`, `data-attributes.md` and `determinism-rules.md`, plus the `hyperframes-animation` rule files that the dictionary cites for the effects you use. Open a full HyperFrames `SKILL.md` (paths in `.agents/skills/`) only for something these do not cover. Remotion or Motion Canvas: load that engine's official skill.
 
-### Live preview (optional)
+**Live preview:** off by default. Only when the user asks to watch it being built or to point at something on screen, or inside the motion-cena interface (`MOTION_CENA_UI=1`): read `references/live-preview.md`. Otherwise never start a preview server.
 
-**Off by default.** Only open the Studio when:
-- the request asks for it ("quero ver ao vivo", "abre o preview", "me mostra montando", "abre no Studio", "I want to watch it live"); or
-- the user wants to point on screen at what to change ("vou te mostrar no Studio", "abre que eu aponto"); or
-- you are inside the `tools/studio` interface (`MOTION_CENA_UI=1`): there the interface itself starts the preview; you just do not open a browser.
-
-Without any of these, do not start a preview server or open a browser, not even at the end: the "Open the final Studio preview" step of the `hyperframes-cli` skill does not apply here. Visual review comes from snapshots and the contact sheet (steps 6 and 8), and the MP4 path goes in the delivery. At the end, offer it in one line ("quer abrir no Studio para ajustar à mão?", in the user's language).
-
-When it is on: as soon as `projects/<slug>/video/index.html` exists (even with just the background and the first scene), open the Studio and keep it open until delivery. It reloads on every saved file, so whoever asked watches the video being built:
-
-```bash
-cd projects/<slug>/video
-npx hyperframes preview --status --json        # one already running? use its studioUrl
-npx hyperframes preview --background ${MOTION_CENA_UI:+--no-open}  # otherwise: start it and open the browser (not inside the motion-cena interface)
-npx hyperframes preview --status --json        # gets the studioUrl (http://127.0.0.1:<port>/#project/video)
-```
-
-- On: send the `studioUrl` to the user **right away**, before continuing to animate. Inside `tools/studio` (`MOTION_CENA_UI=1`) the preview shows up by itself next to the chat; no browser needed.
-- On: build **scene by scene** and save after each one (layout, then entrance, then emphasis) instead of writing the whole HTML at the end: every save becomes a visible step.
-- A request pointing at something in the Studio ("muda isso", "esse texto") → `npx hyperframes preview --context --json --context-fields selection` tells what was clicked (file, element, time).
-- Do not start a second server for the same project. At the end, leave it running and say how to stop it (`npx hyperframes preview --stop`).
-
-Animation rules (details in `references/brand-and-motion.md`; effect terms → recipe and defaults in `references/motion-dictionary.md`):
+Animation rules (details in `references/brand-and-motion.md`; effect terms → recipe and defaults in `references/motion-dictionary.md`; any term not there → `scripts/motion_lookup.py <term>`):
 - A request in the form **effect + duration + ease + target** ("slide in 0,4 s ease out no título") is a literal instruction: translate it through the dictionary, without reinterpreting.
 - Timing comes from `timeline.json`: never guess times. Emphasis fires on the `anchor_word` frame.
 - Something always moves: subtle continuous motion (drift, scale 1.00→1.04) even in static scenes.
@@ -219,13 +210,14 @@ Animation rules (details in `references/brand-and-motion.md`; effect terms → r
 - Numbers count up to the value; they do not appear ready.
 - Each visual of the map enters on the word that names it (flag `pop in`/`mask reveal`, medal `pop in` + `glow`, silhouette `slide in`, logo a sober `fade in`); real symbols in their original colors, never redrawn; icons and silhouettes in the brand color.
 - Burned-in captions are optional (ask; muted autoplay is common, so the default is on; on LinkedIn, always).
+- Write the composition once, then change it with small edits (see "Token economy"); one sub-composition per scene when there are many scenes.
 - Several formats: compose the main one, get approval, then recompose each extra preset in `video-<preset>/` reusing `timeline.json` (same narration and timing; layout changes).
 
 Before the final render, **measure the safe zone** (opens the composition, steps the timeline every 0.25 s and measures the real box of every text and image):
 ```bash
 uv run scripts/safe_zone_check.py projects/<slug>/video --preset vertical
 ```
-Zero ERRO is mandatory (ERRO = something held ≥ 0.5 s in the zone; aviso = a quick entrance/exit pass, check it). Then take snapshots of key frames (`npx hyperframes snapshot --at <middle of each scene>`), **look at the images** and fix before the final render.
+Zero ERRO is mandatory (ERRO = something held ≥ 0.5 s in the zone; aviso = a quick entrance/exit pass, check it). Then check key frames in one image: `uv run scripts/snapshot_sheet.py projects/<slug>/video <middle of each scene, comma-separated> --out projects/<slug>/out/snapshot-sheet.jpg` tiles them small with timestamps and prints only the path; **look at it** and fix before the final render. Zoom into one spot at full resolution only when the sheet leaves a doubt (`--zoom`).
 
 ## Step 7: Sound
 
@@ -237,7 +229,7 @@ Voice always on top; music ducked (−18 to −22 dB under the voice); final lou
 
 ## Step 8: Render and QA
 
-Render with the engine's CLI straight to `creatives/reels/<slug>-<preset>.mp4` (HyperFrames: `npx hyperframes render -o ../../../creatives/reels/<slug>-<preset>.mp4` from inside `projects/<slug>/video/`), then:
+Render with the engine's CLI straight to `creatives/reels/<slug>-<preset>.mp4` (HyperFrames: `npx hyperframes render -o ../../../creatives/reels/<slug>-<preset>.mp4 > ../out/render.log 2>&1; tail -3 ../out/render.log` from inside `projects/<slug>/video/`), then:
 ```bash
 QA_DIR=projects/<slug>/out bash scripts/qa_video.sh creatives/reels/<slug>-<preset>.mp4 <preset>
 ```
@@ -246,7 +238,7 @@ It checks resolution, fps and maximum duration against the preset (you check the
 
 ## Delivery
 
-Add the video's line to `creatives/registro.md` (device and axes). Report, in the user's language: path of each MP4 (`creatives/reels/<slug>-<preset>.mp4`), platform/preset, duration (target and actual), input mode and genre, what changed in the user's script and why, central idea (and the 2 discarded, one line each), narrative format and why, hook used (and alternatives), voice provider, what was left out and why, and iteration suggestions (e.g. "version without SFX", "hook B"). Horizontal YouTube: include a thumbnail suggestion (1280×720) and chapters if > 3 min. Targeted iterations ("só adiciona SFX", "troca hook", "faz versão pra story") reuse earlier steps; do not redo everything.
+Add the video's line to `creatives/registro.md` (device and axes). Report, in the user's language: path of each MP4 (`creatives/reels/<slug>-<preset>.mp4`), platform/preset, duration (target and actual), input mode and genre, what changed in the user's script and why, central idea (and the 2 discarded, one line each), narrative format and why, hook used (and alternatives), voice provider, what was left out and why, and iteration suggestions (e.g. "version without SFX", "hook B"). Horizontal YouTube: include a thumbnail suggestion (1280×720) and chapters if > 3 min. Targeted iterations ("só adiciona SFX", "troca hook", "faz versão pra story") reuse earlier steps; do not redo everything. End the report with one line suggesting a new session (Claude Code: `/clear`) for the next piece, because it is cheaper; iterations on this piece can stay in this session.
 
 ## Quick mode
 

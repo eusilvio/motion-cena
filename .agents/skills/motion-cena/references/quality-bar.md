@@ -24,4 +24,4 @@ The minimum level for every video. The bar measures **what makes a video good**,
 - [ ] Main objects look like things (light, shadow, texture, volume) or have a deliberate graphic style; no loose icon in the center as a crutch
 - [ ] The layout uses the whole screen within the safe zone and changes over the course of the video
 - [ ] Designed sound: silence, ambience and effects with intent, not just a "pop" on every appearance
-- [ ] **It does not look like any video in `creatives/registro.md`** (device, technique, camera, palette, role of the text)
+- [ ] **It does not look like any delivered video** (`scripts/registro.py --counts`) (device, technique, camera, palette, role of the text)

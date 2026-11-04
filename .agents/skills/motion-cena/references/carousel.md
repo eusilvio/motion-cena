@@ -37,6 +37,8 @@ uv run $S/render_carousel.py projects/<slug>/carousel/render --slides <N> --out 
 
 Without the Artifact tool: write the `.dc.html` files anyway (format below) and use only the local engine.
 
+With Claude Design: iterate on the local render (look at `contact.jpg`) and publish to Claude Design **once**, when the slides are approved, or when the user asks for the editable canvas. Each publish result adds about 20k tokens to the conversation, and every later request pays for it again.
+
 ## Presets
 
 `uv run scripts/platform_preset.py ig-carousel`
